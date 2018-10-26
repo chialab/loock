@@ -1,0 +1,40 @@
+{
+  "name": "@chialab/loock",
+  "version": "1.1.0",
+  "description": "A helper for tab navigation.",
+  "structure": "module",
+  "main": "dist/loock.js",
+  "module": "src/index.js",
+  "license": "MIT",
+  "author": "Chialab",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.com:chialab/loock.git"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.7.0",
+    "eslint-plugin-babel": "^5.2.1",
+    "eslint-plugin-mocha": "^5.2.0",
+    "stylelint": "^9.6.0",
+    "stylelint-order": "^1.0.0"
+  },
+  "dependencies": {
+    "@chialab/proteins": "^3.0.0-rc.16"
+  },
+  "directories": {
+    "src": "src",
+    "lib": "dist",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "rna build --production",
+    "watch": "rna build --watch",
+    "test": "rna lint + unit",
+    "lint": "rna lint",
+    "unit": "rna unit",
+    "start": "yarn install + build --watch",
+    "demo": "rna build demo/demo.js --output demo/index.js + serve demo --directory",
+    "prepublish": "yarn build"
+  }
+}
