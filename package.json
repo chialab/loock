@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git@github.com:chialab/loock.git"
   },
-  "homepage": "https://github.com/chialab/loock#readme"
+  "homepage": "https://github.com/chialab/loock#readme",
   "bugs": {
     "url": "https://github.com/chialab/loock/issues",
     "email": "dev@chialab.io"
