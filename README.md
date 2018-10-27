@@ -1,9 +1,9 @@
 <!-- RNA-HEADER -->
-<h3 align="center">@chialab/loock</h3>
+<h3 align="center">Loock</h3>
 
 
 <p align="center">
-  A helper for tab navigation.
+   An accessibility helper for keyboard navigation on the web.
 </p>
 
 
@@ -17,8 +17,6 @@
 </p>
 
 ---
-
-**Loock** is an accessibility helper for keyboard navigation on the web.
 
 * Organize your web page or web application by navigation areas.
 * Never lose the context while navigating the area with the `TAB` key.
