@@ -9,7 +9,12 @@
   "author": "Chialab",
   "repository": {
     "type": "git",
-    "url": "git@gitlab.com:chialab/loock.git"
+    "url": "git@github.com:chialab/loock.git"
+  },
+  "homepage": "https://github.com/chialab/loock#readme"
+  "bugs": {
+    "url": "https://github.com/chialab/loock/issues",
+    "email": "dev@chialab.io"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
@@ -33,7 +38,7 @@
     "test": "rna lint + unit",
     "lint": "rna lint",
     "unit": "rna unit",
-    "start": "yarn install + build --watch",
+    "start": "yarn install + rna build --watch",
     "demo": "rna build demo/demo.js --output demo/index.js + serve demo --directory",
     "prepublish": "yarn build"
   }
