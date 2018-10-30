@@ -3,26 +3,6 @@ language: node_js
 jobs:
   include:
     - stage: test
-      env: CI_BUILD_TYPE=default
-      node_js: 9
-      before_install:
-        - yarn global add @chialab/rna-cli
-      install:
-        - rna install
-      script:
-        - rna unit 'test/*.tests.js' --node
-
-    - stage: test
-      env: CI_BUILD_TYPE=default
-      node_js: 10
-      before_install:
-        - yarn global add @chialab/rna-cli
-      install:
-        - rna install
-      script:
-        - rna unit 'test/*.tests.js' --node
-
-    - stage: test
       os: linux
       env: CI_BUILD_TYPE=saucelabs
       node_js: 10
@@ -65,54 +45,6 @@ jobs:
         - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
       script:
         - rna unit 'test/*.tests.js' --electron
-
-    - stage: test
-      os: osx
-      osx_image: xcode8.3
-      env: CI_BUILD_TYPE=nativescript
-      node_js: 10
-      before_install:
-        - npm install -g nativescript
-        - yarn global add github:chialab/rna-cli#fix/nativescript
-      install:
-        - rna install
-      before_script:
-        - export DISPLAY=':99.0'
-        - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-        - tns usage-reporting disable
-        - tns error-reporting disable
-      script:
-        - rna unit 'test/*.tests.js' --nativescript ios
-
-    - stage: test
-      os: linux
-      env: CI_BUILD_TYPE=nativescript
-      language: android
-      jdk: oraclejdk8
-      node_js: 10
-      android:
-        components:
-          - platform-tools
-          - build-tools-27.0.3
-          - android-19
-          - extra-android-m2repository
-          - sys-img-armeabi-v7a-android-19
-      before_install:
-        - nvm install 10
-        - npm install -g nativescript
-        - yarn global add github:chialab/rna-cli#fix/nativescript
-      install:
-        - rna install
-      before_script:
-        - export DISPLAY=':99.0'
-        - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-        - tns usage-reporting disable
-        - tns error-reporting disable
-        - echo no | android create avd --force -n test -t android-19 -b armeabi-v7a
-        - emulator -avd test -no-audio -no-window &
-        - android-wait-for-emulator
-      script:
-        - rna unit 'test/*.tests.js' --nativescript android
 
   allow_failures:
     - env: CI_BUILD_TYPE=electron
