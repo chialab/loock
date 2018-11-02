@@ -12,44 +12,12 @@ jobs:
         - rna install
         - rna add codecov
       script:
-        - rna unit 'test/*.tests.js' --saucelabs --coverage --context test/context.html --concurrency 1
+        - rna unit 'test/*.tests.js' --saucelabs --coverage --concurrency 1
       after_success:
         - cat reports/unit/coverage/report-lcov/*/lcov.info | ./node_modules/.bin/codecov
 
-    - stage: test
-      os: linux
-      env: CI_BUILD_TYPE=electron
-      node_js: 10
-      before_install:
-        - yarn global add @chialab/rna-cli
-      install:
-        - rna install
-        - rna add electron
-      before_script:
-        - export DISPLAY=':99.0'
-        - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-      script:
-        - rna unit 'test/*.tests.js' --electron
-
-    - stage: test
-      os: osx
-      env: CI_BUILD_TYPE=electron
-      node_js: 10
-      before_install:
-        - yarn global add @chialab/rna-cli
-      install:
-        - rna install
-        - rna add electron
-      before_script:
-        - export DISPLAY=':99.0'
-        - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-      script:
-        - rna unit 'test/*.tests.js' --electron
-
   allow_failures:
-    - env: CI_BUILD_TYPE=electron
     - env: CI_BUILD_TYPE=saucelabs
-    - env: CI_BUILD_TYPE=nativescript
 
 addons:
   apt:
