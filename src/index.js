@@ -9,6 +9,8 @@ const SELECTORS = [
     '[tabindex]',
 ];
 
+const TIME_BETWEEN_KEYDOWNS = 150;
+
 /**
  * Loock context class.
  */
@@ -23,6 +25,7 @@ class LoockContext extends Factory.Emitter {
         this.isActive = false;
         this.currentElement = null;
         this.ignore = this.options.ignore;
+        this.lastKeydownTime = Date.now();
 
         if (!element.hasAttribute('tabindex')) {
             element.setAttribute('tabindex', '0');
@@ -87,7 +90,7 @@ class LoockContext extends Factory.Emitter {
             return;
         }
         let io = children.indexOf(this.currentElement);
-        if (io === children.length - 1) {
+        if (io === children.length -1) {
             io = 0;
         } else if (io !== -1) {
             io = io + 1;
@@ -150,6 +153,15 @@ export default class Loock {
         this.contexts = [];
         this.actives = [];
         root.addEventListener('keydown', (event) => {
+
+            // prevent compulsively key holding down in all browsers.
+            if ((Date.now() - this.lastKeydownTime) < TIME_BETWEEN_KEYDOWNS) {
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
+            this.lastKeydownTime = Date.now();
+
             if (!this.activeContext) {
                 return;
             }
