@@ -23,6 +23,10 @@
 * Leave the context with the `ESC` key.
 * Use a default context.
 
+## Demo
+
+[Try out the demo!](https://codesandbox.io/s/ypjoj2r1qv)
+
 ## Install
 
 ```sh
