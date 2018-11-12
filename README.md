@@ -51,19 +51,23 @@ $ yarn add @chialab/loock
 
         <script type="module">
             import Loock from '@chialab/loock';
-
             const loock = new Loock();
-
+            
+            // define the default context
             const mainContext = loock.createDefaultContext(document.getElementById('main'));
+           
+            // define one context
             const context = loock.createContext(document.getElementById('navigation'));
 
             // listen the context
             context.on('enter', () => {
-                console.log('entered the navigation context');
+               console.log('entered the navigation context');
+               // do stuff you like
             });
 
             context.on('exit', () => {
-                console.log('exited the navigation context');
+               console.log('exited the navigation context');
+               // do stuff you like
             });
 
             // activate the context
@@ -75,11 +79,7 @@ $ yarn add @chialab/loock
 
 On page load, the `#navigation` will be automatically focused and you can navigate the links using the `TAB` key without losing focus from the nav element. Press `ESC` to exit the navigation context and skip to the default context, the `#main` element.
 
-<!-- RNA-HEADER -->
-<!-- RNA-WORKSPACES -->
 
-<!-- RNA-WORKSPACES -->
-<!-- RNA-DEV -->
 ## Development
 
 ### Requirements
@@ -99,5 +99,3 @@ $ rna run build
 ```sh
 $ rna run watch
 ```
-
-<!-- RNA-DEV -->
