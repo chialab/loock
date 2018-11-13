@@ -79,6 +79,7 @@ $ yarn add @chialab/loock
 
 On page load, the `#navigation` will be automatically focused and you can navigate the links using the `TAB` key without losing focus from the nav element. Press `ESC` to exit the navigation context and skip to the default context, the `#main` element.
 
+For a more complete example, please see the [demo source code](https://codesandbox.io/s/ypjoj2r1qv).
 
 ## Development
 
