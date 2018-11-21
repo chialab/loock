@@ -153,15 +153,6 @@ export default class Loock {
         this.contexts = [];
         this.actives = [];
         root.addEventListener('keydown', (event) => {
-
-            // prevent compulsively key holding down in all browsers.
-            if ((Date.now() - this.lastKeydownTime) < TIME_BETWEEN_KEYDOWNS) {
-                event.preventDefault();
-                event.stopPropagation();
-                return;
-            }
-            this.lastKeydownTime = Date.now();
-
             if (!this.activeContext) {
                 return;
             }
@@ -173,6 +164,11 @@ export default class Loock {
             if (event.keyCode == '9') {
                 event.preventDefault();
                 event.stopPropagation();
+                // prevent compulsively key holding down in all browsers.
+                if ((Date.now() - this.lastKeydownTime) < TIME_BETWEEN_KEYDOWNS) {
+                    return;
+                }
+                this.lastKeydownTime = Date.now();
                 let elements = this.activeContext.findFocusableChildren();
                 if (elements.length === 0) {
                     this.activeContext.exit();
