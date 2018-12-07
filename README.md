@@ -27,6 +27,10 @@
 
 [Try out the demo!](https://codesandbox.io/s/ypjoj2r1qv)
 
+## Introducing Loock
+
+Medium article - ["How to improve keyboard navigation of your web page"](https://medium.com/chialab-open-source/how-to-improve-keyboard-navigation-of-your-web-page-f11b324adbab)
+
 ## Install
 
 ```sh
@@ -89,14 +93,14 @@ For a more complete example, please see the [demo source code](https://codesandb
 * [Yarn](https://yarnpkg.com/) (>= 1.10.0)
 * [RNA cli](https://www.npmjs.com/package/@chialab/rna-cli)
 
-### Build the project.
+### Build the project
 
 ```sh
 $ rna install
 $ rna run build
 ```
 
-### Develpment mode.
+### Develpment mode
 ```sh
 $ rna run watch
 ```
