@@ -23,6 +23,7 @@ class LoockContext extends Factory.Emitter {
         this.root = element;
         this.options = options;
         this.isActive = false;
+        this.currentIndex = null;
         this.currentElement = null;
         this.ignore = this.options.ignore;
         this.lastKeydownTime = Date.now();
@@ -72,8 +73,9 @@ class LoockContext extends Factory.Emitter {
         } else if (io !== -1) {
             io = io - 1;
         } else {
-            io = 0;
+            io = Math.min(children.length - 1, this.currentIndex || 0);
         }
+        this.currentIndex = io;
         this.currentElement = children[io];
         this.currentElement.focus();
     }
@@ -95,8 +97,9 @@ class LoockContext extends Factory.Emitter {
         } else if (io !== -1) {
             io = io + 1;
         } else {
-            io = 0;
+            io = Math.min(children.length - 1, this.currentIndex || 0);
         }
+        this.currentIndex = io;
         this.currentElement = children[io];
         this.currentElement.focus();
     }
@@ -137,6 +140,7 @@ class LoockContext extends Factory.Emitter {
             return;
         }
         this.isActive = false;
+        this.currentIndex = null;
         this.currentElement = null;
         this.trigger('exit');
     }
@@ -158,12 +162,10 @@ export default class Loock {
             }
             if (event.key == 'Escape' || event.key == 'Esc') {
                 event.preventDefault();
-                event.stopPropagation();
                 this.activeContext.exit();
             }
             if (event.keyCode == '9') {
                 event.preventDefault();
-                event.stopPropagation();
                 // prevent compulsively key holding down in all browsers.
                 if ((Date.now() - this.lastKeydownTime) < TIME_BETWEEN_KEYDOWNS) {
                     return;
