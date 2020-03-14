@@ -1,7 +1,7 @@
 {
   "name": "@chialab/loock",
   "version": "1.1.4",
-  "description": "A helper for tab navigation.",
+  "description": "An accessibility helper for keyboard navigation on the web.",
   "structure": "module",
   "main": "dist/loock.js",
   "module": "src/index.js",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git@github.com:chialab/loock.git"
   },
-  "homepage": "https://github.com/chialab/loock#readme",
+  "homepage": "https://www.chialab.io/p/loock",
   "bugs": {
     "url": "https://github.com/chialab/loock/issues",
     "email": "dev@chialab.io"
@@ -35,11 +35,8 @@
   "scripts": {
     "build": "rna build --production",
     "watch": "rna build --watch",
-    "test": "rna lint + unit",
     "lint": "rna lint",
-    "unit": "rna unit",
     "start": "yarn install + rna build --watch",
-    "demo": "rna build demo/demo.js --output demo/index.js + serve demo --directory",
-    "prepublish": "yarn build"
+    "prepack": "yarn build"
   }
 }
