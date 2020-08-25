@@ -25,15 +25,18 @@ const TIME_BETWEEN_KEYDOWNS = 150;
 
 /**
  * Loock context class.
+ * @property {Loock} parent The Loock instance to bound.
+ * @property {boolean} isActive The context state.
  */
-class LoockContext extends Factory.Emitter {
+export class Context extends Factory.Emitter {
     /**
      * Create a new context.
      * @param {HTMLElement} element The root element of the context.
      * @param {ContextOptions} options A set of options for the context.
      */
-    constructor(element, options = {}) {
+    constructor(element, options = {}, parent = null) {
         super();
+        this.attach(parent);
         this.root = element;
         this.isActive = false;
         this.currentIndex = null;
@@ -46,7 +49,7 @@ class LoockContext extends Factory.Emitter {
         }
         if (!element.hasAttribute('aria-label')) {
             // eslint-disable-next-line
-            console.warn('created a LoockContext without aria-label', this);
+            console.warn('created a Context without aria-label', this);
         }
     }
 
@@ -126,8 +129,11 @@ class LoockContext extends Factory.Emitter {
         if (this.isActive) {
             return;
         }
+        if (!this.parent) {
+            this._activeElement = this.root.ownerDocument.activeElement;
+        }
         this.isActive = true;
-        this.trigger('enter');
+        this.trigger('enter', this);
         this.restore();
     }
 
@@ -155,7 +161,35 @@ class LoockContext extends Factory.Emitter {
         this.isActive = false;
         this.currentIndex = null;
         this.currentElement = null;
-        this.trigger('exit');
+        this.trigger('exit', this);
+        if (this._activeElement) {
+            this._activeElement.focus();
+            delete this._activeElement;
+        }
+    }
+
+    /**
+     * Attach the context to a Loock instance.
+     * @param {Loock} parent The parent loock instance.
+     */
+    attach(parent) {
+        if (this.parent && this.parent !== parent) {
+            this.detach();
+        }
+        this.parent = parent;
+    }
+
+    /**
+     * Detach the context from the current Loock instance.
+     */
+    detach() {
+        if (this.parent) {
+            if (context.isActive) {
+                context.close();
+            }
+            this.parent.removeContext(this);
+            this.parent = null;
+        }
     }
 }
 
@@ -170,6 +204,8 @@ class Loock {
     constructor(root = window) {
         this.contexts = [];
         this.actives = [];
+        this.onContextEntered = this.onContextEntered.bind(this);
+        this.onContextExited = this.onContextExited.bind(this);
         root.addEventListener('keydown', (event) => {
             if (!this.activeContext) {
                 return;
@@ -219,11 +255,50 @@ class Loock {
     }
 
     /**
+     * Flag the active context.
+     * @private
+     * @param {Context} context The context to flag.
+     */
+    onContextEntered(context) {
+        previousElement = document.activeElement;
+        this.activeContext = context;
+        this.actives.push(context);
+    }
+
+    /**
+     * Unflag the active context.
+     * @private
+     * @param {Context} context The context to unflag.
+     */
+    onContextExited(context) {
+        let isActiveContext = context === this.activeContext;
+        let io = this.actives.indexOf(context);
+        this.actives.splice(io, 1);
+
+        if (!isActiveContext) {
+            return;
+        }
+
+        if (this.actives.length) {
+            this.activeContext = this.actives[this.actives.length - 1];
+            this.activeContext.restore();
+            return;
+        }
+
+        delete this.activeContext;
+
+        if (this.defaultContext) {
+            this.defaultContext.enter();
+            return;
+        }
+    }
+
+    /**
      * Create a default context.
      *
      * @param {HTMLElement} element The root of the default context.
      * @param {ContextOptions} options A set of options for the context.
-     * @return {LoockContext} new context
+     * @return {Context} New context
      */
     createDefaultContext(element, options = {}) {
         this.defaultContext = this.createContext(element, options);
@@ -237,48 +312,40 @@ class Loock {
      *
      * @param {HTMLElement} element The root element of the context.
      * @param {ContextOptions} options A set of options for the context.
-     * @return {LoockContext} new context
+     * @return {Context} New context
      */
     createContext(element, options = {}) {
-        let context = new LoockContext(element, options);
-        let previousElement;
-
-        this.contexts.push(context);
-
-        context.on('enter', () => {
-            previousElement = document.activeElement;
-            this.activeContext = context;
-            this.actives.push(context);
-        });
-
-        context.on('exit', () => {
-            let isActiveContext = context === this.activeContext;
-            let io = this.actives.indexOf(context);
-            this.actives.splice(io, 1);
-
-            if (!isActiveContext) {
-                return;
-            }
-
-            if (this.actives.length) {
-                this.activeContext = this.actives[this.actives.length - 1];
-                this.activeContext.restore();
-                return;
-            }
-
-            delete this.activeContext;
-
-            if (this.defaultContext) {
-                this.defaultContext.enter();
-                return;
-            }
-
-            if (previousElement) {
-                previousElement.focus();
-            }
-        });
-
+        let context = new Context(element, options);
+        this.addContext(context);
         return context;
+    }
+
+    /**
+     * Handle a context.
+     * @param {Context} context The context to handle.
+     */
+    addContext(context) {
+        let io = this.contexts.indexOf(context);
+        if (io !== -1) {
+            return;
+        }
+        context.attach(this);
+        context.on('enter', this.onContextEntered);
+        context.on('exit', this.onContextExited);
+        this.contexts.push(context);
+    }
+
+    /**
+     * Unhandle a context.
+     * @param {Context} context The context to remove.
+     */
+    removeContext(context) {
+        let io = this.contexts.indexOf(context);
+        if (io === -1) {
+            return;
+        }
+        context.detach();
+        this.contexts.splice(io, 1);
     }
 }
 
