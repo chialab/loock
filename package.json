@@ -3,8 +3,10 @@
   "version": "1.1.4",
   "description": "An accessibility helper for keyboard navigation on the web.",
   "structure": "module",
-  "main": "dist/loock.js",
-  "module": "src/index.js",
+  "lib": "src/index.js",
+  "main": "dist/cjs/loock.js",
+  "module": "dist/esm/index.js",
+  "browser": "dist/umd/index.js",
   "license": "MIT",
   "author": "Chialab",
   "repository": {
@@ -25,7 +27,7 @@
     "stylelint-order": "^1.0.0"
   },
   "dependencies": {
-    "@chialab/proteins": "^3.0.0-rc.16"
+    "@chialab/proteins": "^3.0.0"
   },
   "directories": {
     "src": "src",
@@ -33,7 +35,7 @@
     "test": "test"
   },
   "scripts": {
-    "build": "rna build --production",
+    "build": "rna build --production --typings",
     "watch": "rna build --watch",
     "lint": "rna lint",
     "start": "yarn install + rna build --watch",

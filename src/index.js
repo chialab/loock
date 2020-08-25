@@ -1,31 +1,44 @@
 import { Factory } from '@chialab/proteins';
 
+/**
+ * Default focusable selectors.
+ */
 const SELECTORS = [
     'button',
-    'a[href]',
     'input',
     'select',
     'textarea',
+    'a[href]',
     '[tabindex]',
+    'details',
 ];
 
+/**
+ * Interval between keydown triggers.
+ */
 const TIME_BETWEEN_KEYDOWNS = 150;
+
+/**
+ * @typedef {Object} ContextOptions
+ * @property {string[]} ignore A list of selectors to ignore.
+ */
 
 /**
  * Loock context class.
  */
 class LoockContext extends Factory.Emitter {
     /**
-     * @constructor
+     * Create a new context.
+     * @param {HTMLElement} element The root element of the context.
+     * @param {ContextOptions} options A set of options for the context.
      */
     constructor(element, options = {}) {
         super();
         this.root = element;
-        this.options = options;
         this.isActive = false;
         this.currentIndex = null;
         this.currentElement = null;
-        this.ignore = this.options.ignore;
+        this.ignore = options.ignore;
         this.lastKeydownTime = Date.now();
 
         if (!element.hasAttribute('tabindex')) {
@@ -40,7 +53,7 @@ class LoockContext extends Factory.Emitter {
     /**
      * Returns focusable children elements.
      *
-     * @returns {Array<HTMLElement>} focusable children of root element.
+     * @return {Array<HTMLElement>} focusable children of root element.
      */
     findFocusableChildren() {
         const elements = [...this.root.querySelectorAll(
@@ -59,7 +72,7 @@ class LoockContext extends Factory.Emitter {
     /**
      * Active previous focusable element.
      *
-     * @returns {void}
+     * @return {void}
      */
     prev() {
         let children = this.findFocusableChildren();
@@ -83,7 +96,7 @@ class LoockContext extends Factory.Emitter {
     /**
      * Active next focusable element.
      *
-     * @returns {void}
+     * @return {void}
      */
     next() {
         let children = this.findFocusableChildren();
@@ -107,7 +120,7 @@ class LoockContext extends Factory.Emitter {
     /**
      * Entering the context.
      *
-     * @returns {void}
+     * @return {void}
      */
     enter() {
         if (this.isActive) {
@@ -133,7 +146,7 @@ class LoockContext extends Factory.Emitter {
     /**
      * Exit from the context.
      *
-     * @returns {void}
+     * @return {void}
      */
     exit() {
         if (!this.isActive) {
@@ -149,9 +162,10 @@ class LoockContext extends Factory.Emitter {
 /**
  * A manager for Loock contexts.
  */
-export default class Loock {
+class Loock {
     /**
-     * @constructor
+     * Create a new Loock instance.
+     * @param {EventTarget} root
      */
     constructor(root = window) {
         this.contexts = [];
@@ -205,11 +219,11 @@ export default class Loock {
     }
 
     /**
-     * Creates a default context.
+     * Create a default context.
      *
-     * @param {HTMLElement} element
-     * @param {Object} options
-     * @returns {LoockContext} new context
+     * @param {HTMLElement} element The root of the default context.
+     * @param {ContextOptions} options A set of options for the context.
+     * @return {LoockContext} new context
      */
     createDefaultContext(element, options = {}) {
         this.defaultContext = this.createContext(element, options);
@@ -219,18 +233,20 @@ export default class Loock {
     }
 
     /**
-     * Creates new context.
+     * Create a new context.
      *
-     * @param {HTMLElement} element
-     * @param {Object} options
-     * @returns {LoockContext} new context
+     * @param {HTMLElement} element The root element of the context.
+     * @param {ContextOptions} options A set of options for the context.
+     * @return {LoockContext} new context
      */
     createContext(element, options = {}) {
         let context = new LoockContext(element, options);
+        let previousElement;
 
         this.contexts.push(context);
 
         context.on('enter', () => {
+            previousElement = document.activeElement;
             this.activeContext = context;
             this.actives.push(context);
         });
@@ -254,9 +270,16 @@ export default class Loock {
 
             if (this.defaultContext) {
                 this.defaultContext.enter();
+                return;
+            }
+
+            if (previousElement) {
+                previousElement.focus();
             }
         });
 
         return context;
     }
 }
+
+export { Loock as default };

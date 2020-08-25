@@ -46,6 +46,32 @@ Use via cdn:
 
 ## Usage
 
+```ts
+import Loock from '@chialab/loock';
+
+const loock = new Loock();
+
+// define the default context
+const mainContext = loock.createDefaultContext(document.getElementById('main'));
+
+// define one context
+const context = loock.createContext(document.getElementById('navigation'));
+
+// listen context state
+context.on('enter', () => {
+    console.log('entered the navigation context');
+    // do stuff
+});
+
+context.on('exit', () => {
+    console.log('exited the navigation context');
+    // do stuff
+});
+
+// activate the context
+context.enter();
+```
+
 ```html
 <html>
     <body>
@@ -57,31 +83,6 @@ Use via cdn:
         <section id="main" aria-label="Main content">
             ...
         </section>
-
-        <script type="module">
-            import Loock from '@chialab/loock';
-            const loock = new Loock();
-
-            // define the default context
-            const mainContext = loock.createDefaultContext(document.getElementById('main'));
-
-            // define one context
-            const context = loock.createContext(document.getElementById('navigation'));
-
-            // listen the context
-            context.on('enter', () => {
-               console.log('entered the navigation context');
-               // do stuff you like
-            });
-
-            context.on('exit', () => {
-               console.log('exited the navigation context');
-               // do stuff you like
-            });
-
-            // activate the context
-            context.enter();
-        </script>
     </body>
 </html>
 ```
