@@ -19,6 +19,23 @@ const SELECTORS = [
 const TIME_BETWEEN_KEYDOWNS = 150;
 
 /**
+ * The tab key descriptor.
+ */
+export const TAB_KEY = {
+    key: 'Tab',
+    keyCode: '9',
+};
+
+/**
+ * The esc key descriptor.
+ */
+export const ESC_KEY = {
+    key: 'Escape',
+    altKey: 'Esc',
+    keyCode: '27',
+};
+
+/**
  * @typedef {Object} ContextOptions
  * @property {string[]} ignore A list of selectors to ignore.
  */
@@ -108,7 +125,7 @@ export class Context extends Factory.Emitter {
             return;
         }
         let io = children.indexOf(this.currentElement);
-        if (io === children.length -1) {
+        if (io === children.length - 1) {
             io = 0;
         } else if (io !== -1) {
             io = io + 1;
@@ -196,7 +213,7 @@ export class Context extends Factory.Emitter {
 /**
  * A manager for Loock contexts.
  */
-class Loock {
+export class Loock {
     /**
      * Create a new Loock instance.
      * @param {EventTarget} root
@@ -210,11 +227,11 @@ class Loock {
             if (!this.activeContext) {
                 return;
             }
-            if (event.key == 'Escape' || event.key == 'Esc') {
+            if (event.key == ESC_KEY.key || event.key == ESC_KEY.altKey) {
                 event.preventDefault();
                 this.activeContext.exit();
             }
-            if (event.keyCode == '9') {
+            if (event.keyCode == TAB_KEY.keyCode) {
                 event.preventDefault();
                 // prevent compulsively key holding down in all browsers.
                 if ((Date.now() - this.lastKeydownTime) < TIME_BETWEEN_KEYDOWNS) {
@@ -260,7 +277,6 @@ class Loock {
      * @param {Context} context The context to flag.
      */
     onContextEntered(context) {
-        previousElement = document.activeElement;
         this.activeContext = context;
         this.actives.push(context);
     }
@@ -289,7 +305,6 @@ class Loock {
 
         if (this.defaultContext) {
             this.defaultContext.enter();
-            return;
         }
     }
 
@@ -329,10 +344,10 @@ class Loock {
         if (io !== -1) {
             return;
         }
+        this.contexts.push(context);
         context.attach(this);
         context.on('enter', this.onContextEntered);
         context.on('exit', this.onContextExited);
-        this.contexts.push(context);
     }
 
     /**
@@ -348,5 +363,3 @@ class Loock {
         this.contexts.splice(io, 1);
     }
 }
-
-export { Loock as default };

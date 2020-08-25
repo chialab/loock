@@ -22,3 +22,5 @@ public/**/*.css.map
 
 /demo/loock.js
 /demo/*.js.map
+/test/__generated__
+/test/__coverage__

@@ -47,7 +47,7 @@ Use via cdn:
 ## Usage
 
 ```ts
-import Loock from '@chialab/loock';
+import { Loock } from '@chialab/loock';
 
 const loock = new Loock();
 

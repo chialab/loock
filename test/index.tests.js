@@ -1,12 +1,10 @@
-/* eslint-env mocha */
-import Loock from '../src/index.js';
-import { fireKey, TAB_KEY, ESC_KEY } from './events.js';
-import chai from 'chai/chai.js';
+import { Loock, TAB_KEY, ESC_KEY } from '../src/index.js';
+import { fireKey } from './events.js';
 
-const expect = chai.expect;
 let loock;
 
-describe('Loock Tests', () => {
+describe('Loock Tests', function() {
+    this.timeout(10 * 1000);
 
     before(() => {
         document.body.innerHTML =
@@ -26,19 +24,19 @@ describe('Loock Tests', () => {
         loock.createDefaultContext(document.body);
     });
 
-    afterEach(() => {
+    afterEach(async () => {
         // reset all 3 levels of contexts so tests can start in a clean way.
-        fireKey(window, ESC_KEY);
-        fireKey(window, ESC_KEY);
-        fireKey(window, ESC_KEY);
+        await fireKey(window, ESC_KEY);
+        await fireKey(window, ESC_KEY);
+        await fireKey(window, ESC_KEY);
     });
 
-    it('should initially focus on default context', async () => {
+    it('should initially focus on default context', () => {
         expect(document.activeElement).to.equal(document.body);
     });
 
     it('should navigate within default context', async () => {
-        fireKey(window, ESC_KEY);
+        await fireKey(window, ESC_KEY);
         expect(document.activeElement).to.equal(document.body);
     });
 
@@ -46,17 +44,17 @@ describe('Loock Tests', () => {
         const alphabetDiv = document.querySelector('.alphabet');
         loock.createContext(alphabetDiv);
 
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(alphabetDiv);
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonB"]'));
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonC"]'));
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        fireKey(window, ESC_KEY);
+        await fireKey(window, ESC_KEY);
         expect(document.activeElement).to.equal(alphabetDiv);
     });
 
@@ -67,29 +65,29 @@ describe('Loock Tests', () => {
         const numericDiv = document.querySelector('.numeric');
         loock.createContext(numericDiv);
 
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(alphabetDiv);
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        fireKey(window, ESC_KEY);
+        await fireKey(window, ESC_KEY);
         expect(document.activeElement).to.equal(alphabetDiv);
-        fireKey(window, ESC_KEY);
+        await fireKey(window, ESC_KEY);
         expect(document.activeElement).to.equal(alphabetDiv);
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonB"]'));
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonC"]'));
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(numericDiv);
-        fireKey(window, TAB_KEY);
+        await fireKey(window, TAB_KEY);
         expect(document.activeElement).to.equal(document.querySelector('button[name="button1"]'));
-        fireKey(window, ESC_KEY);
+        await fireKey(window, ESC_KEY);
         expect(document.activeElement).to.equal(numericDiv);
-        fireKey(window, ESC_KEY);
+        await fireKey(window, ESC_KEY);
         expect(document.activeElement).to.equal(numericDiv);
-        fireKey(window, ESC_KEY);
+        await fireKey(window, ESC_KEY);
         expect(document.activeElement).to.equal(document.body);
     });
 });

@@ -9,12 +9,12 @@ jobs:
       before_install:
         - yarn global add @chialab/rna-cli
       install:
-        - rna install
-        - rna add codecov
+        - yarn install
+        - yarn add codecov
       script:
-        - rna unit 'test/*.tests.js' --saucelabs --coverage --concurrency 1
+        - yarn test
       after_success:
-        - cat reports/unit/coverage/report-lcov/*/lcov.info | ./node_modules/.bin/codecov
+        - cat test/__coverage__/*/lcov.info | ./node_modules/.bin/codecov
 
   allow_failures:
     - env: CI_BUILD_TYPE=saucelabs

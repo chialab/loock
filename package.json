@@ -37,6 +37,7 @@
   "scripts": {
     "build": "rna build --production --typings",
     "watch": "rna build --watch",
+    "test": "rna unit 'test/*.tests.js' --saucelabs --coverage --concurrency 1",
     "lint": "rna lint",
     "start": "yarn install + rna build --watch",
     "prepack": "yarn build"
