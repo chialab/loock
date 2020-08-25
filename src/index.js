@@ -37,7 +37,9 @@ export const ESC_KEY = {
 
 /**
  * @typedef {Object} ContextOptions
- * @property {string[]} ignore A list of selectors to ignore.
+ * @property {string[]} [selectors] A list of focusable selectors.
+ * @property {string[]} [ignore] A list of selectors to ignore.
+ * @property {boolean|((context: Context) => boolean|Promise<boolean>)} [dismiss] A dismiss rule for the context.
  */
 
 /**
@@ -58,7 +60,9 @@ export class Context extends Factory.Emitter {
         this.isActive = false;
         this.currentIndex = null;
         this.currentElement = null;
+        this.selectors = options.selectors || SELECTORS;
         this.ignore = options.ignore;
+        this.dismiss = options.dismiss || true;
         this.lastKeydownTime = Date.now();
 
         if (!element.hasAttribute('tabindex')) {
@@ -77,16 +81,16 @@ export class Context extends Factory.Emitter {
      */
     findFocusableChildren() {
         const elements = [...this.root.querySelectorAll(
-            SELECTORS.map((selector) => `${selector}:not([tabindex="-1"]):not([disabled]):not([aria-hidden]):not([display=none])`).join(', ')
+            this.selectors.map((selector) => `${selector}:not([tabindex="-1"]):not([disabled]):not([aria-hidden]):not([display=none])`).join(', ')
         )];
         const ignore = this.ignore ? [...this.root.querySelectorAll(this.ignore)] : [];
 
         return elements
+            .filter((elem) => !ignore.some((area) => elem === area || area.contains(elem)))
             .filter((elem) => {
                 const rect = elem.getBoundingClientRect();
                 return rect.height && rect.width;
-            })
-            .filter((elem) => !ignore.some((area) => elem === area || area.contains(elem)));
+            });
     }
 
     /**
@@ -166,12 +170,31 @@ export class Context extends Factory.Emitter {
     /**
      * Exit from the context.
      *
+     * @return {Promise<boolean>}
+     */
+    async exit() {
+        if (!this.isActive) {
+            return false;
+        }
+        if (this.dismiss === false) {
+            return false;
+        }
+        if (typeof this.dismiss === 'function') {
+            let result = await this.dismiss(this);
+            if (result === false) {
+                return false;
+            }
+        }
+        this.forceExit();
+        return true;
+    }
+
+    /**
+     * Force exit from the context.
+     *
      * @return {void}
      */
-    exit() {
-        if (!this.isActive) {
-            return;
-        }
+    forceExit() {
         this.isActive = false;
         this.currentIndex = null;
         this.currentElement = null;
@@ -212,17 +235,21 @@ export class Loock {
      * @param {EventTarget} root
      */
     constructor(root = window) {
+        this.root = root;
         this.contexts = [];
         this.actives = [];
         this.onContextEntered = this.onContextEntered.bind(this);
         this.onContextExited = this.onContextExited.bind(this);
-        root.addEventListener('keydown', (event) => {
+        root.addEventListener('keydown', async (event) => {
             if (!this.activeContext) {
                 return;
             }
             if (event.key == ESC_KEY.key || event.key == ESC_KEY.altKey) {
                 event.preventDefault();
-                this.activeContext.exit();
+                let result = await this.activeContext.exit();
+                if (!result) {
+                    return;
+                }
             }
             if (event.keyCode == TAB_KEY.keyCode) {
                 event.preventDefault();
@@ -233,8 +260,10 @@ export class Loock {
                 this.lastKeydownTime = Date.now();
                 let elements = this.activeContext.findFocusableChildren();
                 if (elements.length === 0) {
-                    this.activeContext.exit();
-                    return;
+                    let result = await this.activeContext.exit();
+                    if (!result) {
+                        return;
+                    }
                 }
                 if (event.shiftKey) {
                     this.activeContext.prev();
