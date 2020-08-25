@@ -146,9 +146,6 @@ export class Context extends Factory.Emitter {
         if (this.isActive) {
             return;
         }
-        if (!this.parent) {
-            this._activeElement = this.root.ownerDocument.activeElement;
-        }
         this.isActive = true;
         this.trigger('enter', this);
         this.restore();
@@ -179,10 +176,6 @@ export class Context extends Factory.Emitter {
         this.currentIndex = null;
         this.currentElement = null;
         this.trigger('exit', this);
-        if (this._activeElement) {
-            this._activeElement.focus();
-            delete this._activeElement;
-        }
     }
 
     /**
@@ -277,6 +270,7 @@ export class Loock {
      * @param {Context} context The context to flag.
      */
     onContextEntered(context) {
+        this._activeElement = this._activeElement || this.root.document.activeElement;
         this.activeContext = context;
         this.actives.push(context);
     }
@@ -305,6 +299,12 @@ export class Loock {
 
         if (this.defaultContext) {
             this.defaultContext.enter();
+            return;
+        }
+
+        if (this._activeElement) {
+            this._activeElement.focus();
+            delete this._activeElement;
         }
     }
 
