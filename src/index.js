@@ -3,7 +3,7 @@ import { Factory } from '@chialab/proteins';
 /**
  * Default focusable selectors.
  */
-const SELECTORS = [
+export const DEFAULT_SELECTORS = [
     'button',
     'input',
     'select',
@@ -44,7 +44,7 @@ export const ESC_KEY = {
 
 /**
  * Loock context class.
- * @property {Loock} parent The Loock instance to bound.
+ * @property {Loock} parent The Loock instance to bound.
  * @property {boolean} isActive The context state.
  */
 export class Context extends Factory.Emitter {
@@ -60,7 +60,7 @@ export class Context extends Factory.Emitter {
         this.isActive = false;
         this.currentIndex = null;
         this.currentElement = null;
-        this.selectors = options.selectors || SELECTORS;
+        this.selectors = options.selectors || DEFAULT_SELECTORS;
         this.ignore = options.ignore;
         this.dismiss = options.dismiss || true;
         this.lastKeydownTime = Date.now();
@@ -68,10 +68,28 @@ export class Context extends Factory.Emitter {
         if (!element.hasAttribute('tabindex')) {
             element.setAttribute('tabindex', '0');
         }
-        if (!element.hasAttribute('aria-label')) {
+        if (!element.hasAttribute('aria-label') &&
+            !element.hasAttribute('aria-labelledby') &&
+            !element.hasAttribute('aria-describedby')) {
             // eslint-disable-next-line
             console.warn('created a Context without aria-label', this);
         }
+
+        element.addEventListener('click', (event) => {
+            let elements = this.findFocusableChildren();
+            let target = event.target;
+            while (element.contains(target) || target === element) {
+                if (elements.indexOf(target) !== -1) {
+                    target.focus();
+                    break;
+                }
+                if (target === element) {
+                    element.focus();
+                    break;
+                }
+                target = target.parentNode;
+            }
+        });
     }
 
     /**
@@ -80,15 +98,15 @@ export class Context extends Factory.Emitter {
      * @return {Array<HTMLElement>} focusable children of root element.
      */
     findFocusableChildren() {
-        const elements = [...this.root.querySelectorAll(
+        let elements = [...this.root.querySelectorAll(
             this.selectors.map((selector) => `${selector}:not([tabindex="-1"]):not([disabled]):not([aria-hidden]):not([display=none])`).join(', ')
         )];
-        const ignore = this.ignore ? [...this.root.querySelectorAll(this.ignore)] : [];
+        let ignore = this.ignore ? [...this.root.querySelectorAll(this.ignore)] : [];
 
         return elements
             .filter((elem) => !ignore.some((area) => elem === area || area.contains(elem)))
             .filter((elem) => {
-                const rect = elem.getBoundingClientRect();
+                let rect = elem.getBoundingClientRect();
                 return rect.height && rect.width;
             });
     }
@@ -144,14 +162,14 @@ export class Context extends Factory.Emitter {
     /**
      * Entering the context.
      *
-     * @return {void}
+     * @return {Promise<void>}
      */
-    enter() {
+    async enter() {
         if (this.isActive) {
             return;
         }
         this.isActive = true;
-        this.trigger('enter', this);
+        await this.trigger('enter', this);
         this.restore();
     }
 
@@ -185,20 +203,20 @@ export class Context extends Factory.Emitter {
                 return false;
             }
         }
-        this.forceExit();
+        await this.forceExit();
         return true;
     }
 
     /**
      * Force exit from the context.
      *
-     * @return {void}
+     * @return {Promise<void>}
      */
-    forceExit() {
+    async forceExit() {
         this.isActive = false;
         this.currentIndex = null;
         this.currentElement = null;
-        this.trigger('exit', this);
+        await this.trigger('exit', this);
     }
 
     /**
@@ -217,8 +235,8 @@ export class Context extends Factory.Emitter {
      */
     detach() {
         if (this.parent) {
-            if (context.isActive) {
-                context.close();
+            if (this.isActive) {
+                this.close();
             }
             this.parent.removeContext(this);
             this.parent = null;

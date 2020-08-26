@@ -9,4 +9,5 @@ karma.conf.js
 # RNA
 
 /demo
+/src
 logo.svg
