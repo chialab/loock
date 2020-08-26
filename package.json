@@ -1,6 +1,6 @@
 {
   "name": "@chialab/loock",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "An accessibility helper for keyboard navigation on the web.",
   "structure": "module",
   "lib": "src/index.js",
