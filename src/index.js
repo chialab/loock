@@ -40,6 +40,7 @@ export const ESC_KEY = {
  * @property {string[]} [selectors] A list of focusable selectors.
  * @property {string[]} [ignore] A list of selectors to ignore.
  * @property {boolean|((context: Context) => boolean|Promise<boolean>)} [dismiss] A dismiss rule for the context.
+ * @property {boolean} [disabled] Disabled state of the context.
  */
 
 /**
@@ -63,11 +64,17 @@ export class Context extends Factory.Emitter {
         this.selectors = options.selectors || DEFAULT_SELECTORS;
         this.ignore = options.ignore;
         this.dismiss = options.dismiss || true;
+        this.disabled = options.disabled || false;
         this.lastKeydownTime = Date.now();
 
-        if (!element.hasAttribute('tabindex')) {
+        if (!element.hasAttribute('tabindex') && !this.disabled) {
             element.setAttribute('tabindex', '0');
         }
+        this.tabIndex = element.getAttribute('tabindex') || '0';
+        if (this.disabled) {
+            element.setAttribute('tabindex', '-1');
+        }
+
         if (!element.hasAttribute('aria-label') &&
             !element.hasAttribute('aria-labelledby') &&
             !element.hasAttribute('aria-describedby')) {
@@ -76,6 +83,9 @@ export class Context extends Factory.Emitter {
         }
 
         element.addEventListener('click', (event) => {
+            if (this.disabled) {
+                return;
+            }
             let elements = this.findFocusableChildren();
             let target = event.target;
             while (element.contains(target) || target === element) {
@@ -117,6 +127,9 @@ export class Context extends Factory.Emitter {
      * @return {void}
      */
     prev() {
+        if (this.disabled) {
+            return;
+        }
         let children = this.findFocusableChildren();
         if (!children.length) {
             this.restore();
@@ -141,6 +154,9 @@ export class Context extends Factory.Emitter {
      * @return {void}
      */
     next() {
+        if (this.disabled) {
+            return;
+        }
         let children = this.findFocusableChildren();
         if (!children.length) {
             this.restore();
@@ -165,6 +181,9 @@ export class Context extends Factory.Emitter {
      * @return {Promise<void>}
      */
     async enter() {
+        if (this.disabled) {
+            return;
+        }
         if (this.isActive) {
             return;
         }
@@ -178,6 +197,9 @@ export class Context extends Factory.Emitter {
      * @return {void}
      */
     restore() {
+        if (this.disabled) {
+            return;
+        }
         if (this.currentElement) {
             this.currentElement.focus();
         } else {
@@ -191,6 +213,9 @@ export class Context extends Factory.Emitter {
      * @return {Promise<boolean>}
      */
     async exit() {
+        if (this.disabled) {
+            return;
+        }
         if (!this.isActive) {
             return false;
         }
@@ -213,6 +238,9 @@ export class Context extends Factory.Emitter {
      * @return {Promise<void>}
      */
     async forceExit() {
+        if (this.disabled) {
+            return;
+        }
         this.isActive = false;
         this.currentIndex = null;
         this.currentElement = null;
@@ -241,6 +269,31 @@ export class Context extends Factory.Emitter {
             this.parent.removeContext(this);
             this.parent = null;
         }
+    }
+
+    /**
+     * Enable the context that has been disabled.
+     */
+    enable() {
+        if (!this.disabled) {
+            return;
+        }
+
+        this.disabled = false;
+        this.root.setAttribute('tabindex', this.tabIndex);
+    }
+
+    /**
+     * Disable the context.
+     */
+    disable() {
+        if (this.disabled) {
+            return;
+        }
+
+        this.forceExit();
+        this.disabled = true;
+        this.root.setAttribute('tabindex', '-1');
     }
 }
 
@@ -293,7 +346,7 @@ export class Loock {
 
         root.addEventListener('focusin', ({ target }) => {
             let context = this.contexts.find(({ root }) => root === target);
-            if (context && !context.isActive) {
+            if (context && !context.isActive && !context.disabled) {
                 context.enter();
                 return;
             }
@@ -344,7 +397,7 @@ export class Loock {
 
         delete this.activeContext;
 
-        if (this.defaultContext) {
+        if (this.defaultContext && !this.defaultContext.disabled) {
             this.defaultContext.enter();
             return;
         }
@@ -364,7 +417,9 @@ export class Loock {
      */
     createDefaultContext(element, options = {}) {
         this.defaultContext = this.createContext(element, options);
-        this.defaultContext.enter();
+        if (!this.defaultContext.disabled) {
+            this.defaultContext.enter();
+        }
         this.contexts.push(this.defaultContext);
         return this.defaultContext;
     }
