@@ -1,13 +1,7 @@
-# RNA
 .*
 /node_modules
 /reports
 /test
-rollup.config.js
-sauce.browsers.js
-karma.conf.js
-# RNA
-
 /demo
 /src
 logo.svg
