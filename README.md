@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>Loock</strong> • An accessibility helper for keyboard navigation on the web.
+  <strong>Loock</strong> • A focus trap helper for keyboard navigation on the web.
 </p>
 
 <p align="center">
@@ -44,20 +44,22 @@ Use via cdn:
 import { Loock } from '@chialab/loock';
 
 const loock = new Loock();
+const mainElem = document.getElementById('main');
+const navigationElem = document.getElementById('main');
 
 // define the default context
-const mainContext = loock.createDefaultContext(document.getElementById('main'));
+const mainContext = loock.createDefaultContext(mainElem);
 
 // define one context
-const context = loock.createContext(document.getElementById('navigation'));
+const context = loock.createContext(navigationElem);
 
 // listen context state
-context.on('enter', () => {
+navigationElem.addEventListener('focusenter', () => {
     console.log('entered the navigation context');
     // do stuff
 });
 
-context.on('exit', () => {
+navigationElem.addEventListener('focusexit', () => {
     console.log('exited the navigation context');
     // do stuff
 });

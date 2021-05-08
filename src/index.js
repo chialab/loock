@@ -1,4 +1,4 @@
-import { Factory } from '@chialab/proteins';
+import { dispatchAsyncEvent } from '@chialab/dna';
 
 /**
  * Default focusable selectors.
@@ -8,6 +8,8 @@ export const DEFAULT_SELECTORS = [
     'input',
     'select',
     'textarea',
+    '[contenteditable=""]',
+    '[contenteditable="true"]',
     'a[href]',
     '[tabindex]',
     'details',
@@ -36,43 +38,119 @@ export const ESC_KEY = {
 };
 
 /**
+ * Private symbol to store the context of an element.
+ */
+const SYM = typeof Symbol !== 'undefined' ? Symbol('loock') : '__look_symbol__';
+
+/**
+ * @typedef {(context: Context) => boolean|Promise<boolean>} DismissFunction
+ */
+
+/**
  * @typedef {Object} ContextOptions
- * @property {string[]} [selectors] A list of focusable selectors.
- * @property {string[]} [ignore] A list of selectors to ignore.
- * @property {boolean|((context: Context) => boolean|Promise<boolean>)} [dismiss] A dismiss rule for the context.
+ * @property {string|string[]} [selectors] A list of focusable selectors.
+ * @property {string|string[]} [ignore] A list of selectors to ignore.
+ * @property {boolean|DismissFunction} [dismiss] A dismiss rule for the context.
  * @property {boolean} [disabled] Disabled state of the context.
  */
+
+/**
+ * Store the context of the element.
+ * @param {HTMLElement} element The root element of the context.
+ * @param {Context} context The context.
+ */
+export function setContext(element, context) {
+    element[SYM] = context;
+}
+
+/**
+ * Get the context of the element.
+ * @param {HTMLElement} element The root element of the context.
+ * @return {Context} The context of the element.
+ */
+export function getContext(element) {
+    return element[SYM];
+}
 
 /**
  * Loock context class.
  * @property {Loock} parent The Loock instance to bound.
  * @property {boolean} isActive The context state.
  */
-export class Context extends Factory.Emitter {
+export class Context {
+    /**
+     * Active state of the context.
+     */
+    get active() {
+        return this._active;
+    }
+
+    /**
+     * Disabled state of the context.
+     */
+    get disabled() {
+        return this._disabled || !this.element.isConnected;
+    }
+
     /**
      * Create a new context.
      * @param {HTMLElement} element The root element of the context.
      * @param {ContextOptions} options A set of options for the context.
+     * @param {Loock} [parent] A set of options for the context.
      */
-    constructor(element, options = {}, parent = null) {
-        super();
-        this.attach(parent);
-        this.root = element;
-        this.isActive = false;
-        this.currentIndex = null;
-        this.currentElement = null;
-        this.selectors = options.selectors || DEFAULT_SELECTORS;
-        this.ignore = options.ignore;
-        this.dismiss = options.dismiss || true;
-        this.disabled = options.disabled || false;
-        this.lastKeydownTime = Date.now();
+    constructor(element, options = {}, parent) {
+        this.element = element;
+        setContext(element, this);
 
-        if (!element.hasAttribute('tabindex') && !this.disabled) {
-            element.setAttribute('tabindex', '0');
+        /**
+         * @protected
+         */
+        this.focusableSelectors = DEFAULT_SELECTORS;
+
+        /**
+         * @protected
+         */
+        this.ignoredSelectors = [];
+
+        /**
+         * @protected
+         * @type {boolean|DismissFunction}
+         */
+        this.dismiss = true;
+
+        /**
+         * @protected
+         */
+        this.parent = parent;
+
+        /**
+         * @private
+         */
+        this._active = false;
+
+        /**
+         * @private
+         */
+        this._currentElement = null;
+
+        /**
+         * @private
+         */
+        this._lastKeydownTime = Date.now();
+
+        /**
+         * @private
+         */
+        this._tabIndex = element.getAttribute('tabindex') || '0';
+
+        if (options.selectors) {
+            this.setFocusableSelectors(options.selectors);
         }
-        this.tabIndex = element.getAttribute('tabindex') || '0';
-        if (this.disabled) {
-            element.setAttribute('tabindex', '-1');
+        if (options.ignore) {
+            this.setIgnoredSelectors(options.ignore);
+        }
+        if (options.dismiss != null) {
+            this.setDismiss(options.dismiss);
         }
 
         if (!element.hasAttribute('aria-label') &&
@@ -82,11 +160,14 @@ export class Context extends Factory.Emitter {
             console.warn('created a Context without aria-label', this);
         }
 
-        element.addEventListener('click', (event) => {
+        /**
+         * @private
+         */
+        this.onClick = (event) => {
             if (this.disabled) {
                 return;
             }
-            let elements = this.findFocusableChildren();
+            const elements = this.findFocusableChildren();
             let target = event.target;
             while (element.contains(target) || target === element) {
                 if (elements.indexOf(target) !== -1) {
@@ -99,7 +180,41 @@ export class Context extends Factory.Emitter {
                 }
                 target = target.parentNode;
             }
-        });
+        };
+
+        if (options.disabled) {
+            this.disable();
+        } else {
+            this.enable();
+        }
+    }
+
+    /**
+     * Set focusable selectors.
+     * @param {string|string[]} selectors The selectors to set.
+     */
+    setFocusableSelectors(selectors) {
+        if (Array.isArray(selectors)) {
+            this.focusableSelectors = selectors;
+        } else if (typeof selectors === 'string' && selectors) {
+            this.focusableSelectors = selectors.split(',');
+        } else {
+            throw new Error('invalid selectors list');
+        }
+    }
+
+    /**
+     * Set selectors for elements to ignore.
+     * @param {string|string[]} selectors The selectors to ignore,
+     */
+    setIgnoredSelectors(selectors) {
+        if (Array.isArray(selectors)) {
+            this.ignoredSelectors = selectors;
+        } else if (typeof selectors === 'string' && selectors) {
+            this.ignoredSelectors = selectors.split(',');
+        } else {
+            throw new Error('invalid selectors list');
+        }
     }
 
     /**
@@ -108,10 +223,11 @@ export class Context extends Factory.Emitter {
      * @return {Array<HTMLElement>} focusable children of root element.
      */
     findFocusableChildren() {
-        let elements = [...this.root.querySelectorAll(
-            this.selectors.map((selector) => `${selector}:not([tabindex="-1"]):not([disabled]):not([aria-hidden]):not([display=none])`).join(', ')
-        )];
-        let ignore = this.ignore ? [...this.root.querySelectorAll(this.ignore)] : [];
+        const focusable = this.element.querySelectorAll(
+            this.focusableSelectors.map((selector) => `${selector}:not([type=hidden]):not([tabindex="-1"]):not([disabled]):not([aria-hidden]):not([display=none])`).join(', ')
+        );
+        const elements = [].slice.call(focusable);
+        const ignore = this.ignoredSelectors.length ? [].slice.call(this.element.querySelectorAll(this.ignoredSelectors.join(','))) : [];
 
         return elements
             .filter((elem) => !ignore.some((area) => elem === area || area.contains(elem)))
@@ -119,6 +235,14 @@ export class Context extends Factory.Emitter {
                 let rect = elem.getBoundingClientRect();
                 return rect.height && rect.width;
             });
+    }
+
+    /**
+     *
+     * @param {boolean|DismissFunction} dismiss
+     */
+    setDismiss(dismiss) {
+        this.dismiss = dismiss;
     }
 
     /**
@@ -130,22 +254,20 @@ export class Context extends Factory.Emitter {
         if (this.disabled) {
             return;
         }
-        let children = this.findFocusableChildren();
+        const children = this.findFocusableChildren();
         if (!children.length) {
             this.restore();
             return;
         }
-        let io = children.indexOf(this.currentElement);
+        let io = children.indexOf(this._currentElement);
         if (io === 0) {
             io = children.length - 1;
         } else if (io !== -1) {
             io = io - 1;
         } else {
-            io = Math.min(children.length - 1, this.currentIndex || 0);
+            io = children.length - 1;
         }
-        this.currentIndex = io;
-        this.currentElement = children[io];
-        this.currentElement.focus();
+        this.setCurrentElement(children[io]);
     }
 
     /**
@@ -157,22 +279,20 @@ export class Context extends Factory.Emitter {
         if (this.disabled) {
             return;
         }
-        let children = this.findFocusableChildren();
+        const children = this.findFocusableChildren();
         if (!children.length) {
             this.restore();
             return;
         }
-        let io = children.indexOf(this.currentElement);
+        let io = children.indexOf(this._currentElement);
         if (io === children.length - 1) {
             io = 0;
         } else if (io !== -1) {
             io = io + 1;
         } else {
-            io = Math.min(children.length - 1, this.currentIndex || 0);
+            io = 0;
         }
-        this.currentIndex = io;
-        this.currentElement = children[io];
-        this.currentElement.focus();
+        this.setCurrentElement(children[io]);
     }
 
     /**
@@ -184,11 +304,11 @@ export class Context extends Factory.Emitter {
         if (this.disabled) {
             return;
         }
-        if (this.isActive) {
+        if (this.active) {
             return;
         }
-        this.isActive = true;
-        await this.trigger('enter', this);
+        this._active = true;
+        await dispatchAsyncEvent(this.element, 'focusenter', this);
         this.restore();
     }
 
@@ -200,10 +320,10 @@ export class Context extends Factory.Emitter {
         if (this.disabled) {
             return;
         }
-        if (this.currentElement) {
-            this.currentElement.focus();
+        if (this._currentElement) {
+            this._currentElement.focus();
         } else {
-            this.root.focus();
+            this.element.focus();
         }
     }
 
@@ -214,16 +334,16 @@ export class Context extends Factory.Emitter {
      */
     async exit() {
         if (this.disabled) {
-            return;
+            return false;
         }
-        if (!this.isActive) {
+        if (!this.active) {
             return false;
         }
         if (this.dismiss === false) {
             return false;
         }
         if (typeof this.dismiss === 'function') {
-            let result = await this.dismiss(this);
+            const result = await this.dismiss(this);
             if (result === false) {
                 return false;
             }
@@ -241,10 +361,25 @@ export class Context extends Factory.Emitter {
         if (this.disabled) {
             return;
         }
-        this.isActive = false;
-        this.currentIndex = null;
-        this.currentElement = null;
-        await this.trigger('exit', this);
+        this._active = false;
+        this.unsetCurrentElement();
+        await dispatchAsyncEvent(this.element, 'focusexit', this);
+    }
+
+    /**
+     * Set the current element of the context.
+     * @param {HTMLElement} element
+     */
+    setCurrentElement(element) {
+        this._currentElement = element;
+        element.focus();
+    }
+
+    /**
+     * Unset the current element of the context.
+     */
+    unsetCurrentElement() {
+        this._currentElement = null;
     }
 
     /**
@@ -256,44 +391,43 @@ export class Context extends Factory.Emitter {
             this.detach();
         }
         this.parent = parent;
+        this.enable();
     }
 
     /**
      * Detach the context from the current Loock instance.
      */
     detach() {
-        if (this.parent) {
-            if (this.isActive) {
-                this.close();
-            }
-            this.parent.removeContext(this);
-            this.parent = null;
-        }
+        this.disable();
+        this.parent.removeContext(this);
+        this.parent = null;
     }
 
     /**
      * Enable the context that has been disabled.
      */
     enable() {
-        if (!this.disabled) {
+        if (this._disabled === false) {
             return;
         }
 
-        this.disabled = false;
-        this.root.setAttribute('tabindex', this.tabIndex);
+        this._disabled = false;
+        this.element.setAttribute('tabindex', this._tabIndex);
+        this.element.addEventListener('click', this.onClick);
     }
 
     /**
      * Disable the context.
      */
     disable() {
-        if (this.disabled) {
+        if (this._disabled) {
             return;
         }
 
         this.forceExit();
-        this.disabled = true;
-        this.root.setAttribute('tabindex', '-1');
+        this._disabled = true;
+        this.element.setAttribute('tabindex', '-1');
+        this.element.removeEventListener('click', this.onClick);
     }
 }
 
@@ -303,21 +437,96 @@ export class Context extends Factory.Emitter {
 export class Loock {
     /**
      * Create a new Loock instance.
-     * @param {EventTarget} root
+     * @param {Window} root
      */
     constructor(root = window) {
+        /**
+         * @protected
+         */
         this.root = root;
+
+        /**
+         * @protected
+         * @type {Context[]}
+         */
         this.contexts = [];
+
+        /**
+         * @protected
+         * @type {Context[]}
+         */
         this.actives = [];
-        this.onContextEntered = this.onContextEntered.bind(this);
-        this.onContextExited = this.onContextExited.bind(this);
-        root.addEventListener('keydown', async (event) => {
+
+        /**
+         * @protected
+         * @type {Context}
+         */
+        this.defaultContext = undefined;
+
+        /**
+         * @protected
+         * @type {Context}
+         */
+        this.activeContext = undefined;
+
+        /**
+         * @private
+         * @type {HTMLElement}
+         */
+        this._activeElement = undefined;
+
+        /**
+         * @private
+         */
+        this.onContextEntered = (event) => {
+            const context = event.detail;
+            this._activeElement = /** @type {HTMLElement} */ (this._activeElement || this.root.document.activeElement);
+            this.activeContext = context;
+            this.actives.push(context);
+        };
+
+        /**
+         * @private
+         */
+        this.onContextExited = (event) => {
+            const context = event.detail;
+            const isActiveContext = context === this.activeContext;
+            const io = this.actives.indexOf(context);
+            this.actives.splice(io, 1);
+
+            if (!isActiveContext) {
+                return;
+            }
+
+            if (this.actives.length) {
+                this.activeContext = this.actives[this.actives.length - 1];
+                this.activeContext.restore();
+                return;
+            }
+
+            delete this.activeContext;
+
+            if (this.defaultContext && !this.defaultContext.disabled) {
+                this.defaultContext.enter();
+                return;
+            }
+
+            if (this._activeElement) {
+                this._activeElement.focus();
+                delete this._activeElement;
+            }
+        };
+
+        /**
+         * @private
+         */
+        this.onKeyDown = async (event) => {
             if (!this.activeContext) {
                 return;
             }
             if (event.key == ESC_KEY.key || event.key == ESC_KEY.altKey) {
                 event.preventDefault();
-                let result = await this.activeContext.exit();
+                const result = await this.activeContext.exit();
                 if (!result) {
                     return;
                 }
@@ -325,13 +534,13 @@ export class Loock {
             if (event.keyCode == TAB_KEY.keyCode) {
                 event.preventDefault();
                 // prevent compulsively key holding down in all browsers.
-                if ((Date.now() - this.lastKeydownTime) < TIME_BETWEEN_KEYDOWNS) {
+                if ((Date.now() - this._lastKeydownTime) < TIME_BETWEEN_KEYDOWNS) {
                     return;
                 }
-                this.lastKeydownTime = Date.now();
-                let elements = this.activeContext.findFocusableChildren();
+                this._lastKeydownTime = Date.now();
+                const elements = this.activeContext.findFocusableChildren();
                 if (elements.length === 0) {
-                    let result = await this.activeContext.exit();
+                    const result = await this.activeContext.exit();
                     if (!result) {
                         return;
                     }
@@ -342,70 +551,33 @@ export class Loock {
                     this.activeContext.next();
                 }
             }
-        });
+        };
 
-        root.addEventListener('focusin', ({ target }) => {
-            let context = this.contexts.find(({ root }) => root === target);
-            if (context && !context.isActive && !context.disabled) {
+        /**
+         * @private
+         */
+        this.onFocusIn = ({ target }) => {
+            const context = this.contexts.find(({ element }) => element === target);
+            if (context && !context.active && !context.disabled) {
                 context.enter();
                 return;
             }
+
             if (!this.activeContext) {
                 return;
             }
-            if (target === this.activeContext.root) {
-                this.activeContext.currentElement = null;
+            if (target === this.activeContext.element) {
+                this.activeContext.unsetCurrentElement();
                 return;
             }
             const elements = this.activeContext.findFocusableChildren();
             if (elements.indexOf(target) !== -1) {
-                this.activeContext.currentElement = target;
+                this.activeContext.setCurrentElement(target);
             }
-        });
-    }
+        };
 
-    /**
-     * Flag the active context.
-     * @private
-     * @param {Context} context The context to flag.
-     */
-    onContextEntered(context) {
-        this._activeElement = this._activeElement || this.root.document.activeElement;
-        this.activeContext = context;
-        this.actives.push(context);
-    }
-
-    /**
-     * Unflag the active context.
-     * @private
-     * @param {Context} context The context to unflag.
-     */
-    onContextExited(context) {
-        let isActiveContext = context === this.activeContext;
-        let io = this.actives.indexOf(context);
-        this.actives.splice(io, 1);
-
-        if (!isActiveContext) {
-            return;
-        }
-
-        if (this.actives.length) {
-            this.activeContext = this.actives[this.actives.length - 1];
-            this.activeContext.restore();
-            return;
-        }
-
-        delete this.activeContext;
-
-        if (this.defaultContext && !this.defaultContext.disabled) {
-            this.defaultContext.enter();
-            return;
-        }
-
-        if (this._activeElement) {
-            this._activeElement.focus();
-            delete this._activeElement;
-        }
+        root.addEventListener('keydown', this.onKeyDown);
+        root.addEventListener('focusin', this.onFocusIn);
     }
 
     /**
@@ -432,7 +604,7 @@ export class Loock {
      * @return {Context} New context
      */
     createContext(element, options = {}) {
-        let context = new Context(element, options);
+        const context = new Context(element, options);
         this.addContext(context);
         return context;
     }
@@ -442,14 +614,14 @@ export class Loock {
      * @param {Context} context The context to handle.
      */
     addContext(context) {
-        let io = this.contexts.indexOf(context);
+        const io = this.contexts.indexOf(context);
         if (io !== -1) {
             return;
         }
         this.contexts.push(context);
         context.attach(this);
-        context.on('enter', this.onContextEntered);
-        context.on('exit', this.onContextExited);
+        context.element.addEventListener('focusenter', this.onContextEntered);
+        context.element.addEventListener('focusexit', this.onContextExited);
     }
 
     /**
@@ -457,11 +629,22 @@ export class Loock {
      * @param {Context} context The context to remove.
      */
     removeContext(context) {
-        let io = this.contexts.indexOf(context);
+        const io = this.contexts.indexOf(context);
         if (io === -1) {
             return;
         }
-        context.detach();
+        context.disable();
         this.contexts.splice(io, 1);
+    }
+
+    /**
+     * Destroy the Lock primary context.
+     */
+    destroy() {
+        this.contexts.forEach((context) => {
+            this.removeContext(context);
+        });
+        this.root.removeEventListener('keydown', this.onKeyDown);
+        this.root.removeEventListener('focusin', this.onFocusIn);
     }
 }

@@ -12,6 +12,7 @@
     "noImplicitAny": false,
     "noImplicitThis": true,
     "allowJs": true,
+    "checkJs": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node"
   },

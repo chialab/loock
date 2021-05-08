@@ -1,12 +1,13 @@
-import { Loock, TAB_KEY, ESC_KEY } from '../src/index.js';
-import { fireKey } from './events.js';
+import { expect, aTimeout } from '@open-wc/testing';
+import { Loock } from '@chialab/loock';
+import userEvent from '@testing-library/user-event';
 
 let loock;
 
 describe('Loock Tests', function() {
     this.timeout(10 * 1000);
 
-    before(() => {
+    beforeEach(() => {
         document.body.innerHTML =
             `<div aria-label="section" name="alphabet" class="loock alphabet">
                 <button name="buttonA">A</button>
@@ -24,19 +25,20 @@ describe('Loock Tests', function() {
         loock.createDefaultContext(document.body);
     });
 
-    afterEach(async () => {
+    afterEach(() => {
         // reset all 3 levels of contexts so tests can start in a clean way.
-        await fireKey(window, ESC_KEY);
-        await fireKey(window, ESC_KEY);
-        await fireKey(window, ESC_KEY);
+        userEvent.keyboard('{esc}');
+        userEvent.keyboard('{esc}');
+        userEvent.keyboard('{esc}');
+        loock.destroy();
     });
 
     it('should initially focus on default context', () => {
         expect(document.activeElement).to.equal(document.body);
     });
 
-    it('should navigate within default context', async () => {
-        await fireKey(window, ESC_KEY);
+    it('should navigate within default context', () => {
+        userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(document.body);
     });
 
@@ -44,17 +46,22 @@ describe('Loock Tests', function() {
         const alphabetDiv = document.querySelector('.alphabet');
         loock.createContext(alphabetDiv);
 
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(alphabetDiv);
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonB"]'));
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonC"]'));
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        await fireKey(window, ESC_KEY);
+        userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(alphabetDiv);
     });
 
@@ -65,29 +72,36 @@ describe('Loock Tests', function() {
         const numericDiv = document.querySelector('.numeric');
         loock.createContext(numericDiv);
 
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(alphabetDiv);
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        await fireKey(window, ESC_KEY);
+        userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(alphabetDiv);
-        await fireKey(window, ESC_KEY);
+        userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(alphabetDiv);
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonB"]'));
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonC"]'));
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(numericDiv);
-        await fireKey(window, TAB_KEY);
+        await aTimeout(250);
+        userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="button1"]'));
-        await fireKey(window, ESC_KEY);
+        userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(numericDiv);
-        await fireKey(window, ESC_KEY);
+        userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(numericDiv);
-        await fireKey(window, ESC_KEY);
+        userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(document.body);
     });
 });

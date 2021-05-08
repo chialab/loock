@@ -1,7 +1,7 @@
 {
   "name": "@chialab/loock",
   "version": "3.0.0",
-  "description": "An accessibility helper for keyboard navigation on the web.",
+  "description": "A focus trap helper for keyboard navigation on the web.",
   "type": "module",
   "types": "types/index.d.ts",
   "lib": "src/index.js",
@@ -33,21 +33,24 @@
   "devDependencies": {
     "@chialab/eslint-config": "^2.3.0",
     "@chialab/rna": "^0.5.7",
+    "@open-wc/testing": "^2.5.33",
+    "@testing-library/dom": "^7.30.4",
+    "@testing-library/user-event": "^13.1.8",
     "eslint": "^7.25.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.2.4"
-  },
-  "dependencies": {
-    "@chialab/proteins": "^3.0.0"
   },
   "scripts": {
     "build": "npm run types && rimraf dist && npm run build:esm && npm run build:cjs && npm run build:iife",
     "build:esm": "rna build src/index.js --output dist/esm/loock.js --format esm --minify",
     "build:cjs": "rna build src/index.js --output dist/cjs/loock.js --format cjs --minify",
-    "build:iife": "rna build src/index.js --output dist/iife/loock.js --format iife --minify --target es6",
+    "build:iife": "rna build src/index.js --output dist/iife/loock.js --format iife --minify --target es6 --bundle",
     "types": "rimraf types && tsc --declaration --emitDeclarationOnly --declarationDir 'types'",
-    "test": "rna test 'test/*.tests.js' --saucelabs --coverage",
+    "test": "rna test 'test/*.tests.js' --coverage",
     "lint": "eslint src",
     "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@chialab/dna": "^3.3.0"
   }
 }

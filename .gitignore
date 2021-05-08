@@ -2,10 +2,6 @@ node_modules
 npm-debug.log
 yarn-error.log
 .eslintcache
-.stylelintcache
 dist
 types
-/demo/loock.js
-/demo/*.js.map
-/test/__generated__
-/test/__coverage__
+coverage
