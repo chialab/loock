@@ -9,39 +9,33 @@
 </p>
 
 <p align="center">
-    <a href="https://www.chialab.io/p/loock"><img alt="Documentation link" src="https://img.shields.io/badge/Docs-chialab.io-lightgrey.svg?style=flat-square"></a>
-    <a href="https://github.com/chialab/loock"><img alt="Source link" src="https://img.shields.io/badge/Source-GitHub-lightgrey.svg?style=flat-square"></a>
-    <a href="https://www.chialab.it"><img alt="Authors link" src="https://img.shields.io/badge/Authors-Chialab-lightgrey.svg?style=flat-square"></a>
     <a href="https://www.npmjs.com/package/@chialab/loock"><img alt="NPM" src="https://img.shields.io/npm/v/@chialab/loock.svg?style=flat-square"></a>
     <a href="https://github.com/chialab/loock/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/npm/l/@chialab/loock.svg?style=flat-square"></a>
 </p>
 
 ---
 
+## Introducing Loock
+
 * Organize your web page or web application by navigation areas.
 * Never lose the context while navigating the area with the `TAB` key.
 * Leave the context with the `ESC` key.
 * Use a default context.
 
-## Demo
+Medium article - ["How to improve keyboard navigation of your web page"](https://medium.com/chialab-open-source/how-to-improve-keyboard-navigation-of-your-web-page-f11b324adbab)
 
 [Try out the demo!](https://codesandbox.io/s/ypjoj2r1qv)
-
-## Introducing Loock
-
-Medium article - ["How to improve keyboard navigation of your web page"](https://medium.com/chialab-open-source/how-to-improve-keyboard-navigation-of-your-web-page-f11b324adbab)
 
 ## Install
 
 ```sh
 $ npm install @chialab/loock
-# OR
 $ yarn add @chialab/loock
 ```
 
 Use via cdn:
 ```html
-<script type="text/javascript" src="https://unpkg.com/@chialab/loock"></script>
+<script src="https://unpkg.com/@chialab/loock"></script>
 ```
 
 ## Usage
@@ -95,29 +89,23 @@ For a more complete example, please see the [demo source code](https://codesandb
 
 ## Development
 
-### Requirements
-
-In order to build Loock, the following requirements are needed:
-* [NodeJS](https://nodejs.org/) (>= 10.0.0)
-* [Yarn](https://yarnpkg.com)
-* [RNA](https://github.com/chialab/rna-cli) (>= 3.0.0)
-
-### Build the project
+### Build
 
 Install the dependencies and run the `build` script:
+
 ```
-$ yarn install
-$ yarn build
+$ npm install
+$ npm run build
 ```
 
 This will generate the UMD and ESM bundles in the `dist` folder, as well as the declaration file.
 
-### Test the project
+### Test
 
 Run the `test` script:
 
 ```
-$ yarn test
+$ npm run test
 ```
 
 ---

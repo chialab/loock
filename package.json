@@ -1,19 +1,26 @@
 {
   "name": "@chialab/loock",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "An accessibility helper for keyboard navigation on the web.",
-  "structure": "module",
+  "type": "module",
   "types": "types/index.d.ts",
   "lib": "src/index.js",
   "main": "dist/cjs/loock.js",
   "module": "dist/esm/loock.js",
-  "browser": "dist/umd/loock.js",
+  "browser": "dist/iife/loock.js",
   "exports": {
     "require": "./dist/cjs/loock.js",
     "default": "./dist/esm/loock.js"
   },
+  "files": [
+    "dist",
+    "types",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
   "license": "MIT",
-  "author": "Chialab",
+  "author": "Chialab <dev@chialab.io> (https://www.chialab.it)",
   "repository": {
     "type": "git",
     "url": "git@github.com:chialab/loock.git"
@@ -25,6 +32,7 @@
   },
   "devDependencies": {
     "@chialab/eslint-config": "^2.3.0",
+    "@chialab/rna": "^0.5.7",
     "eslint": "^7.25.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.2.4"
@@ -32,18 +40,14 @@
   "dependencies": {
     "@chialab/proteins": "^3.0.0"
   },
-  "directories": {
-    "src": "src",
-    "lib": "dist",
-    "test": "test"
-  },
   "scripts": {
-    "build": "yarn types && rimraf dist && rna build --production",
+    "build": "npm run types && rimraf dist && npm run build:esm && npm run build:cjs && npm run build:iife",
+    "build:esm": "rna build src/index.js --output dist/esm/loock.js --format esm --minify",
+    "build:cjs": "rna build src/index.js --output dist/cjs/loock.js --format cjs --minify",
+    "build:iife": "rna build src/index.js --output dist/iife/loock.js --format iife --minify --target es6",
     "types": "rimraf types && tsc --declaration --emitDeclarationOnly --declarationDir 'types'",
-    "watch": "rna build --watch",
-    "test": "rna unit 'test/*.tests.js' --saucelabs --coverage --concurrency 1",
+    "test": "rna test 'test/*.tests.js' --saucelabs --coverage",
     "lint": "eslint src",
-    "start": "yarn install + rna build --watch",
-    "prepack": "yarn build"
+    "prepack": "npm run build"
   }
 }
