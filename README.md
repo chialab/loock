@@ -91,6 +91,9 @@ For a more complete example, please see the [demo source code](https://codesandb
 
 ## Development
 
+[![Build status](https://github.com/chialab/loock/workflows/Main/badge.svg)](https://github.com/chialab/loock/actions?query=workflow%3ABuild)
+[![codecov](https://codecov.io/gh/chialab/loock/branch/master/graph/badge.svg)](https://codecov.io/gh/chialab/loock)
+
 ### Build
 
 Install the dependencies and run the `build` script:
