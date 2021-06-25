@@ -232,8 +232,8 @@ export class Context {
         return elements
             .filter((elem) => !ignore.some((area) => elem === area || area.contains(elem)))
             .filter((elem) => {
-                let rect = elem.getBoundingClientRect();
-                return rect.height && rect.width;
+                const { width, height } = elem.getBoundingClientRect();
+                return !!height && !!width;
             });
     }
 
