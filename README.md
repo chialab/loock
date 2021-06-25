@@ -9,8 +9,7 @@
 </p>
 
 <p align="center">
-    <a href="https://www.npmjs.com/package/@chialab/loock"><img alt="NPM" src="https://img.shields.io/npm/v/@chialab/loock.svg?style=flat-square"></a>
-    <a href="https://github.com/chialab/loock/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/npm/l/@chialab/loock.svg?style=flat-square"></a>
+    <a href="https://www.npmjs.com/package/@chialab/loock"><img alt="NPM" src="https://img.shields.io/npm/v/@chialab/loock.svg"></a>
 </p>
 
 ---
@@ -34,6 +33,7 @@ $ yarn add @chialab/loock
 ```
 
 Use via cdn:
+
 ```html
 <script src="https://unpkg.com/@chialab/loock"></script>
 ```

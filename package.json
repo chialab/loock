@@ -3,14 +3,23 @@
   "version": "3.0.0",
   "description": "A focus trap helper for keyboard navigation on the web.",
   "type": "module",
-  "types": "types/index.d.ts",
-  "lib": "src/index.js",
-  "main": "dist/cjs/loock.js",
+  "main": "dist/cjs/loock.cjs",
   "module": "dist/esm/loock.js",
-  "browser": "dist/iife/loock.js",
+  "types": "types/index.d.ts",
   "exports": {
-    "require": "./dist/cjs/loock.js",
+    "require": "./dist/cjs/loock.cjs",
     "default": "./dist/esm/loock.js"
+  },
+  "scripts": {
+    "build": "npm run types && rimraf dist && npm run build:esm && npm run build:cjs",
+    "build:esm": "rna build src/index.js --output dist/esm/loock.js --format esm --minify --platform browser",
+    "build:cjs": "rna build src/index.js --output dist/cjs/loock.cjs --format cjs --minify --platform node",
+    "types": "rimraf types && tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
+    "test": "rna test:browser --coverage",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "prepack": "npm run build",
+    "release": "source .env && semantic-release --no-ci"
   },
   "files": [
     "dist",
@@ -30,27 +39,21 @@
     "url": "https://github.com/chialab/loock/issues",
     "email": "dev@chialab.io"
   },
+  "dependencies": {
+    "@chialab/dna": "^4.0.0-rc.1"
+  },
   "devDependencies": {
     "@chialab/eslint-config": "^2.3.0",
-    "@chialab/rna": "^0.5.7",
+    "@chialab/rna": "^0.8.0",
+    "@chialab/rna-browser-test-runner": "^0.8.6",
+    "@chialab/rna-bundler": "^0.8.6",
     "@open-wc/testing": "^2.5.33",
+    "@semantic-release/git": "^9.0.0",
     "@testing-library/dom": "^7.30.4",
     "@testing-library/user-event": "^13.1.8",
     "eslint": "^7.25.0",
     "rimraf": "^3.0.2",
+    "semantic-release": "^17.4.4",
     "typescript": "^4.2.4"
-  },
-  "scripts": {
-    "build": "npm run types && rimraf dist && npm run build:esm && npm run build:cjs && npm run build:iife",
-    "build:esm": "rna build src/index.js --output dist/esm/loock.js --format esm --minify",
-    "build:cjs": "rna build src/index.js --output dist/cjs/loock.js --format cjs --minify",
-    "build:iife": "rna build src/index.js --output dist/iife/loock.js --format iife --minify --target es6 --bundle",
-    "types": "rimraf types && tsc --declaration --emitDeclarationOnly --declarationDir 'types'",
-    "test": "rna test 'test/*.tests.js' --coverage",
-    "lint": "eslint src",
-    "prepack": "npm run build"
-  },
-  "dependencies": {
-    "@chialab/dna": "^3.3.0"
   }
 }
