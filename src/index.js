@@ -153,13 +153,6 @@ export class Context {
             this.setDismiss(options.dismiss);
         }
 
-        if (!element.hasAttribute('aria-label') &&
-            !element.hasAttribute('aria-labelledby') &&
-            !element.hasAttribute('aria-describedby')) {
-            // eslint-disable-next-line
-            console.warn('created a Context without aria-label', this);
-        }
-
         /**
          * @private
          */
@@ -307,8 +300,15 @@ export class Context {
         if (this.active) {
             return;
         }
+        const element = this.element;
         this._active = true;
-        await dispatchAsyncEvent(this.element, 'focusenter', this);
+        if (!element.hasAttribute('aria-label') &&
+            !element.hasAttribute('aria-labelledby') &&
+            !element.hasAttribute('aria-describedby')) {
+            // eslint-disable-next-line
+            console.warn('created a Context without aria-label', this);
+        }
+        await dispatchAsyncEvent(element, 'focusenter', this);
         this.restore();
     }
 
@@ -391,14 +391,13 @@ export class Context {
             this.detach();
         }
         this.parent = parent;
-        this.enable();
     }
 
     /**
      * Detach the context from the current Loock instance.
      */
     detach() {
-        this.disable();
+        this.forceExit();
         this.parent.removeContext(this);
         this.parent = null;
     }
