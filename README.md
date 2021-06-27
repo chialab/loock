@@ -41,17 +41,17 @@ Use via cdn:
 ## Usage
 
 ```ts
-import { Loock } from '@chialab/loock';
+import { Manager } from '@chialab/loock';
 
-const loock = new Loock();
+const manager = new Manager();
 const mainElem = document.getElementById('main');
 const navigationElem = document.getElementById('main');
 
 // define the default context
-const mainContext = loock.createDefaultContext(mainElem);
+const mainContext = manager.createDefaultContext(mainElem);
 
 // define one context
-const context = loock.createContext(navigationElem);
+const context = manager.createContext(navigationElem);
 
 // listen context state
 navigationElem.addEventListener('focusenter', () => {

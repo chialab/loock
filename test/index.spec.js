@@ -1,8 +1,8 @@
 import { expect, aTimeout } from '@open-wc/testing';
-import { Loock } from '@chialab/loock';
+import { Manager } from '@chialab/loock';
 import userEvent from '@testing-library/user-event';
 
-let loock;
+let manager;
 
 describe('Loock Tests', function() {
     this.timeout(10 * 1000);
@@ -21,8 +21,8 @@ describe('Loock Tests', function() {
             </div>`;
 
         document.body.setAttribute('aria-label', 'main');
-        loock = new Loock();
-        loock.createDefaultContext(document.body);
+        manager = new Manager();
+        manager.createDefaultContext(document.body);
     });
 
     afterEach(() => {
@@ -30,7 +30,7 @@ describe('Loock Tests', function() {
         userEvent.keyboard('{esc}');
         userEvent.keyboard('{esc}');
         userEvent.keyboard('{esc}');
-        loock.destroy();
+        manager.destroy();
     });
 
     it('should initially focus on default context', () => {
@@ -44,7 +44,7 @@ describe('Loock Tests', function() {
 
     it('should navigate within one context', async () => {
         const alphabetDiv = document.querySelector('.alphabet');
-        loock.createContext(alphabetDiv);
+        manager.createContext(alphabetDiv);
 
         await aTimeout(250);
         userEvent.tab();
@@ -67,10 +67,10 @@ describe('Loock Tests', function() {
 
     it('should navigate within contexts', async () => {
         const alphabetDiv = document.querySelector('.alphabet');
-        loock.createContext(alphabetDiv);
+        manager.createContext(alphabetDiv);
 
         const numericDiv = document.querySelector('.numeric');
-        loock.createContext(numericDiv);
+        manager.createContext(numericDiv);
 
         await aTimeout(250);
         userEvent.tab();
