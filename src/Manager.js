@@ -1,3 +1,4 @@
+import { window } from '@chialab/dna';
 import { Context } from './Context.js';
 import { ESC_KEY, TAB_KEY } from './keys.js';
 
