@@ -1,6 +1,6 @@
 {
   "name": "@chialab/loock",
-  "version": "3.0.0-beta.5",
+  "version": "3.0.0",
   "description": "A focus trap helper for keyboard navigation on the web.",
   "type": "module",
   "main": "dist/cjs/loock.cjs",
@@ -41,7 +41,7 @@
     "email": "dev@chialab.io"
   },
   "dependencies": {
-    "@chialab/dna": "^3.4.0-rc.1"
+    "@chialab/dna": "^3.4.0"
   },
   "devDependencies": {
     "@chialab/eslint-config": "^2.3.0",
