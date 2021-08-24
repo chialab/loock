@@ -99,8 +99,8 @@ For a more complete example, please see the [demo source code](https://codesandb
 Install the dependencies and run the `build` script:
 
 ```
-$ npm install
-$ npm run build
+$ yarn
+$ yarn build
 ```
 
 This will generate the UMD and ESM bundles in the `dist` folder, as well as the declaration file.
@@ -110,7 +110,7 @@ This will generate the UMD and ESM bundles in the `dist` folder, as well as the 
 Run the `test` script:
 
 ```
-$ npm run test
+$ yarn test
 ```
 
 ### Release
@@ -126,7 +126,7 @@ $ echo 'export GH_TOKEN="abcxyz"' > .env
 Now you are ready to run the `release` command:
 
 ```sh
-$ npm run release
+$ yarn release
 ```
 
 ---

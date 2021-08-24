@@ -11,15 +11,15 @@
     "default": "./dist/esm/loock.js"
   },
   "scripts": {
-    "build": "npm run types && rimraf dist && npm run build:esm && npm run build:cjs",
+    "build": "yarn types && rimraf dist && yarn build:esm && yarn build:cjs",
     "build:esm": "rna build src/index.js --output dist/esm/loock.js --format esm --minify --platform browser",
     "build:cjs": "rna build src/index.js --output dist/cjs/loock.cjs --format cjs --minify --platform node",
     "types": "rimraf types && tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
-    "test": "npm run test:browser",
+    "test": "yarn test:browser",
     "test:browser": "rna test:browser --coverage",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "prepack": "npm run build",
+    "prepack": "yarn build",
     "release": "source .env && semantic-release --no-ci"
   },
   "files": [

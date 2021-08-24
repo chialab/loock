@@ -3,14 +3,15 @@ import { windowManager } from './Manager.js';
 
 /**
  * Enable focus trap context for components.
- * @template {import('@chialab/dna').ComponentConstructor<HTMLElement>} T
+ * @template {import('@chialab/dna').ComponentConstructor} T
  * @param {T} superClass The base component class.
  * @param {import('./Context.js').ContextOptions} [options] Focus trap options.
  * @return An extended constructor.
  */
-export const focusTrapMixin = (superClass, options) => class FocusTrapElement extends superClass {
+export const focusTrapMixin = (superClass, options) => class FocusTrapElement extends (/** @type {import('@chialab/dna').ComponentConstructor} */ (superClass)) {
     /**
      * @inheritdoc
+     * @param {any[]} args
      */
     constructor(...args) {
         super(...args);
