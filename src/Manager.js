@@ -196,6 +196,7 @@ export class Manager {
         }
         this.contexts.push(context);
         context.attach(this);
+        context.enable();
         context.element.addEventListener('focusenter', this.onContextEntered);
         context.element.addEventListener('focusexit', this.onContextExited);
     }
