@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
+
+
+### Bug Fixes
+
+* re-adding the same disabled context ([a450fad](https://github.com/chialab/loock/commit/a450fad228d751f6529fd70f9b738bfbc6ccd3d9))
+
 # [2.2.0](https://github.com/chialab/loock/compare/v2.1.0...v2.2.0) (2021-08-24)
 
 
