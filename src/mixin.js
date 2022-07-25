@@ -26,6 +26,7 @@ export const focusTrapMixin = (superClass, options) => {
             this.context = new Context(this, {
                 dismiss: this.onFocusDismiss.bind(this),
                 ...options,
+                initialize: false,
             });
             this.addEventListener('focusenter', this.onFocusEnter);
             this.addEventListener('focusexit', this.onFocusExit);
@@ -35,7 +36,9 @@ export const focusTrapMixin = (superClass, options) => {
          * @inheritdoc
          */
         connectedCallback() {
-            super.disconnectedCallback();
+            super.connectedCallback();
+            windowManager.removeContext(this.context);
+            this.context.enable();
             windowManager.addContext(this.context);
         }
 
