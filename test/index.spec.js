@@ -1,4 +1,4 @@
-import { expect, aTimeout } from '@open-wc/testing';
+import { expect, wait } from '@chialab/ginsenghino';
 import { Manager } from '@chialab/loock';
 import userEvent from '@testing-library/user-event';
 
@@ -46,19 +46,19 @@ describe('Loock Tests', function() {
         const alphabetDiv = document.querySelector('.alphabet');
         manager.createContext(alphabetDiv);
 
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(alphabetDiv);
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonB"]'));
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonC"]'));
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
         userEvent.keyboard('{esc}');
@@ -72,29 +72,29 @@ describe('Loock Tests', function() {
         const numericDiv = document.querySelector('.numeric');
         manager.createContext(numericDiv);
 
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(alphabetDiv);
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
         userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(alphabetDiv);
         userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(alphabetDiv);
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonB"]'));
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonC"]'));
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(numericDiv);
-        await aTimeout(250);
+        await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="button1"]'));
         userEvent.keyboard('{esc}');
