@@ -26,6 +26,7 @@ const SYM = typeof Symbol !== 'undefined' ? Symbol('loock') : '__look_symbol__';
 
 /**
  * @typedef {Object} ContextOptions
+ * @property {boolean} [initialize] Self initialize the context.
  * @property {string|string[]} [selectors] A list of focusable selectors.
  * @property {string|string[]} [ignore] A list of selectors to ignore.
  * @property {boolean|DismissFunction} [dismiss] A dismiss rule for the context.
@@ -153,10 +154,12 @@ export class Context {
             }
         };
 
-        if (options.disabled) {
-            this.disable();
-        } else {
-            this.enable();
+        if (options.initialize !== false) {
+            if (options.disabled) {
+                this.disable();
+            } else {
+                this.enable();
+            }
         }
     }
 
