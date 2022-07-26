@@ -12,7 +12,14 @@ export const DEFAULT_SELECTORS = [
     '[contenteditable="true"]',
     'a[href]',
     '[tabindex]',
-    'details',
+    'summary',
+];
+
+/**
+ * Default ignore selectors.
+ */
+export const DEFAULT_IGNORE_SELECTORS = [
+    'details:not([open]) *:not(summary)',
 ];
 
 /**
@@ -89,7 +96,7 @@ export class Context {
         /**
          * @protected
          */
-        this.ignoredSelectors = [];
+        this.ignoredSelectors = DEFAULT_IGNORE_SELECTORS;
 
         /**
          * @protected
