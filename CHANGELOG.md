@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 3.2.3
+
+### Patch Changes
+
+- 0cf40d6: Prevent lock from focus hidden details content
+
 ## 3.2.2
 
 ### Patch Changes
