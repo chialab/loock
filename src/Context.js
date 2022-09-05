@@ -52,7 +52,7 @@ export function setContext(element, context) {
 /**
  * Get the context of the element.
  * @param {HTMLElement} element The root element of the context.
- * @return {Context} The context of the element.
+ * @returns {Context} The context of the element.
  */
 export function getContext(element) {
     return element[SYM];
@@ -147,6 +147,10 @@ export class Context {
                 return;
             }
             const elements = this.findFocusableChildren();
+            const activeElement = /** @type {HTMLElement} */ (this.parent.root.document.activeElement);
+            if (activeElement && elements.indexOf(activeElement) !== -1) {
+                return;
+            }
             let target = event.target;
             while (element.contains(target) || target === element) {
                 if (elements.indexOf(target) !== -1) {
@@ -201,7 +205,7 @@ export class Context {
     /**
      * Returns focusable children elements.
      *
-     * @return {Array<HTMLElement>} focusable children of root element.
+     * @returns {HTMLElement[]} focusable children of root element.
      */
     findFocusableChildren() {
         const focusable = this.element.querySelectorAll(
@@ -229,7 +233,7 @@ export class Context {
     /**
      * Active previous focusable element.
      *
-     * @return {void}
+     * @returns {void}
      */
     prev() {
         if (this.disabled) {
@@ -254,7 +258,7 @@ export class Context {
     /**
      * Active next focusable element.
      *
-     * @return {void}
+     * @returns {void}
      */
     next() {
         if (this.disabled) {
@@ -279,7 +283,7 @@ export class Context {
     /**
      * Entering the context.
      *
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async enter() {
         if (this.disabled) {
@@ -302,7 +306,7 @@ export class Context {
 
     /**
      * Restore the focus on the last element.
-     * @return {void}
+     * @returns {void}
      */
     restore() {
         if (this.disabled) {
@@ -318,7 +322,7 @@ export class Context {
     /**
      * Exit from the context.
      *
-     * @return {Promise<boolean>}
+     * @returns {Promise<boolean>}
      */
     async exit() {
         if (this.disabled) {
@@ -343,7 +347,7 @@ export class Context {
     /**
      * Force exit from the context.
      *
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async forceExit() {
         if (this.disabled) {
