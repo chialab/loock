@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 3.2.4
+
+### Patch Changes
+
+- bf7d7f2: Check activeElement on click in context
+
 ## 3.2.3
 
 ### Patch Changes
