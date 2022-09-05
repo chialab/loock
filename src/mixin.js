@@ -10,7 +10,7 @@ import { windowManager } from './Manager.js';
  * @template {import('@chialab/dna').ComponentInstance} T
  * @param {import('@chialab/dna').ComponentConstructor<T>} superClass The base component class.
  * @param {import('./Context.js').ContextOptions} [options] Focus trap options.
- * @return An extended constructor.
+ * @returns An extended constructor.
  */
 export const focusTrapMixin = (superClass, options) => {
     const FocusTrapElement = class FocusTrapElement extends (/** @type {import('@chialab/dna').ComponentConstructor} */ (superClass)) {
@@ -62,7 +62,7 @@ export const focusTrapMixin = (superClass, options) => {
 
         /**
          * Callback invoked on focus dismiss.
-         * @return {ReturnType<import('./Context.js').DismissFunction>}
+         * @returns {ReturnType<import('./Context.js').DismissFunction>}
          */
         onFocusDismiss() {
             return true;

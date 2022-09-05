@@ -17,7 +17,7 @@ export class Manager {
      */
     constructor(root = window) {
         /**
-         * @protected
+         * @readonly
          */
         this.root = root;
 
@@ -161,7 +161,7 @@ export class Manager {
      *
      * @param {HTMLElement} element The root of the default context.
      * @param {import('./Context.js').ContextOptions} options A set of options for the context.
-     * @return {Context} New context
+     * @returns {Context} New context
      */
     createDefaultContext(element, options = {}) {
         this.defaultContext = this.createContext(element, options);
@@ -177,7 +177,7 @@ export class Manager {
      *
      * @param {HTMLElement} element The root element of the context.
      * @param {import('./Context.js').ContextOptions} options A set of options for the context.
-     * @return {Context} New context
+     * @returns {Context} New context
      */
     createContext(element, options = {}) {
         const context = new Context(element, options);
