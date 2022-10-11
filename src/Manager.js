@@ -53,45 +53,9 @@ export class Manager {
 
         /**
          * @private
+         * @type {WeakMap<Context, { onFocusEnter: (event: Event) => void; onFocusExit: (event: Event) => void; }>}
          */
-        this.onContextEntered = (event) => {
-            const context = event.detail;
-            this._activeElement = /** @type {HTMLElement} */ (this._activeElement || this.root.document.activeElement);
-            this.activeContext = context;
-            this.actives.push(context);
-        };
-
-        /**
-         * @private
-         */
-        this.onContextExited = (event) => {
-            const context = event.detail;
-            const isActiveContext = context === this.activeContext;
-            const io = this.actives.indexOf(context);
-            this.actives.splice(io, 1);
-
-            if (!isActiveContext) {
-                return;
-            }
-
-            if (this.actives.length) {
-                this.activeContext = this.actives[this.actives.length - 1];
-                this.activeContext.restore();
-                return;
-            }
-
-            delete this.activeContext;
-
-            if (this.defaultContext && !this.defaultContext.disabled) {
-                this.defaultContext.enter();
-                return;
-            }
-
-            if (this._activeElement) {
-                this._activeElement.focus();
-                delete this._activeElement;
-            }
-        };
+        this._listeners = new WeakMap();
 
         /**
          * @private
@@ -101,13 +65,19 @@ export class Manager {
                 return;
             }
             if (event.key == ESC_KEY.key || event.key == ESC_KEY.altKey) {
+                if (this.activeContext === this.defaultContext) {
+                    if (!this.activeContext.hasCurrentElement()) {
+                        return;
+                    }
+                    this.activeContext.unsetCurrentElement();
+                    return;
+                }
                 event.preventDefault();
                 const result = await this.activeContext.exit();
                 if (!result) {
                     return;
                 }
-            }
-            if (event.keyCode == TAB_KEY.keyCode) {
+            } else if (event.keyCode == TAB_KEY.keyCode) {
                 event.preventDefault();
                 // prevent compulsively key holding down in all browsers.
                 if ((Date.now() - this._lastKeydownTime) < TIME_BETWEEN_KEYDOWNS) {
@@ -143,12 +113,14 @@ export class Manager {
                 return;
             }
             if (target === this.activeContext.element) {
-                this.activeContext.unsetCurrentElement();
+                this.activeContext.unsetCurrentElement(false);
                 return;
             }
             const elements = this.activeContext.findFocusableChildren();
             if (elements.indexOf(target) !== -1) {
                 this.activeContext.setCurrentElement(target);
+            } else {
+                this.activeContext.exit();
             }
         };
 
@@ -164,11 +136,10 @@ export class Manager {
      * @returns {Context} New context
      */
     createDefaultContext(element, options = {}) {
-        this.defaultContext = this.createContext(element, options);
-        if (!this.defaultContext.disabled) {
-            this.defaultContext.enter();
+        const context = this.defaultContext = this.createContext(element, options);
+        if (!context.disabled) {
+            context.enter();
         }
-        this.contexts.push(this.defaultContext);
         return this.defaultContext;
     }
 
@@ -197,8 +168,80 @@ export class Manager {
         this.contexts.push(context);
         context.attach(this);
         context.enable();
-        context.element.addEventListener('focusenter', this.onContextEntered);
-        context.element.addEventListener('focusexit', this.onContextExited);
+        this._listenContext(context);
+    }
+
+    /**
+     * Listen context events.
+     * @private
+     * @param {Context} context The context to listen.
+     */
+    _listenContext(context) {
+        const onFocusEnter = (event) => {
+            if ((/** @type {CustomEvent} */ (event)).detail !== context) {
+                return;
+            }
+            this._activeElement = /** @type {HTMLElement} */ (this._activeElement || this.root.document.activeElement);
+            this.activeContext = context;
+            this.actives.push(context);
+        };
+
+        const onFocusExit = (event) => {
+            if ((/** @type {CustomEvent} */ (event)).detail !== context) {
+                return;
+            }
+
+            const isActiveContext = context === this.activeContext;
+            const io = this.actives.indexOf(context);
+            this.actives.splice(io, 1);
+
+            if (!isActiveContext) {
+                return;
+            }
+
+            if (this.actives.length) {
+                this.activeContext = this.actives[this.actives.length - 1];
+                this.activeContext.restore();
+                return;
+            }
+
+            if (this.defaultContext === this.activeContext) {
+                return;
+            }
+
+            delete this.activeContext;
+
+            if (this.defaultContext && !this.defaultContext.disabled) {
+                this.defaultContext.enter();
+                return;
+            }
+
+            if (this._activeElement) {
+                this._activeElement.focus();
+                delete this._activeElement;
+            }
+        };
+
+        this._listeners.set(context, {
+            onFocusEnter,
+            onFocusExit,
+        });
+        context.element.addEventListener('focusenter', onFocusEnter);
+        context.element.addEventListener('focusexit', onFocusExit);
+    }
+
+    /**
+     * Unlisten context events.
+     * @private
+     * @param {Context} context The context to unlisten.
+     */
+    _unlistenContext(context) {
+        const listeners = this._listeners.get(context);
+        if (listeners) {
+            context.element.removeEventListener('focusenter', listeners.onFocusEnter);
+            context.element.removeEventListener('focusexit', listeners.onFocusExit);
+            this._listeners.delete(context);
+        }
     }
 
     /**
@@ -212,6 +255,7 @@ export class Manager {
         }
         context.disable();
         this.contexts.splice(io, 1);
+        this._unlistenContext(context);
     }
 
     /**

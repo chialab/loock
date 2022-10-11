@@ -286,10 +286,7 @@ export class Context {
      * @returns {Promise<void>}
      */
     async enter() {
-        if (this.disabled) {
-            return;
-        }
-        if (this.active) {
+        if (this.disabled || this.active) {
             return;
         }
         const element = this.element;
@@ -354,7 +351,7 @@ export class Context {
             return;
         }
         this._active = false;
-        this.unsetCurrentElement();
+        this.unsetCurrentElement(false);
         await dispatchAsyncEvent(this.element, 'focusexit', this);
     }
 
@@ -369,9 +366,22 @@ export class Context {
 
     /**
      * Unset the current element of the context.
+     * @param {boolean} restore Should restore focus to container element.
      */
-    unsetCurrentElement() {
+    unsetCurrentElement(restore = true) {
         this._currentElement = null;
+        if (restore) {
+            this.restore();
+        }
+    }
+
+    /**
+     * Check if the context has a focused child.
+     *
+     * @returns {boolean}
+     */
+    hasCurrentElement() {
+        return this._currentElement !== null;
     }
 
     /**
