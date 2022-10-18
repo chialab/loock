@@ -28,8 +28,16 @@ export const focusTrapMixin = (superClass, options) => {
                 ...options,
                 initialize: false,
             });
-            this.addEventListener('focusenter', this.onFocusEnter);
-            this.addEventListener('focusexit', this.onFocusExit);
+            this.addEventListener('focusenter', (event) => {
+                if (event.target === this) {
+                    this.onFocusEnter();
+                }
+            });
+            this.addEventListener('focusexit', (event) => {
+                if (event.target === this) {
+                    this.onFocusExit();
+                }
+            });
         }
 
         /**
