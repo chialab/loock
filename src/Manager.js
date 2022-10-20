@@ -65,14 +65,14 @@ export class Manager {
                 return;
             }
             if (event.key == ESC_KEY.key || event.key == ESC_KEY.altKey) {
-                if (this.activeContext === this.defaultContext && !this.activeContext.hasCurrentElement()) {
+                if (this.activeContext === this.defaultContext) {
+                    if (this.activeContext.hasCurrentElement()) {
+                        event.preventDefault();
+                        this.activeContext.unsetCurrentElement();
+                    }
                     return;
                 }
                 event.preventDefault();
-                if (this.activeContext.hasCurrentElement()) {
-                    this.activeContext.unsetCurrentElement();
-                    return;
-                }
                 const result = await this.activeContext.exit();
                 if (!result) {
                     return;
@@ -104,25 +104,19 @@ export class Manager {
          */
         this.onFocusIn = ({ target }) => {
             const context = this.contexts
+                .filter((context) => !context.disabled)
                 .filter(({ element }) => element === target || element.contains(target))
                 .sort(({ element: match1 }, { element: match2 }) => (match1.contains(match2) ? 1 : -1))[0];
 
-            if (context && !context.active && !context.disabled) {
-                context.enter(target);
-                return;
-            }
-
-            if (!this.activeContext) {
-                return;
-            }
-            if (target === this.activeContext.element) {
-                this.activeContext.unsetCurrentElement(false);
-                return;
-            }
-            const elements = this.activeContext.findFocusableChildren();
-            if (elements.indexOf(target) !== -1) {
-                this.activeContext.setCurrentElement(target);
-            } else {
+            if (context) {
+                if (!context.active) {
+                    context.enter(target);
+                } else if (target !== context.element) {
+                    context.setCurrentElement(target);
+                } else {
+                    context.unsetCurrentElement(false);
+                }
+            } else if (this.activeContext) {
                 this.activeContext.exit();
             }
         };
@@ -184,9 +178,11 @@ export class Manager {
             if ((/** @type {CustomEvent} */ (event)).detail !== context) {
                 return;
             }
-            this._activeElement = /** @type {HTMLElement} */ (this._activeElement || this.root.document.activeElement);
-            this.activeContext = context;
-            this.actives.push(context);
+            if (this.contexts.indexOf(context) !== -1) {
+                this._activeElement = /** @type {HTMLElement} */ (this._activeElement || this.root.document.activeElement);
+                this.activeContext = context;
+                this.actives.push(context);
+            }
         };
 
         const onFocusExit = (event) => {

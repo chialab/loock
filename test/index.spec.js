@@ -42,7 +42,7 @@ describe('Loock Tests', function() {
         expect(document.activeElement).to.equal(document.body);
     });
 
-    it('should navigate within one context', async () => {
+    it('should navigate within context', async () => {
         const alphabetDiv = document.querySelector('.alphabet');
         manager.createContext(alphabetDiv);
 
@@ -61,46 +61,6 @@ describe('Loock Tests', function() {
         await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        userEvent.keyboard('{esc}');
-        expect(document.activeElement).to.equal(alphabetDiv);
-    });
-
-    it('should navigate within contexts', async () => {
-        const alphabetDiv = document.querySelector('.alphabet');
-        manager.createContext(alphabetDiv);
-
-        const numericDiv = document.querySelector('.numeric');
-        manager.createContext(numericDiv);
-
-        await wait(250);
-        userEvent.tab();
-        expect(document.activeElement).to.equal(alphabetDiv);
-        await wait(250);
-        userEvent.tab();
-        expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        userEvent.keyboard('{esc}');
-        expect(document.activeElement).to.equal(alphabetDiv);
-        userEvent.keyboard('{esc}');
-        expect(document.activeElement).to.equal(alphabetDiv);
-        await wait(250);
-        userEvent.tab();
-        expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        await wait(250);
-        userEvent.tab();
-        expect(document.activeElement).to.equal(document.querySelector('button[name="buttonB"]'));
-        await wait(250);
-        userEvent.tab();
-        expect(document.activeElement).to.equal(document.querySelector('button[name="buttonC"]'));
-        userEvent.keyboard('{esc}');
-        expect(document.activeElement).to.equal(alphabetDiv);
-        await wait(250);
-        numericDiv.focus();
-        expect(document.activeElement).to.equal(numericDiv);
-        await wait(250);
-        userEvent.tab();
-        expect(document.activeElement).to.equal(document.querySelector('button[name="button1"]'));
-        userEvent.keyboard('{esc}');
-        expect(document.activeElement).to.equal(numericDiv);
         userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(alphabetDiv);
     });
