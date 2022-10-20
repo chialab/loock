@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 3.2.7
+
+### Patch Changes
+
+- 3b813ae: Fix current target on enter.
+
 ## 3.2.6
 
 ### Patch Changes
