@@ -91,8 +91,10 @@ describe('Loock Tests', function() {
         await wait(250);
         userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonC"]'));
+        userEvent.keyboard('{esc}');
+        expect(document.activeElement).to.equal(alphabetDiv);
         await wait(250);
-        userEvent.tab();
+        numericDiv.focus();
         expect(document.activeElement).to.equal(numericDiv);
         await wait(250);
         userEvent.tab();
@@ -100,8 +102,6 @@ describe('Loock Tests', function() {
         userEvent.keyboard('{esc}');
         expect(document.activeElement).to.equal(numericDiv);
         userEvent.keyboard('{esc}');
-        expect(document.activeElement).to.equal(numericDiv);
-        userEvent.keyboard('{esc}');
-        expect(document.activeElement).to.equal(document.body);
+        expect(document.activeElement).to.equal(alphabetDiv);
     });
 });

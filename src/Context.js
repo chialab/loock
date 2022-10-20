@@ -282,10 +282,10 @@ export class Context {
 
     /**
      * Entering the context.
-     *
+     * @param {HTMLElement} [target] The target element to focus.
      * @returns {Promise<void>}
      */
-    async enter() {
+    async enter(target) {
         if (this.disabled || this.active) {
             return;
         }
@@ -298,6 +298,12 @@ export class Context {
             console.warn('created a Context without aria-label', this);
         }
         await dispatchAsyncEvent(element, 'focusenter', this);
+        if (target !== this.element) {
+            const children = this.findFocusableChildren();
+            if (children.indexOf(target) !== -1) {
+                this.setCurrentElement(target, false);
+            }
+        }
         this.restore();
     }
 
@@ -358,10 +364,13 @@ export class Context {
     /**
      * Set the current element of the context.
      * @param {HTMLElement} element
+     * @param {boolean} focus Should focus the element.
      */
-    setCurrentElement(element) {
+    setCurrentElement(element, focus = true) {
         this._currentElement = element;
-        element.focus();
+        if (focus) {
+            element.focus();
+        }
     }
 
     /**
