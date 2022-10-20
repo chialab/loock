@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 3.2.8
+
+### Patch Changes
+
+- 565bb65: Fix contexts chain.
+
 ## 3.2.7
 
 ### Patch Changes
