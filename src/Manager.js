@@ -65,14 +65,14 @@ export class Manager {
                 return;
             }
             if (event.key == ESC_KEY.key || event.key == ESC_KEY.altKey) {
-                if (this.activeContext === this.defaultContext) {
-                    if (!this.activeContext.hasCurrentElement()) {
-                        return;
-                    }
-                    this.activeContext.unsetCurrentElement();
+                if (this.activeContext === this.defaultContext && !this.activeContext.hasCurrentElement()) {
                     return;
                 }
                 event.preventDefault();
+                if (this.activeContext.hasCurrentElement()) {
+                    this.activeContext.unsetCurrentElement();
+                    return;
+                }
                 const result = await this.activeContext.exit();
                 if (!result) {
                     return;
