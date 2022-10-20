@@ -282,10 +282,10 @@ export class Context {
 
     /**
      * Entering the context.
-     *
+     * @param {HTMLElement} [target] The target element to focus.
      * @returns {Promise<void>}
      */
-    async enter() {
+    async enter(target) {
         if (this.disabled || this.active) {
             return;
         }
@@ -298,6 +298,10 @@ export class Context {
             console.warn('created a Context without aria-label', this);
         }
         await dispatchAsyncEvent(element, 'focusenter', this);
+        const children = this.findFocusableChildren();
+        if (children.indexOf(target) !== -1) {
+            this.setCurrentElement(target);
+        }
         this.restore();
     }
 

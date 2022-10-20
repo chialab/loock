@@ -103,9 +103,12 @@ export class Manager {
          * @private
          */
         this.onFocusIn = ({ target }) => {
-            const context = this.contexts.find(({ element }) => element === target);
+            const context = this.contexts
+                .filter(({ element }) => element === target || element.contains(target))
+                .sort(({ element: match1 }, { element: match2 }) => (match1.contains(match2) ? 1 : -1))[0];
+
             if (context && !context.active && !context.disabled) {
-                context.enter();
+                context.enter(target);
                 return;
             }
 
