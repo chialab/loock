@@ -27,15 +27,24 @@ Medium article - ["How to improve keyboard navigation of your web page"](https:/
 
 ## Install
 
-```sh
-$ npm install @chialab/loock
-$ yarn add @chialab/loock
+### NPM
+
+```
+npm install @chialab/loock
 ```
 
-Use via cdn:
+```
+yarn add @chialab/loock
+```
+
+### CDN
 
 ```html
 <script src="https://unpkg.com/@chialab/loock"></script>
+```
+
+```ts
+import { Manager } from 'https://unpkg.com/@chialab/loock?module';
 ```
 
 ## Usage
@@ -99,8 +108,8 @@ For a more complete example, please see the [demo source code](https://codesandb
 Install the dependencies and run the `build` script:
 
 ```
-$ yarn
-$ yarn build
+yarn
+yarn build
 ```
 
 This will generate the UMD and ESM bundles in the `dist` folder, as well as the declaration file.
@@ -110,27 +119,11 @@ This will generate the UMD and ESM bundles in the `dist` folder, as well as the 
 Run the `test` script:
 
 ```
-$ yarn test
-```
-
-### Release
-
-The `release` script uses [Semantic Release](https://github.com/semantic-release/semantic-release) to update package version, create a Github release and publish to the NPM registry.
-
-An environment variable named `GH_TOKEN` with a [generated Github Access Token](https://github.com/settings/tokens/new?scopes=repo) needs to be defined in a local `.env` file.
-
-```sh
-$ echo 'export GH_TOKEN="abcxyz"' > .env
-```
-
-Now you are ready to run the `release` command:
-
-```sh
-$ yarn release
+yarn test
 ```
 
 ---
 
 ## License
 
-Loock is released under the [MIT](https://github.com/chialab/loock/blob/master/LICENSE) license.
+**Loock** is released under the [MIT](https://github.com/chialab/loock/blob/master/LICENSE) license.
