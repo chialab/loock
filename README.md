@@ -97,7 +97,7 @@ For a more complete example, please see the [demo source code](https://codesandb
 ## Development
 
 [![Build status](https://github.com/chialab/loock/workflows/Main/badge.svg)](https://github.com/chialab/loock/actions?query=workflow%3ABuild)
-[![codecov](https://codecov.io/gh/chialab/loock/branch/master/graph/badge.svg)](https://codecov.io/gh/chialab/loock)
+[![codecov](https://codecov.io/gh/chialab/loock/branch/main/graph/badge.svg)](https://codecov.io/gh/chialab/loock)
 
 ### Build
 
@@ -122,4 +122,4 @@ yarn test
 
 ## License
 
-**Loock** is released under the [MIT](https://github.com/chialab/loock/blob/master/LICENSE) license.
+**Loock** is released under the [MIT](https://github.com/chialab/loock/blob/main/LICENSE) license.
