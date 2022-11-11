@@ -39,10 +39,6 @@ yarn add @chialab/loock
 
 ### CDN
 
-```html
-<script src="https://unpkg.com/@chialab/loock"></script>
-```
-
 ```ts
 import { Manager } from 'https://unpkg.com/@chialab/loock?module';
 ```
