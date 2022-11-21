@@ -1,4 +1,4 @@
-import { window } from '@chialab/dna';
+import { window, document } from '@chialab/dna';
 import { Context } from './Context.js';
 import { ESC_KEY, TAB_KEY } from './keys.js';
 
@@ -121,8 +121,22 @@ export class Manager {
             }
         };
 
+        /**
+         * @private
+         */
+        this.onIframeFocus = () => {
+            setTimeout(() => {
+                if (document.activeElement?.tagName === 'IFRAME') {
+                    if (this.activeContext) {
+                        this.activeContext.exit();
+                    }
+                }
+            }, 0);
+        };
+
         root.addEventListener('keydown', this.onKeyDown);
         root.addEventListener('focusin', this.onFocusIn);
+        root.addEventListener('focusout', this.onIframeFocus);
     }
 
     /**
@@ -266,6 +280,7 @@ export class Manager {
         });
         this.root.removeEventListener('keydown', this.onKeyDown);
         this.root.removeEventListener('focusin', this.onFocusIn);
+        this.root.removeEventListener('focusout', this.onIframeFocus);
     }
 }
 
