@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 3.2.9
+
+### Patch Changes
+
+- 7433466: Handle focus on iframes.
+
 ## 3.2.8
 
 ### Patch Changes
