@@ -298,11 +298,8 @@ export class Context {
             console.warn('created a Context without aria-label', this);
         }
         await dispatchAsyncEvent(element, 'focusenter', this);
-        if (target !== this.element) {
-            const children = this.findFocusableChildren();
-            if (children.indexOf(target) !== -1) {
-                this.setCurrentElement(target, false);
-            }
+        if (element.contains(target)) {
+            this.setCurrentElement(target, false);
         }
         this.restore();
     }
