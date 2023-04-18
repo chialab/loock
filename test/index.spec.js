@@ -2,11 +2,10 @@ import { expect, wait } from '@chialab/ginsenghino';
 import { Manager } from '@chialab/loock';
 import userEvent from '@testing-library/user-event';
 
-let manager;
-
 describe('Loock Tests', function() {
     this.timeout(10 * 1000);
 
+    let manager;
     beforeEach(() => {
         document.body.innerHTML =
             `<div aria-label="section" name="alphabet" class="loock alphabet">
@@ -25,11 +24,11 @@ describe('Loock Tests', function() {
         manager.createDefaultContext(document.body);
     });
 
-    afterEach(() => {
+    afterEach(async () => {
         // reset all 3 levels of contexts so tests can start in a clean way.
-        userEvent.keyboard('{esc}');
-        userEvent.keyboard('{esc}');
-        userEvent.keyboard('{esc}');
+        await userEvent.keyboard('{Esc}');
+        await userEvent.keyboard('{Esc}');
+        await userEvent.keyboard('{Esc}');
         manager.destroy();
     });
 
@@ -37,8 +36,8 @@ describe('Loock Tests', function() {
         expect(document.activeElement).to.equal(document.body);
     });
 
-    it('should navigate within default context', () => {
-        userEvent.keyboard('{esc}');
+    it('should navigate within default context', async () => {
+        await userEvent.keyboard('{Esc}');
         expect(document.activeElement).to.equal(document.body);
     });
 
@@ -47,21 +46,21 @@ describe('Loock Tests', function() {
         manager.createContext(alphabetDiv);
 
         await wait(250);
-        userEvent.tab();
+        await userEvent.tab();
         expect(document.activeElement).to.equal(alphabetDiv);
         await wait(250);
-        userEvent.tab();
+        await userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
         await wait(250);
-        userEvent.tab();
+        await userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonB"]'));
         await wait(250);
-        userEvent.tab();
+        await userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonC"]'));
         await wait(250);
-        userEvent.tab();
+        await userEvent.tab();
         expect(document.activeElement).to.equal(document.querySelector('button[name="buttonA"]'));
-        userEvent.keyboard('{esc}');
+        await userEvent.keyboard('{Esc}');
         expect(document.activeElement).to.equal(alphabetDiv);
     });
 });

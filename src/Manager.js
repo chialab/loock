@@ -77,7 +77,7 @@ export class Manager {
                 if (!result) {
                     return;
                 }
-            } else if (event.keyCode == TAB_KEY.keyCode) {
+            } else if (event.key == TAB_KEY.key) {
                 event.preventDefault();
                 // prevent compulsively key holding down in all browsers.
                 if ((Date.now() - this._lastKeydownTime) < TIME_BETWEEN_KEYDOWNS) {
