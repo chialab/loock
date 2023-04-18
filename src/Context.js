@@ -1,4 +1,4 @@
-import { dispatchAsyncEvent } from '@chialab/dna';
+import { Node, dispatchAsyncEvent } from '@chialab/dna';
 
 /**
  * Default focusable selectors.
@@ -146,11 +146,12 @@ export class Context {
             if (this.disabled) {
                 return;
             }
-            const elements = this.findFocusableChildren();
             const activeElement = /** @type {HTMLElement} */ (this.parent.root.document.activeElement);
-            if (activeElement && elements.indexOf(activeElement) !== -1) {
+            if (activeElement && (element === activeElement || element.contains(activeElement))) {
                 return;
             }
+
+            const elements = this.findFocusableChildren();
             let target = event.target;
             while (element.contains(target) || target === element) {
                 if (elements.indexOf(target) !== -1) {
@@ -244,15 +245,17 @@ export class Context {
             this.restore();
             return;
         }
-        let io = children.indexOf(this._currentElement);
-        if (io === 0) {
-            io = children.length - 1;
-        } else if (io !== -1) {
-            io = io - 1;
-        } else {
-            io = children.length - 1;
+
+        const current = this._currentElement;
+        if (!current) {
+            this.setCurrentElement(children[children.length - 1]);
+            return;
         }
-        this.setCurrentElement(children[io]);
+
+        const nearest = children.filter((child) =>
+            current.compareDocumentPosition(child) & Node.DOCUMENT_POSITION_PRECEDING
+        ).pop();
+        this.setCurrentElement(nearest || children[children.length - 1]);
     }
 
     /**
@@ -269,15 +272,17 @@ export class Context {
             this.restore();
             return;
         }
-        let io = children.indexOf(this._currentElement);
-        if (io === children.length - 1) {
-            io = 0;
-        } else if (io !== -1) {
-            io = io + 1;
-        } else {
-            io = 0;
+
+        const current = this._currentElement;
+        if (!current) {
+            this.setCurrentElement(children[0]);
+            return;
         }
-        this.setCurrentElement(children[io]);
+
+        const nearest = children.filter((child) =>
+            current.compareDocumentPosition(child) & Node.DOCUMENT_POSITION_FOLLOWING
+        ).shift();
+        this.setCurrentElement(nearest || children[0]);
     }
 
     /**
