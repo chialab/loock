@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 3.3.0
+
+### Minor Changes
+
+- eb8015d: Correctly detect prev and next focusable item.
+
 ## 3.2.10
 
 ### Patch Changes
