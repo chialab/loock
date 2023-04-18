@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 3.2.10
+
+### Patch Changes
+
+- aa3fd32: Fix focus on context enter when target has tabindex equal to -1.
+
 ## 3.2.9
 
 ### Patch Changes
