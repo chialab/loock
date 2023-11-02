@@ -11,10 +11,10 @@
     "default": "./dist/esm/loock.js"
   },
   "scripts": {
-    "build": "yarn types && rimraf dist && yarn build:esm && yarn build:cjs",
+    "build": "rimraf 'dist' 'types' && yarn types && yarn build:esm && yarn build:cjs",
     "build:esm": "rna build src/index.js --output dist/esm/loock.js --format esm --minify --platform browser",
     "build:cjs": "rna build src/index.js --output dist/cjs/loock.cjs --format cjs --minify --platform node",
-    "types": "rimraf types && tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
+    "types": "tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
     "test": "yarn test:browser",
     "test:browser": "rna test:browser --coverage",
     "lint": "eslint src",
@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.24.1",
-    "@chialab/eslint-config": "^3.0.0",
+    "@chialab/eslint-config": "^4.0.0",
     "@chialab/ginsenghino": "^1.0.0",
     "@chialab/rna": "^0.17.0",
     "@chialab/rna-browser-test-runner": "^0.17.0",
@@ -53,7 +53,7 @@
     "@testing-library/dom": "^9.0.0",
     "@testing-library/user-event": "^14.0.0",
     "eslint": "^8.0.0",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.2.4"
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.0"
   }
 }
