@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <p
+            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus totam eius, reiciendis dolores, rerum
+            voluptates facere deserunt blanditiis veniam magni et nostrum itaque molestias doloribus praesentium
+            voluptatem aliquam, ab libero.</p
+        >
+        <video
+            src=""
+            controls></video>
+        <p
+            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus totam eius, reiciendis dolores, rerum
+            voluptates facere deserunt blanditiis veniam magni et nostrum itaque molestias doloribus praesentium
+            voluptatem aliquam, ab libero.</p
+        >
+        <div
+            class="wrapper"
+            tabindex="0">
+            <video
+                src=""
+                controls></video>
+            <div></div>
+            <iframe
+                tabindex="0"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik"></iframe>
+        </div>
+        <p
+            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus totam eius, reiciendis dolores, rerum
+            voluptates facere deserunt blanditiis veniam magni et nostrum itaque molestias doloribus praesentium
+            voluptatem aliquam, ab libero.</p
+        >
+        <video
+            src=""
+            controls></video>
+
+        <script type="module">
+            import { windowManager } from './dist/esm/loock.js';
+
+            console.log(windowManager);
+            const wrapper = document.querySelector('.wrapper');
+            const context = windowManager.createContext(wrapper);
+            console.log(context);
+        </script>
+
+        <style>
+            *:focus {
+                border: solid 20px red;
+            }
+        </style>
+    </body>
+</html>

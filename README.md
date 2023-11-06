@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://www.chialab.io/p/loock">
-        <img alt="Loock logo" width="144" height="144" src="https://raw.githack.com/chialab/loock/master/logo.svg" />
+        <img alt="Loock logo" width="144" height="144" src="https://raw.githack.com/chialab/loock/main/logo.svg" />
     </a>
 </p>
 
@@ -19,7 +19,6 @@
 * Organize your web page or web application by navigation areas.
 * Never lose the context while navigating the area with the `TAB` key.
 * Leave the context with the `ESC` key.
-* Use a default context.
 
 Medium article - ["How to improve keyboard navigation of your web page"](https://medium.com/chialab-open-source/how-to-improve-keyboard-navigation-of-your-web-page-f11b324adbab)
 
@@ -40,57 +39,88 @@ yarn add @chialab/loock
 ### CDN
 
 ```ts
-import { Manager } from 'https://unpkg.com/@chialab/loock?module';
+import { FocusContext } from 'https://unpkg.com/@chialab/loock?module';
 ```
 
 ## Usage
 
 ```ts
-import { Manager } from '@chialab/loock';
+import { FocusContext } from '@chialab/loock';
 
-const manager = new Manager();
-const mainElem = document.getElementById('main');
-const navigationElem = document.getElementById('main');
+const dialog = document.getElementById('.dialog');
+// define a context
+const dialogContext = new FocusContext(dialog);
 
-// define the default context
-const mainContext = manager.createDefaultContext(mainElem);
-
-// define one context
-const context = manager.createContext(navigationElem);
-
-// listen context state
-navigationElem.addEventListener('focusenter', () => {
-    console.log('entered the navigation context');
-    // do stuff
+dialog.addEventListener('open', () => {
+    // activate the context
+    dialogContext.enter();
 });
-
-navigationElem.addEventListener('focusexit', () => {
-    console.log('exited the navigation context');
-    // do stuff
-});
-
-// activate the context
-context.enter();
 ```
 
-```html
-<html>
-    <body>
-        <nav id="navigation" aria-label="Main navigation">
-            <a href="/">Home</a>
-            <a href="/posts">Posts</a>
-            <a href="/login">Login</a>
-        </nav>
-        <section id="main" aria-label="Main content">
-            ...
-        </section>
-    </body>
-</html>
-```
+### Options
 
-On page load, the `#navigation` will be automatically focused and you can navigate the links using the `TAB` key without losing focus from the nav element. Press `ESC` to exit the navigation context and skip to the default context, the `#main` element.
+#### `include`
 
-For a more complete example, please see the [demo source code](https://codesandbox.io/s/ypjoj2r1qv).
+A list of selectors of tabbable elements to include in the context.
+
+Default: `a[href], area[href], button, input, select, textarea, video[controls], audio[controls], embed, iframe, summary, [contenteditable], [tabindex]`.
+
+#### `exclude`
+
+A list of selectors of elements to exclude from the context.
+
+Default: `[tabindex="-1"], [disabled], [hidden], [aria-hidden="true"], [aria-disabled="true"], [inert], details:not([open]) *:not(summary)`.
+
+#### `inert`
+
+Should add the `inert` attribute to the excluded elements when a focus context is active.  
+This may be useful for screen readers but it may cause a bit of overhead.
+
+Default: `false`.
+
+#### `restore`
+
+Should restore the focus to the previously focused element when the context is exited.
+
+Default: `true`.
+
+#### `trap`
+
+Should trap the focus inside the context when the context is active.
+
+Default: `true`.
+
+#### `focusContainer`
+
+Focus the context container when the context is entered.
+
+Default: `true`.
+
+#### `onEnter`
+
+A callback that is called when the context is entering.  
+The return value is awaited before the context is entered.
+
+#### `onExit`
+
+A callback that is called when the context is exiting.  
+The return value is awaited before the context is exited.
+
+#### `beforeExit`
+
+A callback that is called before the context is exiting.  
+The return value is awaited. If the return value is `false`, the context is not exited.  
+It can be used to block the context exit when the `ESC` key is pressed.
+
+### How "trap" works
+
+Loock attaches a ShadowRoot to the context container. Inside the ShadowRoot, it appends 3 elements:
+* a `<span>` used to detect when the focus ring needs to be moved to the last element of the context when pressing `Shift+TAB` on the first tabbable element
+* a `<slot>` used to render the context content
+* a `<span>` used to detect when the focus ring needs to be moved to the first element of the context when pressing `TAB` on the last tabbable element
+
+The container contents is rendered the same way as before context initialization, but the keyboard navigation is now "wrapped" by the two `span` elements.  
+When one of the wrapping elements gets the focus, it redirect the focus ring to the correct sibling.
 
 ---
 
@@ -104,11 +134,14 @@ For a more complete example, please see the [demo source code](https://codesandb
 Install the dependencies and run the `build` script:
 
 ```
-yarn
+yarn install
+```
+
+```
 yarn build
 ```
 
-This will generate the UMD and ESM bundles in the `dist` folder, as well as the declaration file.
+This will generate the bundles in the `dist` folder, as well as the declaration file.
 
 ### Test
 

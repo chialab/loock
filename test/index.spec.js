@@ -2,13 +2,12 @@ import { expect, wait } from '@chialab/ginsenghino';
 import { Manager } from '@chialab/loock';
 import userEvent from '@testing-library/user-event';
 
-describe('Loock Tests', function() {
+describe('Loock Tests', function () {
     this.timeout(10 * 1000);
 
     let manager;
     beforeEach(() => {
-        document.body.innerHTML =
-            `<div aria-label="section" name="alphabet" class="loock alphabet">
+        document.body.innerHTML = `<div aria-label="section" name="alphabet" class="loock alphabet">
                 <button name="buttonA">A</button>
                 <button name="buttonB">B</button>
                 <button name="buttonC">C</button>
