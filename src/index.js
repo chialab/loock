@@ -282,7 +282,7 @@ export class FocusContext {
             this.#trapEnd.tabIndex = 0;
         }
         this.#restoreFocusNode = /** @type {HTMLElement} */ (document.activeElement);
-        if (node.contains(this.#restoreFocusNode)) {
+        if (node.contains(this.#restoreFocusNode) && this.#restoreFocusNode !== node) {
             this.#restoreFocusNode = node;
         } else if (focusContainer) {
             node.focus();
