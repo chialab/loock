@@ -11,14 +11,4 @@ export default defineConfig({
     preview: {
         port: 8765,
     },
-    esbuild: {
-        include: /\.(m?(t|j)s|[jt]sx)$/,
-        target: ['es2020'],
-        platform: 'browser',
-    },
-    resolve: {
-        alias: {
-            '@chialab/loock': './src/index.js',
-        },
-    },
 });
