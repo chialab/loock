@@ -35,7 +35,7 @@
     "build:cjs": "esbuild src/index.ts --outfile=dist/cjs/loock.cjs --format=cjs --bundle --minify --sourcemap",
     "types": "tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
     "test": "playwright test",
-    "lint": "prettier --check . eslint src",
+    "lint": "prettier --check . && eslint src",
     "typecheck": "tsc --noEmit",
     "prepack": "yarn build"
   },

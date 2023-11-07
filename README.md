@@ -16,9 +16,9 @@
 
 ## Introducing Loock
 
-* Organize your web page or web application by navigation areas.
-* Never lose the context while navigating the area with the `TAB` key.
-* Leave the context with the `ESC` key.
+-   Organize your web page or web application by navigation areas.
+-   Never lose the context while navigating the area with the `TAB` key.
+-   Leave the context with the `ESC` key.
 
 Medium article - ["How to improve keyboard navigation of your web page"](https://medium.com/chialab-open-source/how-to-improve-keyboard-navigation-of-your-web-page-f11b324adbab)
 
@@ -115,9 +115,10 @@ It can be used to block the context exit when the `ESC` key is pressed.
 ### How "trap" works
 
 Loock attaches a ShadowRoot to the context container. Inside the ShadowRoot, it appends 3 elements:
-* a `<span>` used to detect when the focus ring needs to be moved to the last element of the context when pressing `Shift+TAB` on the first tabbable element
-* a `<slot>` used to render the context content
-* a `<span>` used to detect when the focus ring needs to be moved to the first element of the context when pressing `TAB` on the last tabbable element
+
+-   a `<span>` used to detect when the focus ring needs to be moved to the last element of the context when pressing `Shift+TAB` on the first tabbable element
+-   a `<slot>` used to render the context content
+-   a `<span>` used to detect when the focus ring needs to be moved to the first element of the context when pressing `TAB` on the last tabbable element
 
 The container contents is rendered the same way as before context initialization, but the keyboard navigation is now "wrapped" by the two `span` elements.  
 When one of the wrapping elements gets the focus, it redirect the focus ring to the correct sibling.
