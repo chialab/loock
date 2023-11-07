@@ -1,7 +1,5 @@
 <p align="center">
-    <a href="https://www.chialab.io/p/loock">
-        <img alt="Loock logo" width="144" height="144" src="https://raw.githack.com/chialab/loock/main/logo.svg" />
-    </a>
+    <img alt="Loock logo" width="144" height="144" src="https://raw.githack.com/chialab/loock/main/logo.svg" />
 </p>
 
 <p align="center">

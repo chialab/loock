@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/chialab/loock/issues"
   },
-  "homepage": "https://www.chialab.io/p/loock",
+  "homepage": "https://github.com/chialab/loock",
   "author": "Chialab <dev@chialab.io> (https://www.chialab.it)",
   "scripts": {
     "dev": "vite",
