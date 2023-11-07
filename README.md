@@ -20,9 +20,9 @@
 -   Never lose the context while navigating the area with the `TAB` key.
 -   Leave the context with the `ESC` key.
 
-Medium article - ["How to improve keyboard navigation of your web page"](https://medium.com/chialab-open-source/how-to-improve-keyboard-navigation-of-your-web-page-f11b324adbab)
+<!-- Medium article - ["How to improve keyboard navigation of your web page"](https://medium.com/chialab-open-source/how-to-improve-keyboard-navigation-of-your-web-page-f11b324adbab)
 
-[Try out the demo!](https://codesandbox.io/s/ypjoj2r1qv)
+[Try out the demo!](https://codesandbox.io/s/ypjoj2r1qv) -->
 
 ## Install
 
@@ -127,8 +127,7 @@ When one of the wrapping elements gets the focus, it redirect the focus ring to 
 
 ## Development
 
-[![Build status](https://github.com/chialab/loock/workflows/Main/badge.svg)](https://github.com/chialab/loock/actions?query=workflow%3ABuild)
-[![codecov](https://codecov.io/gh/chialab/loock/branch/main/graph/badge.svg)](https://codecov.io/gh/chialab/loock)
+[![Build status](https://github.com/chialab/loock/workflows/Main/badge.svg)](https://github.com/chialab/loock/actions?query=workflow%3AMain)
 
 ### Build
 
