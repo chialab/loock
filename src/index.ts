@@ -303,7 +303,8 @@ export class FocusContext {
         const { inert = false, focusContainer = false, onEnter } = this._options;
 
         // MUST use the `focusin` event because it fires after the bound `focus` on trap helpers
-        node.addEventListener('focusin', this.#handleFocusin, true);
+        node.ownerDocument.addEventListener('focus', this.#handleFocusOut, true);
+        node.addEventListener('focusin', this.#handleFocusIn, true);
         node.addEventListener('keydown', this.#handleKeyDown, true);
         if (this._trapStart) {
             this._trapStart.tabIndex = 0;
@@ -345,7 +346,8 @@ export class FocusContext {
         }
         this._active = false;
 
-        node.removeEventListener('focusin', this.#handleFocusin, true);
+        node.ownerDocument.removeEventListener('focus', this.#handleFocusOut, true);
+        node.removeEventListener('focusin', this.#handleFocusIn, true);
         node.removeEventListener('keydown', this.#handleKeyDown, true);
 
         if (this._restoreTreeState) {
@@ -417,8 +419,25 @@ export class FocusContext {
      * Handle focusin events.
      * @param event The focusin event.
      */
-    #handleFocusin = (event: FocusEvent) => {
+    #handleFocusIn = (event: FocusEvent) => {
         this._currentNode = event.target as HTMLElement;
+    };
+
+    /**
+     * Handle focus events on document in order to prevent focus exits the active context.
+     * @param event The focusin event.
+     */
+    #handleFocusOut = (event: FocusEvent) => {
+        const { node } = this;
+        const element = event.target as HTMLElement;
+        if (!node.contains(element)) {
+            const { focusContainer = false } = this._options;
+            if (focusContainer) {
+                node.focus();
+            } else {
+                this.focusFirst();
+            }
+        }
     };
 
     /**

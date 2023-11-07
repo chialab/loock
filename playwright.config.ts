@@ -21,7 +21,7 @@ export default defineConfig({
         },
         {
             name: 'webkit',
-            use: { ...devices['Desktop Safari'], headless: false },
+            use: { ...devices['Desktop Safari'] },
         },
     ],
 });
