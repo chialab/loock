@@ -1,0 +1,86 @@
+name: Lint and Test
+on:
+  workflow_call:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: yarn
+
+      - name: Install project dependencies
+        run: yarn install
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
+
+      - name: Run build script
+        run: yarn build
+
+      - name: Check package
+        run: yarn publint
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Loock
+          path: |
+            dist
+            types
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: yarn
+
+      - name: Install project dependencies
+        run: yarn install
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
+
+      - name: Lint
+        run: yarn lint
+
+  test:
+    name: Test Browsers
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 3
+      matrix:
+        browser:
+          - 'chromium'
+          - 'firefox'
+          - 'webkit'
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: yarn
+
+      - name: Install project dependencies
+        run: yarn install
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
+
+      - name: Install chromium
+        run: yarn playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Run tests
+        run: yarn test --project ${{ matrix.browser }}

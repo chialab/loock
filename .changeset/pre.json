@@ -1,0 +1,8 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "@chialab/loock": "3.3.0"
+  },
+  "changesets": []
+}

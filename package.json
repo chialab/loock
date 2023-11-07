@@ -7,20 +7,9 @@
   "module": "dist/esm/loock.js",
   "types": "types/index.d.ts",
   "exports": {
+    "types": "./types/index.d.ts",
     "require": "./dist/cjs/loock.cjs",
     "default": "./dist/esm/loock.js"
-  },
-  "scripts": {
-    "build": "rimraf 'dist' 'types' && yarn types && yarn build:esm && yarn build:cjs",
-    "build:esm": "rna build src/index.js --output dist/esm/loock.js --format esm --minify --platform browser",
-    "build:cjs": "rna build src/index.js --output dist/cjs/loock.cjs --format cjs --minify --platform node",
-    "types": "tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
-    "test": "yarn test:browser",
-    "test:browser": "rna test:browser --coverage",
-    "lint": "eslint src",
-    "typecheck": "tsc --noEmit",
-    "prepack": "yarn build",
-    "release": "source .env && semantic-release --no-ci"
   },
   "files": [
     "dist",
@@ -30,30 +19,38 @@
     "LICENSE"
   ],
   "license": "MIT",
-  "author": "Chialab <dev@chialab.io> (https://www.chialab.it)",
   "repository": {
     "type": "git",
-    "url": "git@github.com:chialab/loock.git"
+    "url": "https://github.com/chialab/loock"
+  },
+  "bugs": {
+    "url": "https://github.com/chialab/loock/issues"
   },
   "homepage": "https://www.chialab.io/p/loock",
-  "bugs": {
-    "url": "https://github.com/chialab/loock/issues",
-    "email": "dev@chialab.io"
-  },
-  "dependencies": {
-    "@chialab/dna": "^3.4.0"
+  "author": "Chialab <dev@chialab.io> (https://www.chialab.it)",
+  "scripts": {
+    "dev": "vite",
+    "build": "rimraf 'dist' 'types' && yarn types && yarn build:esm && yarn build:cjs",
+    "build:esm": "esbuild src/index.ts --outfile=dist/esm/loock.js --format=esm --bundle --minify --sourcemap",
+    "build:cjs": "esbuild src/index.ts --outfile=dist/cjs/loock.cjs --format=cjs --bundle --minify --sourcemap",
+    "types": "tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
+    "test": "playwright test",
+    "lint": "prettier --check . && eslint src",
+    "typecheck": "tsc --noEmit",
+    "prepack": "yarn build"
   },
   "devDependencies": {
     "@changesets/cli": "^2.24.1",
     "@chialab/eslint-config": "^4.0.0",
-    "@chialab/ginsenghino": "^1.0.0",
-    "@chialab/rna": "^0.17.0",
-    "@chialab/rna-browser-test-runner": "^0.17.0",
-    "@chialab/rna-bundler": "^0.17.0",
-    "@testing-library/dom": "^9.0.0",
-    "@testing-library/user-event": "^14.0.0",
+    "@chialab/prettier-config": "^1.2.2",
+    "@playwright/test": "^1.39.0",
+    "esbuild": "^0.19.5",
     "eslint": "^8.0.0",
+    "playwright": "^1.39.0",
+    "prettier": "^3.0.3",
+    "publint": "^0.2.5",
     "rimraf": "^5.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vite": "^4.5.0"
   }
 }
