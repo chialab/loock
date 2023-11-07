@@ -1,5 +1,15 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.0.0-alpha.0
+
+### Major Changes
+
+-   459a4cb: Refactored the trap mechanism in order to handle video controls and iframe contents.
+
+### Minor Changes
+
+-   8645f7d: Add `types` entrypoint for exports map.
+
 ## 3.3.0
 
 ### Minor Changes

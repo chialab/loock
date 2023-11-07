@@ -4,5 +4,8 @@
   "initialVersions": {
     "@chialab/loock": "3.3.0"
   },
-  "changesets": []
+  "changesets": [
+    "mean-cups-hang",
+    "tricky-radios-hunt"
+  ]
 }

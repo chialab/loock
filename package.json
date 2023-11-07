@@ -1,6 +1,6 @@
 {
   "name": "@chialab/loock",
-  "version": "3.3.0",
+  "version": "4.0.0-alpha.0",
   "description": "A focus trap helper for keyboard navigation on the web.",
   "type": "module",
   "main": "dist/cjs/loock.cjs",
