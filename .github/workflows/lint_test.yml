@@ -58,6 +58,13 @@ jobs:
   test:
     name: Test Browsers
     runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 3
+      matrix:
+        browser:
+          - 'chromium'
+          - 'firefox'
+          - 'webkit'
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -73,14 +80,7 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
 
       - name: Install chromium
-        run: yarn playwright install --with-deps chromium
+        run: yarn playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run tests
-        run: yarn test --coverage
-
-      - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v3
-        if: always()
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage/clover.xml
+        run: yarn test --project ${{ matrix.browser }}

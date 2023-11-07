@@ -5,4 +5,4 @@ yarn-error.log
 .eslintcache
 dist
 types
-coverage
+public

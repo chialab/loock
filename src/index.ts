@@ -1,10 +1,10 @@
 /**
  * Restore old attribute value or remove it if the new value is null.
- * @param {HTMLElement} node The element to update.
- * @param {string} name The attribute name.
- * @param {string|null} value The attribute value.
+ * @param node The element to update.
+ * @param name The attribute name.
+ * @param value The attribute value.
  */
-function restoreAttribute(node, name, value) {
+function restoreAttribute(node: HTMLElement, name: string, value: string | null) {
     if (value === null) {
         node.removeAttribute(name);
     } else {
@@ -14,21 +14,21 @@ function restoreAttribute(node, name, value) {
 
 /**
  * Inert node ancestors up to the root node.
- * @param {HTMLElement} node The node to start from.
- * @param {HTMLElement} until The root node.
- * @returns {() => void} A list of functions to restore the original state.
+ * @param node The node to start from.
+ * @param until The root node.
+ * @returns A list of functions to restore the original state.
  */
-function inertTree(node, until = document.documentElement) {
-    const parentNode = /** @type {HTMLElement} */ (node.parentNode);
+function inertTree(node: HTMLElement, until: HTMLElement = document.documentElement): () => void {
+    const parentNode = node.parentNode as HTMLElement;
     if (!parentNode) {
         return () => {};
     }
 
     let restore = until !== parentNode ? inertTree(parentNode, until) : () => {};
 
-    const children = /** @type {HTMLElement[]} */ (Array.from(parentNode.children));
+    const children = /** @type {HTMLElement[]} */ Array.from(parentNode.children);
     for (let i = 0; i < children.length; i++) {
-        const child = children[i];
+        const child = children[i] as HTMLElement;
         if (child === node) {
             continue;
         }
@@ -55,11 +55,11 @@ function inertTree(node, until = document.documentElement) {
 
 /**
  * Create a focus trap helper span.
- * @param {Document} doc The document to create the span in.
- * @returns {HTMLElement} The focus trap helper span.
+ * @param document The document to create the span in.
+ * @returns The focus trap helper span.
  */
-function createTrapHelper(doc) {
-    const span = doc.createElement('span');
+function createTrapHelper(document: Document) {
+    const span = document.createElement('span');
     span.tabIndex = -1;
     span.ariaHidden = 'true';
     span.style.position = 'absolute';
@@ -100,26 +100,63 @@ export const DEFAULT_IGNORE_SELECTORS = [
     'details:not([open]) *:not(summary)',
 ];
 
-/**
- * @typedef {Object} FocusTrapImpl
- * @property {boolean} [useShadowDOM] Whether to use Shadow DOM.
- * @property {HTMLElement} [startHelper] The trap start element to use instead of creating one.
- * @property {HTMLElement} [endHelper] The trap end element to use instead of creating one
- */
+export interface FocusTrapImpl {
+    /**
+     * Whether to use Shadow DOM.
+     */
+    useShadowDOM?: boolean;
+    /**
+     * The trap start element to use instead of creating one.
+     */
+    startHelper?: HTMLElement;
+    /**
+     * The trap end element to use instead of creating one
+     */
+    endHelper?: HTMLElement;
+}
 
-/**
- * @typedef {Object} FocusContextOptions
- * @property {string[]} [include] The selectors to use to find focusable elements.
- * @property {string[]} [exclude] The selectors to use to ignore focusable elements.
- * @property {boolean} [inert] Whether to inert the other elements of the page.
- * @property {boolean} [restore] Whether to restore focus to the previous element.
- * @property {boolean} [trap] Whether to trap the focus.
- * @property {FocusTrapImpl} [trapImpl] The focus trap implementation configuration.
- * @property {boolean} [focusContainer] Whether to focus the container when entering the focus context.
- * @property {(context: FocusContext) => void|Promise<void>} [onEnter] A function that is called when the focus context is entered.
- * @property {(context: FocusContext) => void|Promise<void>} [onExit] A function that is called when the focus context is exited.
- * @property {(context: FocusContext) => boolean|void|Promise<boolean|void>} [beforeExit] A function that is called before the focus context is exited.
- */
+export interface FocusContextOptions {
+    /**
+     * The selectors to use to find focusable elements.
+     */
+    include?: string[];
+    /**
+     * The selectors to use to ignore focusable elements.
+     */
+    exclude?: string[];
+    /**
+     * Whether to inert the other elements of the page.
+     */
+    inert?: boolean;
+    /**
+     * Whether to restore focus to the previous element.
+     */
+    restore?: boolean;
+    /**
+     * Whether to trap the focus.
+     */
+    trap?: boolean;
+    /**
+     * The focus trap implementation configuration.
+     */
+    trapImpl?: FocusTrapImpl;
+    /**
+     * Whether to focus the container when entering the focus context.
+     */
+    focusContainer?: boolean;
+    /**
+     * A function that is called when the focus context is entered.
+     */
+    onEnter?: (context: FocusContext) => void | Promise<void>;
+    /**
+     * A function that is called when the focus context is exited.
+     */
+    onExit?: (context: FocusContext) => void | Promise<void>;
+    /**
+     * A function that is called before the focus context is exited.
+     */
+    beforeExit?: (context: FocusContext) => boolean | void | Promise<boolean | void>;
+}
 
 /**
  * A Focus Context.
@@ -127,59 +164,52 @@ export const DEFAULT_IGNORE_SELECTORS = [
 export class FocusContext {
     /**
      * The root node of the focus context.
-     * @type {HTMLElement}
      */
-    #node;
+    private _node: HTMLElement;
 
     /**
      * Whether the focus context is active.
      */
-    #active = false;
+    private _active = false;
 
     /**
      * The focus context options.
-     * @type {FocusContextOptions}
      */
-    #options = {};
+    private _options: FocusContextOptions = {};
 
     /**
      * A function that restores tree status.
-     * @type {(() => void)|null}
      */
-    #restoreTreeState = null;
+    private _restoreTreeState: (() => void) | null = null;
 
     /**
      * The node to restore focus to.
-     * @type {HTMLElement|null}
      */
-    #restoreFocusNode = null;
+    private _restoreFocusNode: HTMLElement | null = null;
 
     /**
      * The currently focused node.
-     * @type {HTMLElement|null}
      */
-    #currentNode = null;
+    private _currentNode: HTMLElement | null = null;
 
     /**
      * The start of the focus trap.
-     * @type {HTMLElement|null}
      */
-    #trapStart = null;
+    private _trapStart: HTMLElement | null = null;
 
     /**
      * The end of the focus trap.
-     * @type {HTMLElement|null}
      */
-    #trapEnd = null;
+    private _trapEnd: HTMLElement | null = null;
 
     /**
      * Create a new focus context.
-     * @param {HTMLElement} node The root node of the focus context.
-     * @param {FocusContextOptions} [options] The focus context options.
+     * @param node The root node of the focus context.
+     * @param options The focus context options.
      */
-    constructor(node, options = {}) {
-        this.#node = node;
-        this.#options = options;
+    constructor(node: HTMLElement, options: FocusContextOptions = {}) {
+        this._node = node;
+        this._options = options;
 
         const { focusContainer = false, trap = true, trapImpl = {} } = options;
         const { useShadowDOM = true, startHelper = null, endHelper = null } = trapImpl;
@@ -188,18 +218,18 @@ export class FocusContext {
         }
         if (trap) {
             const document = node.ownerDocument;
-            this.#trapStart = startHelper || createTrapHelper(document);
-            this.#trapStart.addEventListener(
+            this._trapStart = startHelper || createTrapHelper(document);
+            this._trapStart.addEventListener(
                 'focus',
                 (event) => {
                     event.stopImmediatePropagation();
                     event.stopPropagation();
                     event.preventDefault();
 
-                    if (this.#currentNode === node) {
+                    if (this._currentNode === node) {
                         this.focusFirst();
                     } else if (focusContainer) {
-                        this.#currentNode = node;
+                        this._currentNode = node;
                         node.focus();
                     } else {
                         this.focusLast();
@@ -208,18 +238,18 @@ export class FocusContext {
                 true
             );
 
-            this.#trapEnd = endHelper || createTrapHelper(document);
-            this.#trapEnd.addEventListener(
+            this._trapEnd = endHelper || createTrapHelper(document);
+            this._trapEnd.addEventListener(
                 'focus',
                 (event) => {
                     event.stopImmediatePropagation();
                     event.stopPropagation();
                     event.preventDefault();
 
-                    if (this.#currentNode === node) {
+                    if (this._currentNode === node) {
                         this.focusLast();
                     } else if (focusContainer) {
-                        this.#currentNode = node;
+                        this._currentNode = node;
                         node.focus();
                     } else {
                         this.focusFirst();
@@ -228,20 +258,20 @@ export class FocusContext {
                 true
             );
 
-            let root = /** @type {HTMLElement|DocumentFragment} */ (node);
+            let root: HTMLElement | DocumentFragment = node;
             if (useShadowDOM) {
                 if (node.shadowRoot) {
                     root = node.shadowRoot;
                 } else {
-                    root = node.attachShadow({ mode: 'open' });
+                    root = node.attachShadow({ mode: 'closed' });
                     root.append(document.createElement('slot'));
                 }
             }
-            if (root.firstChild !== this.#trapStart) {
-                root.prepend(this.#trapStart);
+            if (root.firstChild !== this._trapStart) {
+                root.prepend(this._trapStart);
             }
-            if (root.lastChild !== this.#trapEnd) {
-                root.append(this.#trapEnd);
+            if (root.lastChild !== this._trapEnd) {
+                root.append(this._trapEnd);
             }
         }
     }
@@ -250,14 +280,14 @@ export class FocusContext {
      * The root node of the focus context.
      */
     get node() {
-        return this.#node;
+        return this._node;
     }
 
     /**
      * Whether the focus context is active.
      */
     get active() {
-        return this.#active;
+        return this._active;
     }
 
     /**
@@ -267,30 +297,30 @@ export class FocusContext {
         if (this.active) {
             throw new Error('Focus context is already active');
         }
-        this.#active = true;
+        this._active = true;
 
         const { node } = this;
-        const { inert = false, focusContainer = false, onEnter } = this.#options;
+        const { inert = false, focusContainer = false, onEnter } = this._options;
 
         // MUST use the `focusin` event because it fires after the bound `focus` on trap helpers
         node.addEventListener('focusin', this.#handleFocusin, true);
         node.addEventListener('keydown', this.#handleKeyDown, true);
-        if (this.#trapStart) {
-            this.#trapStart.tabIndex = 0;
+        if (this._trapStart) {
+            this._trapStart.tabIndex = 0;
         }
-        if (this.#trapEnd) {
-            this.#trapEnd.tabIndex = 0;
+        if (this._trapEnd) {
+            this._trapEnd.tabIndex = 0;
         }
-        this.#restoreFocusNode = /** @type {HTMLElement} */ (document.activeElement);
-        if (node.contains(this.#restoreFocusNode) && this.#restoreFocusNode !== node) {
-            this.#restoreFocusNode = node;
+        this._restoreFocusNode = document.activeElement as HTMLElement;
+        if (node.contains(this._restoreFocusNode) && this._restoreFocusNode !== node) {
+            this._restoreFocusNode = node;
         } else if (focusContainer) {
             node.focus();
         } else {
             this.focusFirst();
         }
         if (inert) {
-            this.#restoreTreeState = inertTree(node, node.ownerDocument.body);
+            this._restoreTreeState = inertTree(node, node.ownerDocument.body);
         }
 
         if (onEnter) {
@@ -309,29 +339,29 @@ export class FocusContext {
         }
 
         const { node } = this;
-        const { restore = true, beforeExit, onExit } = this.#options;
+        const { restore = true, beforeExit, onExit } = this._options;
         if (!force && beforeExit && (await beforeExit(this)) === false) {
             return;
         }
-        this.#active = false;
+        this._active = false;
 
         node.removeEventListener('focusin', this.#handleFocusin, true);
         node.removeEventListener('keydown', this.#handleKeyDown, true);
 
-        if (this.#restoreTreeState) {
-            this.#restoreTreeState();
-            this.#restoreTreeState = null;
+        if (this._restoreTreeState) {
+            this._restoreTreeState();
+            this._restoreTreeState = null;
         }
-        if (this.#restoreFocusNode && restore) {
-            this.#restoreFocusNode.focus();
+        if (this._restoreFocusNode && restore) {
+            this._restoreFocusNode.focus();
         }
-        if (this.#trapStart) {
-            this.#trapStart.tabIndex = -1;
+        if (this._trapStart) {
+            this._trapStart.tabIndex = -1;
         }
-        if (this.#trapEnd) {
-            this.#trapEnd.tabIndex = -1;
+        if (this._trapEnd) {
+            this._trapEnd.tabIndex = -1;
         }
-        this.#restoreFocusNode = null;
+        this._restoreFocusNode = null;
 
         if (onExit) {
             await onExit(this);
@@ -355,34 +385,48 @@ export class FocusContext {
 
     /**
      * Find all focusable children.
-     * @returns {HTMLElement[]} The focusable children.
+     * @returns The focusable children.
      */
     findFocusableChildren() {
-        const { include = DEFAULT_SELECTORS, exclude = DEFAULT_IGNORE_SELECTORS } = this.#options;
+        const { include = DEFAULT_SELECTORS, exclude = DEFAULT_IGNORE_SELECTORS } = this._options;
 
-        return /** @type {HTMLElement[]} */ (Array.from(this.node.querySelectorAll(include.join(', '))))
-            .filter((element) => !exclude.some((selector) => element.matches(selector)))
-            .filter((element) => {
-                const { width, height } = element.getBoundingClientRect();
+        return (Array.from(this.node.querySelectorAll(include.join(', '))) as HTMLElement[]).filter((element) => {
+            if (exclude.some((selector) => element.matches(selector))) {
+                return false;
+            }
 
-                return !!height && !!width;
-            });
+            if (element.tagName === 'INPUT' && (element as HTMLInputElement).type === 'radio') {
+                const name = (element as HTMLInputElement).name;
+                const inputs = this.node.querySelectorAll(`input[type="radio"][name="${name}"]`);
+                const checked = Array.from(inputs).find((input) => (input as HTMLInputElement).checked);
+                if (checked) {
+                    if (checked !== element) {
+                        return false;
+                    }
+                } else if (element !== inputs[0]) {
+                    return false;
+                }
+            }
+
+            const { width, height } = element.getBoundingClientRect();
+            return !!height && !!width;
+        });
     }
 
     /**
      * Handle focusin events.
-     * @param {FocusEvent} event The focusin event.
+     * @param event The focusin event.
      */
-    #handleFocusin = (event) => {
-        this.#currentNode = /** @type {HTMLElement} */ (event.target);
+    #handleFocusin = (event: FocusEvent) => {
+        this._currentNode = event.target as HTMLElement;
     };
 
     /**
      * Handle keydown events.
-     * @param {KeyboardEvent} event The keydown event.
+     * @param event The keydown event.
      */
-    #handleKeyDown = (event) => {
-        const { trap = false } = this.#options;
+    #handleKeyDown = (event: KeyboardEvent) => {
+        const { trap = true } = this._options;
         switch (event.key) {
             case 'Esc':
             case 'Escape':
@@ -390,7 +434,7 @@ export class FocusContext {
                 this.exit();
                 break;
             case 'Tab':
-                if (trap && this.#currentNode === this.node) {
+                if (trap && this._currentNode === this.node) {
                     event.preventDefault();
 
                     if (event.shiftKey) {
