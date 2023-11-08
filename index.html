@@ -59,16 +59,16 @@
                         src="https://demo.chialab.io/catalog/media/moon/Apollo_11_Intro.mp4"></video>
                 </section>
                 <script type="module">
-                    import { FocusContext } from '/src/index.ts';
+                    import { focusTrapBehavior } from '/src/index.ts';
 
                     const article1 = document.querySelector('#article1');
                     const button1 = article1.querySelector('header button');
                     const section1 = article1.querySelector('section');
-                    const context1 = new FocusContext(section1);
+                    const behavior1 = focusTrapBehavior(section1);
 
                     button1.addEventListener('click', () => {
                         button1.focus();
-                        context1.enter();
+                        behavior1.connect();
                     });
                 </script>
             </article>
@@ -145,18 +145,18 @@
                 </section>
                 <code class="text-xs">{ focusContainer: true }</code>
                 <script type="module">
-                    import { FocusContext } from '/src/index.ts';
+                    import { focusTrapBehavior } from '/src/index.ts';
 
                     const article2 = document.querySelector('#article2');
                     const button2 = article2.querySelector('header button');
                     const section2 = article2.querySelector('section');
-                    const context2 = new FocusContext(section2, {
+                    const behavior2 = focusTrapBehavior(section2, {
                         focusContainer: true,
                     });
 
                     button2.addEventListener('click', () => {
                         button2.focus();
-                        context2.enter();
+                        behavior2.connect();
                     });
                 </script>
             </article>
@@ -208,14 +208,14 @@
                 </section>
                 <code class="text-xs">{ inert: true }</code>
                 <script type="module">
-                    import { FocusContext } from './src/index.ts';
+                    import { focusTrapBehavior } from './src/index.ts';
 
                     const article3 = document.querySelector('#article3');
                     const section3 = article3.querySelector('section');
                     const button3 = section3.querySelector('button');
                     const dialog = section3.querySelector('dialog');
 
-                    const context3 = new FocusContext(dialog.querySelector('.dialog-content'), {
+                    const behavior3 = focusTrapBehavior(dialog.querySelector('.dialog-content'), {
                         inert: true,
                         onExit: () => {
                             dialog.close();
@@ -224,7 +224,7 @@
                     button3.addEventListener('click', () => {
                         button3.focus();
                         dialog.showModal();
-                        context3.enter();
+                        behavior3.connect();
                     });
                 </script>
             </article>
