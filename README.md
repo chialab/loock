@@ -37,21 +37,19 @@ yarn add @chialab/loock
 ### CDN
 
 ```ts
-import { FocusContext } from 'https://unpkg.com/@chialab/loock?module';
+import { focusTrapBehavior } from 'https://unpkg.com/@chialab/loock?module';
 ```
 
 ## Usage
 
 ```ts
-import { FocusContext } from '@chialab/loock';
+import { focusTrapBehavior } from '@chialab/loock';
 
 const dialog = document.getElementById('.dialog');
-// define a context
-const dialogContext = new FocusContext(dialog);
+const trap = focusTrapBehavior(dialog);
 
 dialog.addEventListener('open', () => {
-    // activate the context
-    dialogContext.enter();
+    trap.connect();
 });
 ```
 
