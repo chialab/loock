@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.0.0-alpha.1
+
+### Major Changes
+
+-   99940f5: Introduce focus and keyboard navigation behaviors.
+
 ## 4.0.0-alpha.0
 
 ### Major Changes
