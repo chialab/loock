@@ -5,6 +5,7 @@
     "@chialab/loock": "3.3.0"
   },
   "changesets": [
+    "clever-crabs-camp",
     "mean-cups-hang",
     "serious-flowers-try",
     "tricky-radios-hunt"
