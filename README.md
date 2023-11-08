@@ -88,17 +88,11 @@ Should restore the focus to the previously focused element when the context is e
 
 Default: `true`.
 
-#### `trap`
-
-Should trap the focus inside the context when the context is active.
-
-Default: `true`.
-
 #### `focusContainer`
 
 Focus the context container when the context is entered.
 
-Default: `true`.
+Default: `false`.
 
 #### `onEnter`
 

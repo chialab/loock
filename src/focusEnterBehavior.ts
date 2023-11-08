@@ -1,7 +1,9 @@
+import { focusManager, type FocusManagerOptions } from './focusManager';
+
 /**
  * The focus enter options.
  */
-export interface FocusEnterOptions {
+export interface FocusEnterOptions extends FocusManagerOptions {
     /**
      * The callback when focus enter.
      */
@@ -23,6 +25,8 @@ export function focusEnterBehavior(node: HTMLElement, options: FocusEnterOptions
     const { onEnter, onExit } = options;
     let focused = false;
     let connected = false;
+
+    const manager = focusManager(node, options);
 
     const onFocusIn = () => {
         const activeElement = document.activeElement;
@@ -73,5 +77,6 @@ export function focusEnterBehavior(node: HTMLElement, options: FocusEnterOptions
             node.removeEventListener('focusin', onFocusIn);
             node.removeEventListener('focusout', onFocusOut);
         },
+        manager,
     };
 }

@@ -1,23 +1,6 @@
-import { findFocusableByOptions } from './findFocusableChildren';
+import { focusEnterBehavior } from './focusEnterBehavior';
+import { type FocusManagerOptions } from './focusManager';
 import { restoreAttribute } from './helpers';
-
-/**
- * The options for focus first option on focus enter.
- */
-export interface FocusFirstChildOptions {
-    /**
-     * The focusable elements.
-     */
-    elements?: HTMLElement[] | (() => HTMLElement[]);
-    /**
-     * The selectors for focusable nodes.
-     */
-    include?: string[];
-    /**
-     * The selectors for ignored nodes.
-     */
-    exclude?: string[];
-}
 
 /**
  * Focus first option on focus enter.
@@ -25,14 +8,26 @@ export interface FocusFirstChildOptions {
  * @param options The options.
  * @returns The behavior controller.
  */
-export function focusFirstChildBehavior(node: HTMLElement, options: FocusFirstChildOptions = {}) {
+export function focusFirstChildBehavior(node: HTMLElement, options: FocusManagerOptions = {}) {
     const document = node.ownerDocument;
     let activeElement: HTMLElement | null = null;
     let connected = false;
-    let tabindex: string | null = null;
+    let tabIndex: string | null = null;
+
+    const enterBehavior = focusEnterBehavior(node, {
+        ...options,
+        onEnter() {
+            tabIndex = node.getAttribute('tabindex');
+            node.setAttribute('tabindex', '-1');
+        },
+        onExit() {
+            restoreAttribute(node, 'tabindex', tabIndex);
+        },
+    });
+    const { manager } = enterBehavior;
 
     const onFocus = () => {
-        const elements = findFocusableByOptions(node, options);
+        const elements = manager.findFocusable();
         const target = document.activeElement as HTMLElement;
         if (target === node) {
             if (activeElement && node.contains(activeElement)) {
@@ -55,20 +50,23 @@ export function focusFirstChildBehavior(node: HTMLElement, options: FocusFirstCh
             if (connected) {
                 return;
             }
+            enterBehavior.connect();
             connected = true;
             activeElement = null;
-            tabindex = node.getAttribute('tabindex');
-            node.setAttribute('tabindex', '-1');
+            if (document.activeElement && node.contains(document.activeElement)) {
+                onFocus();
+            }
             node.addEventListener('focus', onFocus, true);
         },
         disconnect() {
             if (!connected) {
                 return;
             }
+            enterBehavior.disconnect();
             connected = false;
             activeElement = null;
-            restoreAttribute(node, 'tabindex', tabindex);
             node.removeEventListener('focus', onFocus, true);
         },
+        manager,
     };
 }
