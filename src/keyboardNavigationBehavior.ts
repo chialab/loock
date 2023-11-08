@@ -1,4 +1,4 @@
-import { findFocusableChildren } from './findFocusableChildren';
+import { findFocusableByOptions } from './findFocusableChildren';
 
 /**
  * The options for keyboard navigation.
@@ -7,7 +7,7 @@ export interface KeyboardNavigationOptions {
     /**
      * The focusable elements.
      */
-    elements?: HTMLElement[];
+    elements?: HTMLElement[] | (() => HTMLElement[]);
     /**
      * The selectors for focusable nodes.
      */
@@ -36,12 +36,12 @@ export interface KeyboardNavigationOptions {
 
 /**
  * Navigate focusable elements with keyboard.
- * @param element The target element.
+ * @param node The target element.
  * @param options Behavior options.
  * @returns The behavior controller.
  */
-export function keyboardNavigationBehavior(element: HTMLElement, options: KeyboardNavigationOptions) {
-    const document = element.ownerDocument;
+export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardNavigationOptions) {
+    const document = node.ownerDocument;
     let connected = false;
 
     const onKeydown = (event: KeyboardEvent) => {
@@ -49,7 +49,7 @@ export function keyboardNavigationBehavior(element: HTMLElement, options: Keyboa
             return;
         }
 
-        const current = element.contains(document.activeElement) ? (document.activeElement as HTMLElement) : null;
+        const current = node.contains(document.activeElement) ? (document.activeElement as HTMLElement) : null;
         if (!current) {
             return;
         }
@@ -59,10 +59,8 @@ export function keyboardNavigationBehavior(element: HTMLElement, options: Keyboa
             nextKeys = ['Down', 'ArrowDown', 'Right', 'ArrowRight'],
             homeKeys = ['Home'],
             endKeys = ['End'],
-            include,
-            exclude,
-            elements = findFocusableChildren(element, include, exclude),
         } = options;
+        const elements = findFocusableByOptions(node, options);
         const index = elements.findIndex((el) => el === current || el.contains(current));
         if (prevKeys.includes(event.key)) {
             // select previous list item
@@ -111,14 +109,14 @@ export function keyboardNavigationBehavior(element: HTMLElement, options: Keyboa
                 return;
             }
             connected = true;
-            element.addEventListener('keydown', onKeydown);
+            node.addEventListener('keydown', onKeydown);
         },
         disconnect() {
             if (!connected) {
                 return;
             }
             connected = false;
-            element.removeEventListener('keydown', onKeydown);
+            node.removeEventListener('keydown', onKeydown);
         },
     };
 }

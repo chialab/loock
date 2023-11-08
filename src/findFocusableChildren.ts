@@ -1,6 +1,31 @@
 import { DEFAULT_IGNORE_SELECTORS, DEFAULT_SELECTORS } from './constants';
 
 /**
+ * Find all focusable elements by options.
+ * @param node The target node.
+ * @param options The options.
+ */
+export function findFocusableByOptions(
+    node: HTMLElement,
+    options: {
+        elements?: HTMLElement[] | (() => HTMLElement[]);
+        include?: string[];
+        exclude?: string[];
+    }
+) {
+    const { include, exclude, elements } = options;
+    if (!elements) {
+        return findFocusableChildren(node, include, exclude);
+    }
+
+    if (typeof elements === 'function') {
+        return elements();
+    }
+
+    return elements;
+}
+
+/**
  * Find all focusable children of a node.
  * @param node The target node.
  * @param include The selectors to include.

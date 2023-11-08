@@ -1,18 +1,5 @@
-import { findFocusableChildren } from './findFocusableChildren';
-
-/**
- * Restore old attribute value or remove it if the new value is null.
- * @param node The element to update.
- * @param name The attribute name.
- * @param value The attribute value.
- */
-function restoreAttribute(node: HTMLElement, name: string, value: string | null) {
-    if (value === null) {
-        node.removeAttribute(name);
-    } else {
-        node.setAttribute(name, value);
-    }
-}
+import { findFocusableByOptions } from './findFocusableChildren';
+import { restoreAttribute } from './helpers';
 
 /**
  * Inert node ancestors up to the root node.
@@ -89,7 +76,7 @@ export interface FocusTrapOptions {
     /**
      * The focusable elements.
      */
-    elements?: HTMLElement[];
+    elements?: HTMLElement[] | (() => HTMLElement[]);
     /**
      * The selectors to use to find focusable elements.
      */
@@ -177,7 +164,7 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
      * Focus the first focusable child.
      */
     const focusFirst = () => {
-        const { include, exclude, elements = findFocusableChildren(node, include, exclude) } = options;
+        const elements = findFocusableByOptions(node, options);
         elements.shift()?.focus();
     };
 
@@ -185,7 +172,7 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
      * Focus the last focusable child.
      */
     const focusLast = () => {
-        const { include, exclude, elements = findFocusableChildren(node, include, exclude) } = options;
+        const elements = findFocusableByOptions(node, options);
         elements.pop()?.focus();
     };
 
@@ -253,7 +240,7 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
                 if (node.shadowRoot) {
                     root = node.shadowRoot;
                 } else {
-                    root = node.attachShadow({ mode: 'closed' });
+                    root = node.attachShadow({ mode: 'open' });
                     root.append(document.createElement('slot'));
                 }
             }
