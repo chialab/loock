@@ -5,21 +5,21 @@ export interface FocusEnterOptions {
     /**
      * The callback when focus enter.
      */
-    onEnter: (element: Element) => void;
+    onEnter?: (element: Element) => void;
     /**
      * The callback when focus exit.
      */
-    onExit: () => void;
+    onExit?: () => void;
 }
 
 /**
  * Focus first option on focus enter.
- * @param element The target element.
+ * @param node The target element.
  * @param options The options.
  * @returns The behavior controller.
  */
-export function focusEnterBehavior(element: HTMLElement, options: FocusEnterOptions) {
-    const document = element.ownerDocument;
+export function focusEnterBehavior(node: HTMLElement, options: FocusEnterOptions = {}) {
+    const document = node.ownerDocument;
     const { onEnter, onExit } = options;
     let focused = false;
     let connected = false;
@@ -31,7 +31,7 @@ export function focusEnterBehavior(element: HTMLElement, options: FocusEnterOpti
         }
 
         focused = true;
-        onEnter(activeElement);
+        onEnter?.(activeElement);
     };
 
     const onFocusOut = () => {
@@ -41,9 +41,9 @@ export function focusEnterBehavior(element: HTMLElement, options: FocusEnterOpti
 
         setTimeout(() => {
             const activeElement = document.activeElement;
-            if (element !== activeElement && !element.contains(activeElement)) {
+            if (node !== activeElement && !node.contains(activeElement)) {
                 focused = false;
-                onExit();
+                onExit?.();
             }
         });
     };
@@ -58,8 +58,11 @@ export function focusEnterBehavior(element: HTMLElement, options: FocusEnterOpti
             }
             connected = true;
             focused = false;
-            element.addEventListener('focusin', onFocusIn);
-            element.addEventListener('focusout', onFocusOut);
+            if (document.activeElement && node.contains(document.activeElement)) {
+                onFocusIn();
+            }
+            node.addEventListener('focusin', onFocusIn);
+            node.addEventListener('focusout', onFocusOut);
         },
         disconnect() {
             if (!connected) {
@@ -67,8 +70,8 @@ export function focusEnterBehavior(element: HTMLElement, options: FocusEnterOpti
             }
             connected = false;
             focused = false;
-            element.removeEventListener('focusin', onFocusIn);
-            element.removeEventListener('focusout', onFocusOut);
+            node.removeEventListener('focusin', onFocusIn);
+            node.removeEventListener('focusout', onFocusOut);
         },
     };
 }
