@@ -46,7 +46,9 @@ import { focusTrapBehavior } from 'https://unpkg.com/@chialab/loock?module';
 import { focusTrapBehavior } from '@chialab/loock';
 
 const dialog = document.getElementById('.dialog');
-const trap = focusTrapBehavior(dialog);
+const trap = focusTrapBehavior(dialog, {
+    inert: true,
+});
 
 dialog.addEventListener('open', () => {
     trap.connect();
@@ -54,6 +56,12 @@ dialog.addEventListener('open', () => {
 ```
 
 ### Options
+
+#### `elements`
+
+An array of nodes or a function that returns an array of nodes to use as tabbable elements.
+
+Default: `undefined`.
 
 #### `include`
 
