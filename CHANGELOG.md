@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.0.0-alpha.3
+
+### Major Changes
+
+-   f04dd1c: Expose the `focusManager` method.
+
 ## 4.0.0-alpha.2
 
 ### Minor Changes
