@@ -1,4 +1,4 @@
-import { findFocusableByOptions } from './findFocusableChildren';
+import { focusManager } from './focusManager';
 
 /**
  * The options for keyboard navigation.
@@ -44,6 +44,7 @@ export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardN
     const document = node.ownerDocument;
     let connected = false;
 
+    const manager = focusManager(node, options);
     const onKeydown = (event: KeyboardEvent) => {
         if (event.defaultPrevented) {
             return;
@@ -60,7 +61,7 @@ export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardN
             homeKeys = ['Home'],
             endKeys = ['End'],
         } = options;
-        const elements = findFocusableByOptions(node, options);
+        const elements = manager.findFocusable();
         const index = elements.findIndex((el) => el === current || el.contains(current));
         if (prevKeys.includes(event.key)) {
             // select previous list item

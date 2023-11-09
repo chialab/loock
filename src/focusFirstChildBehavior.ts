@@ -1,5 +1,5 @@
 import { focusEnterBehavior } from './focusEnterBehavior';
-import { type FocusManagerOptions } from './focusManager';
+import { focusManager, type FocusManagerOptions } from './focusManager';
 import { restoreAttribute } from './helpers';
 
 /**
@@ -14,6 +14,7 @@ export function focusFirstChildBehavior(node: HTMLElement, options: FocusManager
     let connected = false;
     let tabIndex: string | null = null;
 
+    const manager = focusManager(node, options);
     const enterBehavior = focusEnterBehavior(node, {
         ...options,
         onEnter() {
@@ -24,7 +25,6 @@ export function focusFirstChildBehavior(node: HTMLElement, options: FocusManager
             restoreAttribute(node, 'tabindex', tabIndex);
         },
     });
-    const { manager } = enterBehavior;
 
     const onFocus = () => {
         const elements = manager.findFocusable();
@@ -67,6 +67,5 @@ export function focusFirstChildBehavior(node: HTMLElement, options: FocusManager
             activeElement = null;
             node.removeEventListener('focus', onFocus, true);
         },
-        manager,
     };
 }

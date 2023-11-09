@@ -1,6 +1,7 @@
 export * from './constants';
-export * from './findFocusableChildren';
-export * from './focusEnterBehavior';
-export * from './focusFirstChildBehavior';
-export * from './focusTrapBehavior';
-export * from './keyboardNavigationBehavior';
+export { inertTree } from './helpers';
+export { focusManager } from './focusManager';
+export { focusEnterBehavior } from './focusEnterBehavior';
+export { focusFirstChildBehavior } from './focusFirstChildBehavior';
+export { focusTrapBehavior } from './focusTrapBehavior';
+export { keyboardNavigationBehavior } from './keyboardNavigationBehavior';
