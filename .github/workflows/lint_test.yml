@@ -79,7 +79,7 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
 
-      - name: Install chromium
+      - name: Install browser
         run: yarn playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run tests
