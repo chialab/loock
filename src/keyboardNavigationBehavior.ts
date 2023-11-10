@@ -1,21 +1,9 @@
-import { focusManager } from './focusManager';
+import { focusManager, type FocusManagerOptions } from './focusManager';
 
 /**
  * The options for keyboard navigation.
  */
-export interface KeyboardNavigationOptions {
-    /**
-     * The focusable elements.
-     */
-    elements?: HTMLElement[] | (() => HTMLElement[]);
-    /**
-     * The selectors for focusable nodes.
-     */
-    include?: string[];
-    /**
-     * The selectors for ignored nodes.
-     */
-    exclude?: string[];
+export interface KeyboardNavigationOptions extends FocusManagerOptions {
     /**
      * The keys to select the previous element.
      */
@@ -27,11 +15,11 @@ export interface KeyboardNavigationOptions {
     /**
      * The keys to select the first element.
      */
-    homeKeys?: string[];
+    firstKeys?: string[];
     /**
      * The keys to select the last element.
      */
-    endKeys?: string[];
+    lastKeys?: string[];
 }
 
 /**
@@ -58,8 +46,8 @@ export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardN
         const {
             prevKeys = ['Up', 'ArrowUp', 'Left', 'ArrowLeft'],
             nextKeys = ['Down', 'ArrowDown', 'Right', 'ArrowRight'],
-            homeKeys = ['Home'],
-            endKeys = ['End'],
+            firstKeys = ['Home'],
+            lastKeys = ['End'],
         } = options;
         const elements = manager.findFocusable();
         const index = elements.findIndex((el) => el === current || el.contains(current));
@@ -81,7 +69,7 @@ export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardN
             }
             return;
         }
-        if (homeKeys.includes(event.key)) {
+        if (firstKeys.includes(event.key)) {
             // select first list item
             event.preventDefault();
             const item = elements[0];
@@ -90,7 +78,7 @@ export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardN
             }
             return;
         }
-        if (endKeys.includes(event.key)) {
+        if (lastKeys.includes(event.key)) {
             // select last list item
             event.preventDefault();
             const item = elements[elements.length - 1];
