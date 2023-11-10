@@ -28,7 +28,7 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
 
       - name: Build Documentation
-        run: yarn vite build --base=/loock/
+        run: yarn docs:build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1

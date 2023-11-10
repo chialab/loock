@@ -6,3 +6,6 @@ yarn-error.log
 dist
 types
 public
+!docs/public
+docs/.vitepress/dist
+docs/.vitepress/cache

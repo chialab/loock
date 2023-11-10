@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>Loock</strong> • A focus trap helper for keyboard navigation on the web.
+  <strong>Loock</strong> • Refined keyboard navigation for websites and components.
 </p>
 
 <p align="center">
@@ -54,72 +54,6 @@ dialog.addEventListener('open', () => {
     trap.connect();
 });
 ```
-
-### Options
-
-#### `elements`
-
-An array of nodes or a function that returns an array of nodes to use as tabbable elements.
-
-Default: `undefined`.
-
-#### `include`
-
-A list of selectors of tabbable elements to include in the context.
-
-Default: `a[href], area[href], button, input, select, textarea, video[controls], audio[controls], embed, iframe, summary, [contenteditable], [tabindex]`.
-
-#### `exclude`
-
-A list of selectors of elements to exclude from the context.
-
-Default: `[tabindex="-1"], [disabled], [hidden], [aria-hidden="true"], [aria-disabled="true"], [inert], details:not([open]) *:not(summary)`.
-
-#### `inert`
-
-Should add the `inert` attribute to the excluded elements when a focus context is active.  
-This may be useful for screen readers but it may cause a bit of overhead.
-
-Default: `false`.
-
-#### `restore`
-
-Should restore the focus to the previously focused element when the context is exited.
-
-Default: `true`.
-
-#### `focusContainer`
-
-Focus the context container when the context is entered.
-
-Default: `false`.
-
-#### `onEnter`
-
-A callback that is called when the context is entering.  
-The return value is awaited before the context is entered.
-
-#### `onExit`
-
-A callback that is called when the context is exiting.  
-The return value is awaited before the context is exited.
-
-#### `beforeExit`
-
-A callback that is called before the context is exiting.  
-The return value is awaited. If the return value is `false`, the context is not exited.  
-It can be used to block the context exit when the `ESC` key is pressed.
-
-### How "trap" works
-
-Loock attaches a ShadowRoot to the context container. Inside the ShadowRoot, it appends 3 elements:
-
--   a `<span>` used to detect when the focus ring needs to be moved to the last element of the context when pressing `Shift+TAB` on the first tabbable element
--   a `<slot>` used to render the context content
--   a `<span>` used to detect when the focus ring needs to be moved to the first element of the context when pressing `TAB` on the last tabbable element
-
-The container contents is rendered the same way as before context initialization, but the keyboard navigation is now "wrapped" by the two `span` elements.  
-When one of the wrapping elements gets the focus, it redirect the focus ring to the correct sibling.
 
 ---
 

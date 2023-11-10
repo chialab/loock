@@ -7,7 +7,7 @@ const getActiveElement = async (page: Page) => {
 };
 
 test('should do nothing until a context enters', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/docs/public/demo/focusTrapBehavior.html');
 
     expect(await getActiveElement(page)).toBe('body');
     await page.keyboard.down('Tab');
@@ -35,7 +35,7 @@ test('should do nothing until a context enters', async ({ page }) => {
 });
 
 test('should should trap a context', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/docs/public/demo/focusTrapBehavior.html');
 
     await page.click('[data-testid="button1"]');
     expect(await getActiveElement(page)).toBe('video1');
@@ -60,7 +60,7 @@ test('should should trap a context', async ({ page }) => {
 });
 
 test('should leave context trap', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/docs/public/demo/focusTrapBehavior.html');
 
     await page.focus('[data-testid="button1"]');
     expect(await getActiveElement(page)).toBe('button1');
@@ -71,7 +71,7 @@ test('should leave context trap', async ({ page }) => {
 });
 
 test('should focus container', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/docs/public/demo/focusTrapBehavior.html');
 
     await page.click('[data-testid="button2"]');
     expect(await getActiveElement(page)).toBe('section2');
@@ -91,7 +91,7 @@ test('should focus container', async ({ page }) => {
 });
 
 test('should inert siblings', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/docs/public/demo/focusTrapBehavior.html');
 
     await page.click('[data-testid="button3"]');
     expect(await getActiveElement(page)).toBe('button4');
@@ -101,7 +101,7 @@ test('should inert siblings', async ({ page }) => {
 });
 
 test('should run lifecycle', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/docs/public/demo/focusTrapBehavior.html');
 
     await page.click('[data-testid="button3"]');
     const dialog = await page.locator('dialog');

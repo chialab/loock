@@ -1,7 +1,7 @@
 {
   "name": "@chialab/loock",
   "version": "4.0.0-alpha.3",
-  "description": "A focus trap helper for keyboard navigation on the web.",
+  "description": "Refined keyboard navigation for websites and components.",
   "type": "module",
   "main": "dist/cjs/loock.cjs",
   "module": "dist/esm/loock.js",
@@ -37,6 +37,9 @@
     "test": "playwright test",
     "lint": "prettier --check . && eslint src",
     "typecheck": "tsc --noEmit",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
     "prepack": "yarn build"
   },
   "devDependencies": {
@@ -51,6 +54,7 @@
     "publint": "^0.2.5",
     "rimraf": "^5.0.0",
     "typescript": "^5.0.0",
-    "vite": "^4.5.0"
+    "vite": "^4.5.0",
+    "vitepress": "^1.0.0-rc.25"
   }
 }
