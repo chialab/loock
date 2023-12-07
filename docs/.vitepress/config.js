@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import { OramaPlugin } from '@orama/plugin-vitepress';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -8,6 +9,10 @@ export default defineConfig({
     outDir: '../public',
 
     head: [['link', { rel: 'icon', href: 'https://www.chialab.it/favicon.png' }]],
+
+    vite: {
+        plugins: [OramaPlugin()]
+    },
 
     themeConfig: {
         logo: 'https://raw.githubusercontent.com/chialab/loock/main/logo.svg',
