@@ -1,5 +1,19 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.0.0
+
+### Major Changes
+
+-   99940f5: Introduce focus and keyboard navigation behaviors.
+-   459a4cb: Refactored the trap mechanism in order to handle video controls and iframe contents.
+-   f04dd1c: Expose the `focusManager` method.
+
+### Minor Changes
+
+-   858450c: Add focus manager to behaviors.
+-   8645f7d: Add `types` entrypoint for exports map.
+-   93702f5: Rename `keyboardNavigationBehavior` options.
+
 ## 4.0.0-beta.4
 
 ### Minor Changes
