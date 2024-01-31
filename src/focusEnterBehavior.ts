@@ -36,18 +36,15 @@ export function focusEnterBehavior(node: HTMLElement, options: FocusEnterOptions
         onEnter?.(activeElement);
     };
 
-    const onFocusOut = () => {
+    const onFocusOut = (event: FocusEvent) => {
         if (!focused) {
             return;
         }
 
-        setTimeout(() => {
-            const activeElement = document.activeElement;
-            if (node !== activeElement && !node.contains(activeElement)) {
-                focused = false;
-                onExit?.();
-            }
-        });
+        if (!node.contains(event.relatedTarget as HTMLElement)) {
+            focused = false;
+            onExit?.();
+        }
     };
 
     return {
