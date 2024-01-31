@@ -3,13 +3,13 @@
   "version": "4.0.0",
   "description": "Refined keyboard navigation for websites and components.",
   "type": "module",
-  "main": "dist/cjs/loock.cjs",
-  "module": "dist/esm/loock.js",
+  "main": "dist/loock.cjs",
+  "module": "dist/loock.js",
   "types": "types/index.d.ts",
   "exports": {
     "types": "./types/index.d.ts",
-    "require": "./dist/cjs/loock.cjs",
-    "default": "./dist/esm/loock.js"
+    "require": "./dist/loock.cjs",
+    "default": "./dist/loock.js"
   },
   "files": [
     "dist",
@@ -31,8 +31,8 @@
   "scripts": {
     "dev": "vite",
     "build": "rimraf 'dist' 'types' && yarn types && yarn build:esm && yarn build:cjs",
-    "build:esm": "esbuild src/index.ts --outfile=dist/esm/loock.js --format=esm --bundle --sourcemap",
-    "build:cjs": "esbuild src/index.ts --outfile=dist/cjs/loock.cjs --format=cjs --bundle --sourcemap",
+    "build:esm": "esbuild src/index.ts --outfile=dist/loock.js --format=esm --bundle --sourcemap",
+    "build:cjs": "esbuild src/index.ts --outfile=dist/loock.cjs --format=cjs --bundle --sourcemap",
     "types": "tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
     "test": "playwright test",
     "lint": "prettier --check . && eslint src",
@@ -47,7 +47,7 @@
     "@chialab/eslint-config": "^4.0.0",
     "@chialab/prettier-config": "^1.2.2",
     "@playwright/test": "^1.39.0",
-    "esbuild": "^0.19.5",
+    "esbuild": "^0.20.0",
     "eslint": "^8.0.0",
     "playwright": "^1.39.0",
     "prettier": "^3.0.3",
