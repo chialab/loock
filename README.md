@@ -1,16 +1,8 @@
-<p align="center">
-    <img alt="Loock logo" width="144" height="144" src="https://raw.githack.com/chialab/loock/main/logo.svg" />
-</p>
+# Loock
 
-<p align="center">
-  <strong>Loock</strong> • Refined keyboard navigation for websites and components.
-</p>
+Refined keyboard navigation for websites and components.
 
-<p align="center">
-    <a href="https://www.npmjs.com/package/@chialab/loock"><img alt="NPM" src="https://img.shields.io/npm/v/@chialab/loock.svg"></a>
-</p>
-
----
+[![NPM](https://img.shields.io/npm/v/@chialab/loock.svg)](https://www.npmjs.com/package/@chialab/loock)
 
 ## Introducing Loock
 

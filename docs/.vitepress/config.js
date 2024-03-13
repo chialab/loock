@@ -10,7 +10,7 @@ export default defineConfig({
     head: [['link', { rel: 'icon', href: 'https://www.chialab.it/favicon.png' }]],
 
     themeConfig: {
-        logo: 'https://raw.githubusercontent.com/chialab/loock/main/logo.svg',
+        logo: 'https://raw.githubusercontent.com/chialab/dna/main/logo.svg',
 
         // https://vitepress.dev/reference/default-theme-config
         nav: [
@@ -21,6 +21,15 @@ export default defineConfig({
             {
                 text: 'Guide',
                 link: '/guide/',
+            },
+            {
+                text: 'Ecosystem',
+                items: [
+                    { text: 'DNA', link: 'https://chialab.github.io/dna/' },
+                    { text: 'Quantum', link: 'https://chialab.github.io/quantum/' },
+                    { text: 'Plasma', link: 'https://chialab.github.io/plasma/' },
+                    { text: 'Synapse', link: 'https://github.com/chialab/synapse/' },
+                ],
             },
             {
                 text: 'Chialab.io',
