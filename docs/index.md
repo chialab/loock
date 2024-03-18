@@ -10,7 +10,7 @@ hero:
     tagline: 'Refined keyboard navigation for websites and components.'
     actions:
         - theme: brand
-          text: npm i @chialab/loock
+          text: Get started
           link: /guide/
 
 features:

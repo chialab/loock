@@ -7,10 +7,10 @@ export default defineConfig({
     base: '/loock/',
     outDir: '../public',
 
-    head: [['link', { rel: 'icon', href: 'https://www.chialab.it/favicon.png' }]],
+    head: [['link', { rel: 'icon', href: '/loock/favicon.png' }]],
 
     themeConfig: {
-        logo: 'https://raw.githubusercontent.com/chialab/dna/main/logo.svg',
+        logo: '/chialab.svg',
 
         // https://vitepress.dev/reference/default-theme-config
         nav: [
@@ -32,7 +32,7 @@ export default defineConfig({
                 ],
             },
             {
-                text: 'Chialab.io',
+                text: 'Chialab Open Source',
                 link: 'https://www.chialab.io',
             },
         ],
