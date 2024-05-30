@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.0.2
+
+### Patch Changes
+
+- 0468372: Filter focusable elements.
+
 ## 4.0.1
 
 ### Patch Changes
