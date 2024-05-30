@@ -15,6 +15,14 @@ export interface FocusManagerOptions {
     exclude?: string[];
 }
 
+function isFocusableElement(element: HTMLElement) {
+    if (!element.isConnected) {
+        return false;
+    }
+    const { width, height } = element.getBoundingClientRect();
+    return !!height && !!width;
+}
+
 /**
  * Find all focusable elements by options.
  * @param node The target node.
@@ -34,10 +42,10 @@ function findFocusableByOptions(
     }
 
     if (typeof elements === 'function') {
-        return elements();
+        return elements().filter(isFocusableElement);
     }
 
-    return elements;
+    return elements.filter(isFocusableElement);
 }
 
 /**
@@ -70,8 +78,7 @@ function findFocusableChildren(
             }
         }
 
-        const { width, height } = element.getBoundingClientRect();
-        return !!height && !!width;
+        return isFocusableElement(element);
     });
 }
 
