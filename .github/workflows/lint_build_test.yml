@@ -48,7 +48,7 @@ jobs:
         run: yarn publint
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Loock
           path: |
@@ -67,7 +67,7 @@ jobs:
           - 'webkit'
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
