@@ -21,7 +21,7 @@
     "checkJs": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
+    "isolatedModules": true
   },
-  "include": ["src"],
+  "include": ["src"]
 }
