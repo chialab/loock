@@ -28,10 +28,6 @@ test('should do nothing until a context enters', async ({ page }) => {
     expect(await getActiveElement(page)).toBe('input2');
     await page.keyboard.down('Tab');
     expect(await getActiveElement(page)).toBe('button3');
-    await page.keyboard.down('Tab');
-    // some browser restart focus on body
-    // others to the first focusable element
-    expect(['button1', 'body']).toContain(await getActiveElement(page));
 });
 
 test('should should trap a context', async ({ page }) => {

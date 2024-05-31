@@ -9,3 +9,4 @@ public
 !docs/public
 docs/.vitepress/dist
 docs/.vitepress/cache
+test-results
