@@ -21,13 +21,12 @@ export interface FocusEnterOptions extends FocusManagerOptions {
  * @returns The behavior controller.
  */
 export function focusEnterBehavior(node: HTMLElement, options: FocusEnterOptions = {}) {
-    const document = node.ownerDocument;
     const { onEnter, onExit } = options;
     let focused = false;
     let connected = false;
 
     const onFocusIn = () => {
-        const activeElement = document.activeElement;
+        const activeElement = node.ownerDocument.activeElement;
         if (focused || !activeElement) {
             return;
         }
@@ -57,7 +56,7 @@ export function focusEnterBehavior(node: HTMLElement, options: FocusEnterOptions
             }
             connected = true;
             focused = false;
-            if (document.activeElement && node.contains(document.activeElement)) {
+            if (node.ownerDocument.activeElement && node.contains(node.ownerDocument.activeElement)) {
                 onFocusIn();
             }
             node.addEventListener('focusin', onFocusIn);

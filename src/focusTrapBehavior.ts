@@ -122,8 +122,7 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
             node.setAttribute('tabindex', '0');
         }
 
-        const document = node.ownerDocument;
-        trapStart = startHelper || createTrapHelper(document);
+        trapStart = startHelper || createTrapHelper(node.ownerDocument);
         trapStart.addEventListener(
             'focus',
             (event) => {
@@ -143,7 +142,7 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
             true
         );
 
-        trapEnd = endHelper || createTrapHelper(document);
+        trapEnd = endHelper || createTrapHelper(node.ownerDocument);
         trapEnd.addEventListener(
             'focus',
             (event) => {
@@ -169,7 +168,7 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
                 root = node.shadowRoot;
             } else {
                 root = node.attachShadow({ mode: 'open' });
-                root.append(document.createElement('slot'));
+                root.append(node.ownerDocument.createElement('slot'));
             }
         }
         if (root.firstChild !== trapStart) {
@@ -189,7 +188,7 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
         if (trapEnd) {
             trapEnd.tabIndex = 0;
         }
-        restoreFocusNode = document.activeElement as HTMLElement;
+        restoreFocusNode = node.ownerDocument.activeElement as HTMLElement;
         if (node.contains(restoreFocusNode) && restoreFocusNode !== node) {
             restoreFocusNode = node;
         } else if (focusContainer) {

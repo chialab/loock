@@ -29,7 +29,6 @@ export interface KeyboardNavigationOptions extends FocusManagerOptions {
  * @returns The behavior controller.
  */
 export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardNavigationOptions) {
-    const document = node.ownerDocument;
     let connected = false;
 
     const manager = focusManager(node, options);
@@ -38,7 +37,9 @@ export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardN
             return;
         }
 
-        const current = node.contains(document.activeElement) ? (document.activeElement as HTMLElement) : null;
+        const current = node.contains(node.ownerDocument.activeElement)
+            ? (node.ownerDocument.activeElement as HTMLElement)
+            : null;
         if (!current) {
             return;
         }

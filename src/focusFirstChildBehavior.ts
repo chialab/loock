@@ -9,7 +9,6 @@ import { restoreAttribute } from './helpers';
  * @returns The behavior controller.
  */
 export function focusFirstChildBehavior(node: HTMLElement, options: FocusManagerOptions = {}) {
-    const document = node.ownerDocument;
     let activeElement: HTMLElement | null = null;
     let connected = false;
     let tabIndex: string | null = null;
@@ -28,7 +27,7 @@ export function focusFirstChildBehavior(node: HTMLElement, options: FocusManager
 
     const onFocus = () => {
         const elements = manager.findFocusable();
-        const target = document.activeElement as HTMLElement;
+        const target = node.ownerDocument.activeElement as HTMLElement;
         if (target === node) {
             if (activeElement && node.contains(activeElement)) {
                 activeElement.focus();
@@ -53,7 +52,7 @@ export function focusFirstChildBehavior(node: HTMLElement, options: FocusManager
             enterBehavior.connect();
             connected = true;
             activeElement = null;
-            if (document.activeElement && node.contains(document.activeElement)) {
+            if (node.ownerDocument.activeElement && node.contains(node.ownerDocument.activeElement)) {
                 onFocus();
             }
             node.addEventListener('focus', onFocus, true);
