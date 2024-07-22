@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.2.0
+
+### Minor Changes
+
+-   922183b: Do not restore focus when user clicks outside a trap area.
+
 ## 4.1.0
 
 ### Minor Changes
