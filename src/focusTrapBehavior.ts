@@ -179,7 +179,6 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
         }
 
         // MUST use the `focusin` event because it fires after the bound `focus` on trap helpers
-        node.ownerDocument.addEventListener('focus', handleFocusOut, true);
         node.addEventListener('focusin', handleFocusIn, true);
         node.addEventListener('keydown', handleKeyDown, true);
         if (trapStart) {
@@ -223,7 +222,6 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
         connected = false;
 
         restoreAttribute(node, 'tabindex', tabIndex);
-        node.ownerDocument.removeEventListener('focus', handleFocusOut, true);
         node.removeEventListener('focusin', handleFocusIn, true);
         node.removeEventListener('keydown', handleKeyDown, true);
 
@@ -254,22 +252,6 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
      */
     const handleFocusIn = (event: FocusEvent) => {
         currentNode = event.target as HTMLElement;
-    };
-
-    /**
-     * Handle focus events on document in order to prevent focus exits the active context.
-     * @param event The focusin event.
-     */
-    const handleFocusOut = (event: FocusEvent) => {
-        const element = event.target as HTMLElement;
-        if (!node.contains(element)) {
-            const { focusContainer = false } = options;
-            if (focusContainer) {
-                node.focus();
-            } else {
-                manager.focusFirst();
-            }
-        }
     };
 
     /**
