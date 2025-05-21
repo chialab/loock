@@ -1,4 +1,4 @@
-import { focusManager, type FocusManagerOptions } from './focusManager';
+import { type FocusManagerOptions, focusManager } from './focusManager';
 import { inertTree, restoreAttribute } from './helpers';
 
 /**
@@ -63,7 +63,7 @@ export interface FocusTrapOptions extends FocusManagerOptions {
     /**
      * A function that is called before the focus context is exited.
      */
-    beforeExit?: () => boolean | void | Promise<boolean | void>;
+    beforeExit?: () => boolean | undefined | Promise<boolean | undefined>;
 }
 
 /**
@@ -71,7 +71,10 @@ export interface FocusTrapOptions extends FocusManagerOptions {
  * @param node The root node of the focus context.
  * @param options The focus context options.
  */
-export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions = {}) {
+export function focusTrapBehavior(
+    node: HTMLElement,
+    options: FocusTrapOptions = {}
+) {
     /**
      * Whether the focus context is active.
      */
@@ -100,12 +103,14 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
     /**
      * The start of the focus trap.
      */
-    const startHelper: HTMLElement = options.trapImpl?.startHelper || createTrapHelper(node.ownerDocument);
+    const startHelper: HTMLElement =
+        options.trapImpl?.startHelper || createTrapHelper(node.ownerDocument);
 
     /**
      * The end of the focus trap.
      */
-    const endHelper: HTMLElement = options.trapImpl?.endHelper || createTrapHelper(node.ownerDocument);
+    const endHelper: HTMLElement =
+        options.trapImpl?.endHelper || createTrapHelper(node.ownerDocument);
 
     const manager = focusManager(node, options);
 
@@ -119,7 +124,12 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
 
         connected = true;
 
-        const { trapImpl = {}, inert = false, focusContainer = false, onEnter } = options;
+        const {
+            trapImpl = {},
+            inert = false,
+            focusContainer = false,
+            onEnter,
+        } = options;
         const { useShadowDOM = true, insertHelpers = true } = trapImpl;
         tabIndex = node.getAttribute('tabindex');
         if (focusContainer && !tabIndex) {
@@ -209,7 +219,7 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
      * Leave the focus context.
      * @param force Whether to force exit.
      */
-    const disconnect = async (force: boolean = false) => {
+    const disconnect = async (force = false) => {
         if (!connected) {
             return;
         }

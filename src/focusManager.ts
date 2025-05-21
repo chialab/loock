@@ -60,15 +60,24 @@ function findFocusableChildren(
     include: string[] = DEFAULT_SELECTORS,
     exclude: string[] = DEFAULT_IGNORE_SELECTORS
 ) {
-    return (Array.from(node.querySelectorAll(include.join(', '))) as HTMLElement[]).filter((element) => {
+    return (
+        Array.from(node.querySelectorAll(include.join(', '))) as HTMLElement[]
+    ).filter((element) => {
         if (exclude.some((selector) => element.matches(selector))) {
             return false;
         }
 
-        if (element.tagName === 'INPUT' && (element as HTMLInputElement).type === 'radio') {
+        if (
+            element.tagName === 'INPUT' &&
+            (element as HTMLInputElement).type === 'radio'
+        ) {
             const name = (element as HTMLInputElement).name;
-            const inputs = node.querySelectorAll(`input[type="radio"][name="${name}"]`);
-            const checked = Array.from(inputs).find((input) => (input as HTMLInputElement).checked);
+            const inputs = node.querySelectorAll(
+                `input[type="radio"][name="${name}"]`
+            );
+            const checked = Array.from(inputs).find(
+                (input) => (input as HTMLInputElement).checked
+            );
             if (checked) {
                 if (checked !== element) {
                     return false;
@@ -88,7 +97,10 @@ function findFocusableChildren(
  * @param options The options.
  * @returns The focus manager.
  */
-export function focusManager(node: HTMLElement, options: FocusManagerOptions = {}) {
+export function focusManager(
+    node: HTMLElement,
+    options: FocusManagerOptions = {}
+) {
     return {
         findFocusable() {
             return findFocusableByOptions(node, options);

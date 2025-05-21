@@ -4,7 +4,11 @@
  * @param name The attribute name.
  * @param value The attribute value.
  */
-export function restoreAttribute(node: HTMLElement, name: string, value: string | null) {
+export function restoreAttribute(
+    node: HTMLElement,
+    name: string,
+    value: string | null
+) {
     if (value === null) {
         node.removeAttribute(name);
     } else {
@@ -18,15 +22,21 @@ export function restoreAttribute(node: HTMLElement, name: string, value: string 
  * @param until The root node.
  * @returns A list of functions to restore the original state.
  */
-export function inertTree(node: HTMLElement, until: HTMLElement = document.documentElement): () => void {
+export function inertTree(
+    node: HTMLElement,
+    until: HTMLElement = document.documentElement
+): () => void {
     const parentNode = node.parentNode as HTMLElement;
     if (!parentNode) {
         return () => {};
     }
 
-    let restore = until !== parentNode ? inertTree(parentNode, until) : () => {};
+    let restore =
+        until !== parentNode ? inertTree(parentNode, until) : () => {};
 
-    const children = /** @type {HTMLElement[]} */ Array.from(parentNode.children);
+    const children = /** @type {HTMLElement[]} */ Array.from(
+        parentNode.children
+    );
     for (let i = 0; i < children.length; i++) {
         const child = children[i] as HTMLElement;
         if (child === node) {

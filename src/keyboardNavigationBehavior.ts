@@ -1,4 +1,4 @@
-import { focusManager, type FocusManagerOptions } from './focusManager';
+import { type FocusManagerOptions, focusManager } from './focusManager';
 
 /**
  * The options for keyboard navigation.
@@ -32,7 +32,10 @@ export interface KeyboardNavigationOptions extends FocusManagerOptions {
  * @param options Behavior options.
  * @returns The behavior controller.
  */
-export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardNavigationOptions) {
+export function keyboardNavigationBehavior(
+    node: HTMLElement,
+    options: KeyboardNavigationOptions
+) {
     let connected = false;
 
     const manager = focusManager(node, options);
@@ -56,11 +59,15 @@ export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardN
             continuous = false,
         } = options;
         const elements = manager.findFocusable();
-        const index = elements.findIndex((el) => el === current || el.contains(current));
+        const index = elements.findIndex(
+            (el) => el === current || el.contains(current)
+        );
         if (prevKeys.includes(event.key)) {
             // select previous list item
             event.preventDefault();
-            const item = elements[index - 1] || (continuous ? elements[elements.length - 1] : elements[0]);
+            const item =
+                elements[index - 1] ||
+                (continuous ? elements[elements.length - 1] : elements[0]);
             if (item) {
                 item.focus();
             }
@@ -69,7 +76,9 @@ export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardN
         if (nextKeys.includes(event.key)) {
             // select next list item
             event.preventDefault();
-            const item = elements[index + 1] || (continuous ? elements[0] : elements[elements.length - 1]);
+            const item =
+                elements[index + 1] ||
+                (continuous ? elements[0] : elements[elements.length - 1]);
             if (item) {
                 item.focus();
             }

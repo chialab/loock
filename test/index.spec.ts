@@ -1,8 +1,10 @@
 import { expect, test } from '@playwright/test';
-import { type Page } from 'playwright';
+import type { Page } from 'playwright';
 
 const getActiveElement = async (page: Page) => {
-    const handle = await page.evaluateHandle(() => document.activeElement as HTMLElement);
+    const handle = await page.evaluateHandle(
+        () => document.activeElement as HTMLElement
+    );
     return handle.getAttribute('data-testid');
 };
 

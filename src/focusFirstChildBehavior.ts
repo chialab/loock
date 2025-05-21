@@ -1,5 +1,5 @@
 import { focusEnterBehavior } from './focusEnterBehavior';
-import { focusManager, type FocusManagerOptions } from './focusManager';
+import { type FocusManagerOptions, focusManager } from './focusManager';
 import { restoreAttribute } from './helpers';
 
 /**
@@ -8,7 +8,10 @@ import { restoreAttribute } from './helpers';
  * @param options The options.
  * @returns The behavior controller.
  */
-export function focusFirstChildBehavior(node: HTMLElement, options: FocusManagerOptions = {}) {
+export function focusFirstChildBehavior(
+    node: HTMLElement,
+    options: FocusManagerOptions = {}
+) {
     let activeElement: HTMLElement | null = null;
     let connected = false;
     let tabIndex: string | null = null;
@@ -36,7 +39,8 @@ export function focusFirstChildBehavior(node: HTMLElement, options: FocusManager
 
             elements[0]?.focus();
             return;
-        } else if (elements.includes(target)) {
+        }
+        if (elements.includes(target)) {
             activeElement = target;
         }
     };
@@ -52,7 +56,10 @@ export function focusFirstChildBehavior(node: HTMLElement, options: FocusManager
             enterBehavior.connect();
             connected = true;
             activeElement = null;
-            if (node.ownerDocument.activeElement && node.contains(node.ownerDocument.activeElement)) {
+            if (
+                node.ownerDocument.activeElement &&
+                node.contains(node.ownerDocument.activeElement)
+            ) {
                 onFocus();
             }
             node.addEventListener('focus', onFocus, true);
