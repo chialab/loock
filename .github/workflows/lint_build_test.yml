@@ -80,7 +80,7 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
 
       - name: Install browser
-        run: yarn playwright install
+        run: yarn playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run tests
         run: yarn test --project ${{ matrix.browser }}
