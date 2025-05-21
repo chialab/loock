@@ -20,6 +20,10 @@ export interface KeyboardNavigationOptions extends FocusManagerOptions {
      * The keys to select the last element.
      */
     lastKeys?: string[];
+    /**
+     * Whether to navigate continuously.
+     */
+    continuous?: boolean;
 }
 
 /**
@@ -49,13 +53,14 @@ export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardN
             nextKeys = ['Down', 'ArrowDown', 'Right', 'ArrowRight'],
             firstKeys = ['Home'],
             lastKeys = ['End'],
+            continuous = false,
         } = options;
         const elements = manager.findFocusable();
         const index = elements.findIndex((el) => el === current || el.contains(current));
         if (prevKeys.includes(event.key)) {
             // select previous list item
             event.preventDefault();
-            const item = elements[index - 1] || elements[0];
+            const item = elements[index - 1] || (continuous ? elements[elements.length - 1] : elements[0]);
             if (item) {
                 item.focus();
             }
@@ -64,7 +69,7 @@ export function keyboardNavigationBehavior(node: HTMLElement, options: KeyboardN
         if (nextKeys.includes(event.key)) {
             // select next list item
             event.preventDefault();
-            const item = elements[index + 1] || elements[elements.length - 1];
+            const item = elements[index + 1] || (continuous ? elements[0] : elements[elements.length - 1]);
             if (item) {
                 item.focus();
             }
