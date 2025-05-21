@@ -6,9 +6,9 @@ Refined keyboard navigation for websites and components.
 
 ## Introducing Loock
 
--   Organize your web page or web application by navigation areas.
--   Never lose the context while navigating the area with the `TAB` key.
--   Leave the context with the `ESC` key.
+- Organize your web page or web application by navigation areas.
+- Never lose the context while navigating the area with the `TAB` key.
+- Leave the context with the `ESC` key.
 
 <!-- Medium article - ["How to improve keyboard navigation of your web page"](https://medium.com/chialab-open-source/how-to-improve-keyboard-navigation-of-your-web-page-f11b324adbab)
 

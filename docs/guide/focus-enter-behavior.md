@@ -37,8 +37,8 @@ This behavior acts differently from listening `focus` and `blur` events. In fact
 
 Loock attaches two listeners for the `focusin` and the `focusout` events:
 
--   when `focusin` fires, Loock triggers then `onEnter` callback if the context was not already entered
--   when `focusout` fires, Loock triggers then `onExit` callback if not followed by another `focusin` event.
+- when `focusin` fires, Loock triggers then `onEnter` callback if the context was not already entered
+- when `focusout` fires, Loock triggers then `onExit` callback if not followed by another `focusin` event.
 
 ## Options
 

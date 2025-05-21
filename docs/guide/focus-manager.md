@@ -29,19 +29,19 @@ const manager = focusManager(root, {
 
 Default list:
 
--   `a[href]`
--   `area[href]`
--   `button`
--   `input`
--   `select`
--   `textarea`
--   `video[controls]`
--   `audio[controls]`
--   `embed`
--   `iframe`
--   `summary`
--   `[contenteditable]`
--   `[tabindex]`
+- `a[href]`
+- `area[href]`
+- `button`
+- `input`
+- `select`
+- `textarea`
+- `video[controls]`
+- `audio[controls]`
+- `embed`
+- `iframe`
+- `summary`
+- `[contenteditable]`
+- `[tabindex]`
 
 ### `exclude`
 
@@ -56,13 +56,13 @@ const manager = focusManager(root, {
 
 Default list:
 
--   `[tabindex="-1"]`
--   `[disabled]`
--   `[hidden]`
--   `[aria-hidden="true"]`
--   `[aria-disabled="true"]`
--   `[inert]`
--   `details:not([open]) *:not(summary)`
+- `[tabindex="-1"]`
+- `[disabled]`
+- `[hidden]`
+- `[aria-hidden="true"]`
+- `[aria-disabled="true"]`
+- `[inert]`
+- `details:not([open]) *:not(summary)`
 
 ### `elements`
 

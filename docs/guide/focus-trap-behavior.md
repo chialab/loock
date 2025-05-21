@@ -23,9 +23,9 @@ dialog.addEventListener('open', () => {
 
 Loock attaches a ShadowRoot to the context container. Inside the ShadowRoot, it appends 3 elements:
 
--   a `<span>` used to detect when the focus ring needs to be moved to the last element of the context when pressing `Shift+TAB` on the first tabbable element
--   a `<slot>` used to render the context content
--   a `<span>` used to detect when the focus ring needs to be moved to the first element of the context when pressing `TAB` on the last tabbable element
+- a `<span>` used to detect when the focus ring needs to be moved to the last element of the context when pressing `Shift+TAB` on the first tabbable element
+- a `<slot>` used to render the context content
+- a `<span>` used to detect when the focus ring needs to be moved to the first element of the context when pressing `TAB` on the last tabbable element
 
 The container contents is rendered the same way as before context initialization, but the keyboard navigation is now "wrapped" by the two `span` elements.  
 When one of the wrapping elements gets the focus, it redirect the focus ring to the correct sibling.
