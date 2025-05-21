@@ -18,10 +18,6 @@ function createTrapHelper(document: Document) {
 
 export interface FocusTrapImpl {
     /**
-     * Whether to use Shadow DOM.
-     */
-    useShadowDOM?: boolean;
-    /**
      * The trap start element to use instead of creating one.
      */
     startHelper?: HTMLElement;
@@ -29,6 +25,14 @@ export interface FocusTrapImpl {
      * The trap end element to use instead of creating one
      */
     endHelper?: HTMLElement;
+    /**
+     * Whether to use Shadow DOM.
+     */
+    useShadowDOM?: boolean;
+    /**
+     * Whether to insert the trap start and end elements.
+     */
+    insertHelpers?: boolean;
 }
 
 export interface FocusTrapOptions extends FocusManagerOptions {
@@ -96,12 +100,12 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
     /**
      * The start of the focus trap.
      */
-    let trapStart: HTMLElement | null = null;
+    const startHelper: HTMLElement = options.trapImpl?.startHelper || createTrapHelper(node.ownerDocument);
 
     /**
      * The end of the focus trap.
      */
-    let trapEnd: HTMLElement | null = null;
+    const endHelper: HTMLElement = options.trapImpl?.endHelper || createTrapHelper(node.ownerDocument);
 
     const manager = focusManager(node, options);
 
@@ -116,14 +120,13 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
         connected = true;
 
         const { trapImpl = {}, inert = false, focusContainer = false, onEnter } = options;
-        const { useShadowDOM = true, startHelper = null, endHelper = null } = trapImpl;
+        const { useShadowDOM = true, insertHelpers = true } = trapImpl;
         tabIndex = node.getAttribute('tabindex');
         if (focusContainer && !tabIndex) {
             node.setAttribute('tabindex', '0');
         }
 
-        trapStart = startHelper || createTrapHelper(node.ownerDocument);
-        trapStart.addEventListener(
+        startHelper.addEventListener(
             'focus',
             (event) => {
                 event.stopImmediatePropagation();
@@ -142,8 +145,7 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
             true
         );
 
-        trapEnd = endHelper || createTrapHelper(node.ownerDocument);
-        trapEnd.addEventListener(
+        endHelper.addEventListener(
             'focus',
             (event) => {
                 event.stopImmediatePropagation();
@@ -171,21 +173,19 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
                 root.append(node.ownerDocument.createElement('slot'));
             }
         }
-        if (root.firstChild !== trapStart) {
-            root.prepend(trapStart);
-        }
-        if (root.lastChild !== trapEnd) {
-            root.append(trapEnd);
+        if (insertHelpers) {
+            root.prepend(startHelper);
+            root.append(endHelper);
         }
 
         // MUST use the `focusin` event because it fires after the bound `focus` on trap helpers
         node.addEventListener('focusin', handleFocusIn, true);
         node.addEventListener('keydown', handleKeyDown, true);
-        if (trapStart) {
-            trapStart.tabIndex = 0;
+        if (startHelper) {
+            startHelper.tabIndex = 0;
         }
-        if (trapEnd) {
-            trapEnd.tabIndex = 0;
+        if (endHelper) {
+            endHelper.tabIndex = 0;
         }
         restoreFocusNode = node.ownerDocument.activeElement as HTMLElement;
         if (node.contains(restoreFocusNode) && restoreFocusNode !== node) {
@@ -232,11 +232,11 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
         if (restoreFocusNode && restore) {
             restoreFocusNode.focus();
         }
-        if (trapStart) {
-            trapStart.tabIndex = -1;
+        if (startHelper) {
+            startHelper.tabIndex = -1;
         }
-        if (trapEnd) {
-            trapEnd.tabIndex = -1;
+        if (endHelper) {
+            endHelper.tabIndex = -1;
         }
         restoreFocusNode = null;
 
@@ -285,5 +285,7 @@ export function focusTrapBehavior(node: HTMLElement, options: FocusTrapOptions =
         },
         connect,
         disconnect,
+        startHelper,
+        endHelper,
     };
 }
