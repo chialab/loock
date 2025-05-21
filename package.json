@@ -35,7 +35,7 @@
     "build:cjs": "esbuild src/index.ts --outfile=dist/loock.cjs --format=cjs --bundle --sourcemap",
     "types": "tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
     "test": "playwright test",
-    "lint": "prettier --check . && eslint src",
+    "lint": "biome check",
     "typecheck": "tsc --noEmit",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
@@ -43,18 +43,16 @@
     "prepack": "yarn build"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.2",
     "@changesets/cli": "^2.24.1",
-    "@chialab/eslint-config": "^4.0.0",
-    "@chialab/prettier-config": "^1.2.2",
     "@playwright/test": "^1.39.0",
-    "esbuild": "^0.20.0",
-    "eslint": "^8.0.0",
+    "esbuild": "^0.25.0",
     "playwright": "^1.39.0",
-    "prettier": "^3.0.3",
     "publint": "^0.2.5",
     "rimraf": "^5.0.0",
     "typescript": "^5.0.0",
-    "vite": "^5.0.0",
+    "vite": "^6.0.0",
     "vitepress": "^1.0.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

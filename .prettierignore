@@ -1,6 +1,0 @@
-.changeset
-dist
-public
-docs/.vitepress/dist
-docs/.vitepress/cache
-CHANGELOG.md

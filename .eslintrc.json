@@ -1,9 +1,0 @@
-{
-  "extends": "@chialab/eslint-config",
-  "env": {
-    "browser": true
-  },
-  "rules": {
-    "mocha/no-global-tests": "off"
-  }
-}
