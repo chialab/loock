@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.3.1
+
+### Patch Changes
+
+- 64f4336: Handle nested elements during keyboard navigation.
+
 ## 4.3.0
 
 ### Minor Changes
