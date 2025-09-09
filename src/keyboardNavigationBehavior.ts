@@ -59,9 +59,10 @@ export function keyboardNavigationBehavior(
             continuous = false,
         } = options;
         const elements = manager.findFocusable();
-        const index = elements.findIndex(
-            (el) => el === current || el.contains(current)
-        );
+        let index = elements.findIndex((el) => el === current);
+        if (index === -1) {
+            index = elements.findIndex((el) => el.contains(current));
+        }
         if (prevKeys.includes(event.key)) {
             // select previous list item
             event.preventDefault();
