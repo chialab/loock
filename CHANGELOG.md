@@ -1,5 +1,15 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.4.0
+
+### Minor Changes
+
+- dbb3665: Remove cjs distribution.
+
+### Patch Changes
+
+- dbb3665: Do not navigate items when focused element is an input element.
+
 ## 4.3.1
 
 ### Patch Changes
