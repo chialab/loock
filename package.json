@@ -3,13 +3,14 @@
   "version": "4.3.1",
   "description": "Refined keyboard navigation for websites and components.",
   "type": "module",
-  "main": "dist/loock.cjs",
+  "main": "dist/loock.js",
   "module": "dist/loock.js",
   "types": "types/index.d.ts",
   "exports": {
-    "types": "./types/index.d.ts",
-    "require": "./dist/loock.cjs",
-    "default": "./dist/loock.js"
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./dist/loock.js"
+    }
   },
   "files": [
     "dist",
@@ -30,9 +31,7 @@
   "author": "Chialab <dev@chialab.io> (https://www.chialab.it)",
   "scripts": {
     "dev": "vite",
-    "build": "rimraf 'dist' 'types' && yarn types && yarn build:esm && yarn build:cjs",
-    "build:esm": "esbuild src/index.ts --outfile=dist/loock.js --format=esm --bundle --sourcemap",
-    "build:cjs": "esbuild src/index.ts --outfile=dist/loock.cjs --format=cjs --bundle --sourcemap",
+    "build": "rimraf 'dist' 'types' && yarn types && esbuild src/index.ts --outfile=dist/loock.js --format=esm --bundle --sourcemap",
     "types": "tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
     "test": "playwright test",
     "lint": "biome check",

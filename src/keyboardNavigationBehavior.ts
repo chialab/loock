@@ -44,6 +44,13 @@ export function keyboardNavigationBehavior(
             return;
         }
 
+        const inputTarget = (event.target as HTMLElement)?.closest(
+            'input, textarea, select, [contenteditable]'
+        );
+        if (inputTarget) {
+            return;
+        }
+
         const current = node.contains(node.ownerDocument.activeElement)
             ? (node.ownerDocument.activeElement as HTMLElement)
             : null;
