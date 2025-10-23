@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.5.0
+
+### Minor Changes
+
+- 7ab1f7e: Deprecate trap behavior helpers.
+
 ## 4.4.0
 
 ### Minor Changes
