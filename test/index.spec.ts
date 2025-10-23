@@ -78,14 +78,14 @@ test('should focus container', async ({ page }) => {
     await page.keyboard.down('Tab');
     expect(await getActiveElement(page)).toBe('input2');
     await page.keyboard.down('Tab');
-    expect(await getActiveElement(page)).toBe('section2');
+    expect(await getActiveElement(page)).toBe('input1');
     await page.keyboard.down('Shift');
     await page.keyboard.down('Tab');
     expect(await getActiveElement(page)).toBe('input2');
     await page.keyboard.down('Tab');
     expect(await getActiveElement(page)).toBe('input1');
     await page.keyboard.down('Tab');
-    expect(await getActiveElement(page)).toBe('section2');
+    expect(await getActiveElement(page)).toBe('input2');
 });
 
 test('should inert siblings', async ({ page }) => {
