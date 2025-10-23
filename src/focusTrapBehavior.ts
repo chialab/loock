@@ -46,6 +46,7 @@ export interface FocusTrapOptions extends FocusManagerOptions {
     restore?: boolean;
     /**
      * The focus trap implementation configuration.
+     * @deprecated Using trap helpers is deprecated and will be removed in future versions.
      */
     trapImpl?: FocusTrapImpl;
     /**
@@ -102,15 +103,19 @@ export function focusTrapBehavior(
 
     /**
      * The start of the focus trap.
+     * @deprecated Using trap helpers is deprecated and will be removed in future versions.
      */
-    const startHelper: HTMLElement =
-        options.trapImpl?.startHelper || createTrapHelper(node.ownerDocument);
+    const startHelper: HTMLElement | null = options.trapImpl
+        ? (options.trapImpl.startHelper ?? createTrapHelper(node.ownerDocument))
+        : null;
 
     /**
      * The end of the focus trap.
+     * @deprecated Using trap helpers is deprecated and will be removed in future versions.
      */
-    const endHelper: HTMLElement =
-        options.trapImpl?.endHelper || createTrapHelper(node.ownerDocument);
+    const endHelper: HTMLElement | null = options.trapImpl
+        ? (options.trapImpl.endHelper ?? createTrapHelper(node.ownerDocument))
+        : null;
 
     const manager = focusManager(node, options);
 
@@ -130,73 +135,71 @@ export function focusTrapBehavior(
             focusContainer = false,
             onEnter,
         } = options;
-        const { useShadowDOM = true, insertHelpers = true } = trapImpl;
         tabIndex = node.getAttribute('tabindex');
         if (focusContainer && !tabIndex) {
             node.setAttribute('tabindex', '0');
         }
 
-        startHelper.addEventListener(
-            'focus',
-            (event) => {
-                event.stopImmediatePropagation();
-                event.stopPropagation();
-                event.preventDefault();
-
-                if (currentNode === node) {
-                    manager.focusFirst();
-                } else if (focusContainer) {
-                    currentNode = node;
-                    node.focus();
-                } else {
-                    manager.focusLast();
-                }
-            },
-            true
-        );
-
-        endHelper.addEventListener(
-            'focus',
-            (event) => {
-                event.stopImmediatePropagation();
-                event.stopPropagation();
-                event.preventDefault();
-
-                if (currentNode === node) {
-                    manager.focusLast();
-                } else if (focusContainer) {
-                    currentNode = node;
-                    node.focus();
-                } else {
-                    manager.focusFirst();
-                }
-            },
-            true
-        );
-
         let root: HTMLElement | DocumentFragment = node;
-        if (useShadowDOM) {
-            if (node.shadowRoot) {
-                root = node.shadowRoot;
-            } else {
-                root = node.attachShadow({ mode: 'open' });
-                root.append(node.ownerDocument.createElement('slot'));
+        if (trapImpl) {
+            startHelper?.addEventListener(
+                'focus',
+                (event) => {
+                    event.stopImmediatePropagation();
+                    event.stopPropagation();
+                    event.preventDefault();
+
+                    if (currentNode === node) {
+                        manager.focusFirst();
+                    } else if (focusContainer) {
+                        currentNode = node;
+                        node.focus();
+                    } else {
+                        manager.focusLast();
+                    }
+                },
+                true
+            );
+
+            endHelper?.addEventListener(
+                'focus',
+                (event) => {
+                    event.stopImmediatePropagation();
+                    event.stopPropagation();
+                    event.preventDefault();
+
+                    if (currentNode === node) {
+                        manager.focusLast();
+                    } else if (focusContainer) {
+                        currentNode = node;
+                        node.focus();
+                    } else {
+                        manager.focusFirst();
+                    }
+                },
+                true
+            );
+
+            if (trapImpl.useShadowDOM) {
+                if (node.shadowRoot) {
+                    root = node.shadowRoot;
+                } else {
+                    root = node.attachShadow({ mode: 'open' });
+                    root.append(node.ownerDocument.createElement('slot'));
+                }
             }
-        }
-        if (insertHelpers) {
-            root.prepend(startHelper);
-            root.append(endHelper);
+            if (trapImpl.insertHelpers && startHelper && endHelper) {
+                startHelper.tabIndex = 0;
+                endHelper.tabIndex = 0;
+                root.prepend(startHelper);
+                root.append(endHelper);
+            }
         }
 
         // MUST use the `focusin` event because it fires after the bound `focus` on trap helpers
         node.addEventListener('focusin', handleFocusIn, true);
+        node.addEventListener('focusout', handleFocusOut, true);
         node.addEventListener('keydown', handleKeyDown, true);
-        if (startHelper) {
-            startHelper.tabIndex = 0;
-        }
-        if (endHelper) {
-            endHelper.tabIndex = 0;
-        }
         restoreFocusNode = node.ownerDocument.activeElement as HTMLElement;
         if (node.contains(restoreFocusNode) && restoreFocusNode !== node) {
             restoreFocusNode = node;
@@ -233,6 +236,7 @@ export function focusTrapBehavior(
 
         restoreAttribute(node, 'tabindex', tabIndex);
         node.removeEventListener('focusin', handleFocusIn, true);
+        node.removeEventListener('focusout', handleFocusOut, true);
         node.removeEventListener('keydown', handleKeyDown, true);
 
         if (restoreTreeState) {
@@ -264,6 +268,16 @@ export function focusTrapBehavior(
         currentNode = event.target as HTMLElement;
     };
 
+    const handleFocusOut = (event: FocusEvent) => {
+        const relatedTarget = event.relatedTarget as HTMLElement | null;
+        if (relatedTarget && node.contains(relatedTarget)) {
+            return;
+        }
+        restoreFocusNode = null;
+        currentNode = null;
+        disconnect();
+    };
+
     /**
      * Handle keydown events.
      * @param event The keydown event.
@@ -275,17 +289,32 @@ export function focusTrapBehavior(
                 event.preventDefault();
                 disconnect();
                 break;
-            case 'Tab':
-                if (currentNode === node) {
-                    event.preventDefault();
-
-                    if (event.shiftKey) {
-                        manager.focusLast();
+            case 'Tab': {
+                const focusable = manager.findFocusable();
+                if (currentNode) {
+                    if (currentNode === node) {
+                        event.preventDefault();
+                        if (event.shiftKey) {
+                            manager.focusLast();
+                        } else {
+                            manager.focusFirst();
+                        }
                     } else {
-                        manager.focusFirst();
+                        const io = focusable.indexOf(currentNode);
+                        if (event.shiftKey && io === 0) {
+                            event.preventDefault();
+                            manager.focusLast();
+                        } else if (
+                            !event.shiftKey &&
+                            io === focusable.length - 1
+                        ) {
+                            event.preventDefault();
+                            manager.focusFirst();
+                        }
                     }
                 }
                 break;
+            }
         }
     };
 
