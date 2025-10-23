@@ -24,7 +24,7 @@ jobs:
       pull-requests: write # Required to create the release PR
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -36,6 +36,14 @@ jobs:
         run: yarn install
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: Loock
+          path: |
+            dist
+            types
 
       - name: Lint packages
         run: yarn publint
