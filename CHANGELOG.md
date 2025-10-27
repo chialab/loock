@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.5.1
+
+### Patch Changes
+
+- bbca63e: Do not trigger focus out behavior when page loses focus.
+
 ## 4.5.0
 
 ### Minor Changes
