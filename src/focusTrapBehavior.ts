@@ -199,6 +199,7 @@ export function focusTrapBehavior(
         // MUST use the `focusin` event because it fires after the bound `focus` on trap helpers
         node.addEventListener('focusin', handleFocusIn, true);
         node.addEventListener('focusout', handleFocusOut, true);
+        node.addEventListener('blur', handleFocusOut, true);
         node.addEventListener('keydown', handleKeyDown, true);
         restoreFocusNode = node.ownerDocument.activeElement as HTMLElement;
         if (node.contains(restoreFocusNode) && restoreFocusNode !== node) {
@@ -270,7 +271,7 @@ export function focusTrapBehavior(
 
     const handleFocusOut = (event: FocusEvent) => {
         const relatedTarget = event.relatedTarget as HTMLElement | null;
-        if (relatedTarget && node.contains(relatedTarget)) {
+        if (!relatedTarget || node.contains(relatedTarget)) {
             return;
         }
         restoreFocusNode = null;
