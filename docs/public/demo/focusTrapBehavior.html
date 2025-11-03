@@ -1,233 +1,150 @@
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0" />
-        <script src="https://cdn.tailwindcss.com"></script>
-        <title>focusTrapBehavior | Loock</title>
 
-        <style>
-            main {
-                max-width: 50rem;
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>focusTrapBehavior | Loock</title>
 
-            dialog:not([open]) {
-                display: none;
-            }
+    <style>
+        main {
+            max-width: 50rem;
+        }
 
-            *:focus {
-                outline-offset: 2px;
-            }
-        </style>
-    </head>
+        dialog:not([open]) {
+            display: none;
+        }
 
-    <body data-testid="body">
-        <main class="gap-y-10 flex flex-col p-5 mx-auto">
-            <header class="w-full flex flex-col">
-                <h1 class="text-3xl font-bold">focusTrapBehavior</h1>
+        *:focus {
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+
+<body data-testid="body">
+    <main class="gap-y-10 flex flex-col p-5 mx-auto">
+        <header class="w-full flex flex-col">
+            <h1 class="text-3xl font-bold">focusTrapBehavior</h1>
+        </header>
+
+        <article class="gap-y-3 flex flex-col items-start" id="article1" data-testid="article1">
+            <header class="w-full flex flex-row justify-between">
+                <h2 class="text-2xl font-bold" id="title1">Video</h2>
+                <button class="hover:bg-orange-500 active:bg-orange-600 bg-orange-400 px-2 py-1 text-white rounded"
+                    data-testid="button1">Activate trap</button>
             </header>
+            <p>When entering a context, press ESC to exit.</p>
+            <section class="gap-y-2 flex flex-col items-start w-full p-2 border rounded-sm" tabindex="0"
+                aria-labelledby="title1" data-testid="section1">
+                <video class="w-full" controls data-testid="video1" preload="none"
+                    src="https://demo.chialab.io/catalog/media/moon/Apollo_11_Intro.mp4"></video>
+            </section>
+            <script type="module">
+                import { focusTrapBehavior } from '/src/index.ts';
 
-            <article
-                class="gap-y-3 flex flex-col items-start"
-                id="article1"
-                data-testid="article1">
-                <header class="w-full flex flex-row justify-between">
-                    <h2
-                        class="text-2xl font-bold"
-                        id="title1"
-                        >Video</h2
-                    >
-                    <button
-                        class="hover:bg-orange-500 active:bg-orange-600 bg-orange-400 px-2 py-1 text-white rounded"
-                        data-testid="button1"
-                        >Activate trap</button
-                    >
-                </header>
-                <p>When entering a context, press ESC to exit.</p>
-                <section
-                    class="gap-y-2 flex flex-col items-start w-full p-2 border rounded-sm"
-                    tabindex="0"
-                    aria-labelledby="title1"
-                    data-testid="section1">
-                    <video
-                        class="w-full"
-                        controls
-                        data-testid="video1"
-                        preload="none"
-                        src="https://demo.chialab.io/catalog/media/moon/Apollo_11_Intro.mp4"></video>
-                </section>
-                <script type="module">
-                    import { focusTrapBehavior } from '/src/index.ts';
+                const article1 = document.querySelector('#article1');
+                const button1 = article1.querySelector('header button');
+                const section1 = article1.querySelector('section');
+                const behavior1 = focusTrapBehavior(section1);
 
-                    const article1 = document.querySelector('#article1');
-                    const button1 = article1.querySelector('header button');
-                    const section1 = article1.querySelector('section');
-                    const behavior1 = focusTrapBehavior(section1);
+                button1.addEventListener('click', () => {
+                    button1.focus();
+                    behavior1.connect();
+                });
+            </script>
+        </article>
+        <article class="gap-y-3 flex flex-col items-start" id="article2" data-testid="article2">
+            <header class="w-full flex flex-row justify-between">
+                <h2 class="text-2xl font-bold" id="title2">Forms</h2>
+                <button class="hover:bg-orange-500 active:bg-orange-600 bg-orange-400 px-2 py-1 text-white rounded"
+                    data-testid="button2">Activate trap</button>
+            </header>
+            <p>When entering a context, press ESC to exit.</p>
+            <section class="gap-y-2 flex flex-col items-start w-full p-2 border rounded-sm" tabindex="0"
+                aria-labelledby="title2" data-testid="section2">
+                <div>
+                    <label class="mr-2" for="input-1">Text input</label>
+                    <input class="p-1 border rounded-sm" type="text" id="input-1" data-testid="input1" />
+                </div>
+                <div>
+                    <label class="mr-2" for="radio-1">Radio 1</label>
+                    <input type="radio" name="radios" id="radio-1" checked data-testid="input2" />
+                </div>
+                <div>
+                    <label class="mr-2" for="radio-2">Radio 2</label>
+                    <input type="radio" name="radios" id="radio-2" data-testid="input3" />
+                </div>
+                <div>
+                    <label class="mr-2" for="radio-3">Radio 3</label>
+                    <input type="radio" name="radios" id="radio-3" data-testid="input4" />
+                </div>
+            </section>
+            <code class="text-xs">{ focusContainer: true }</code>
+            <script type="module">
+                import { focusTrapBehavior } from '/src/index.ts';
 
-                    button1.addEventListener('click', () => {
-                        button1.focus();
-                        behavior1.connect();
-                    });
-                </script>
-            </article>
-            <article
-                class="gap-y-3 flex flex-col items-start"
-                id="article2"
-                data-testid="article2">
-                <header class="w-full flex flex-row justify-between">
-                    <h2
-                        class="text-2xl font-bold"
-                        id="title2"
-                        >Forms</h2
-                    >
-                    <button
-                        class="hover:bg-orange-500 active:bg-orange-600 bg-orange-400 px-2 py-1 text-white rounded"
-                        data-testid="button2"
-                        >Activate trap</button
-                    >
-                </header>
-                <p>When entering a context, press ESC to exit.</p>
-                <section
-                    class="gap-y-2 flex flex-col items-start w-full p-2 border rounded-sm"
-                    tabindex="0"
-                    aria-labelledby="title2"
-                    data-testid="section2">
-                    <div>
-                        <label
-                            class="mr-2"
-                            for="input-1"
-                            >Text input</label
-                        >
-                        <input
-                            class="p-1 border rounded-sm"
-                            type="text"
-                            id="input-1"
-                            data-testid="input1" />
+                const article2 = document.querySelector('#article2');
+                const button2 = article2.querySelector('header button');
+                const section2 = article2.querySelector('section');
+                const behavior2 = focusTrapBehavior(section2, {
+                    focusContainer: true,
+                });
+
+                button2.addEventListener('click', () => {
+                    button2.focus();
+                    behavior2.connect();
+                });
+            </script>
+        </article>
+        <article class="gap-y-3 flex flex-col items-start" id="article3" data-testid="article3">
+            <header class="w-full flex flex-row justify-between">
+                <h2 class="text-2xl font-bold">Dialog</h2>
+            </header>
+            <section class="gap-y-2 flex flex-col items-start w-full p-2 border rounded-sm">
+                <button class="hover:bg-orange-500 active:bg-orange-600 bg-orange-400 px-2 py-1 text-white rounded"
+                    id="open-dialog" data-testid="button3">Open</button>
+                <dialog
+                    class="open:w-96 open:h-96 backdrop:bg-gray-400 backdrop:bg-opacity-50 group-open: flex flex-col items-start gap-2 p-4 rounded-sm"
+                    data-testid="dialog">
+                    <div class="dialog-content" tabindex="0" data-testid="section3" aria-labelledby="title3">
+                        <h3 id="title3" class="text-xl font-bold">Dialog</h3>
+                        <p class="mb-2">Press ESC to exit.</p>
+                        <button
+                            class="hover:bg-orange-50 active:bg-orange-100 border-orange-400 px-2 py-1 text-orange-400 border rounded"
+                            data-testid="button4">Button 1</button>
+                        <button
+                            class="hover:bg-orange-50 active:bg-orange-100 border-orange-400 px-2 py-1 text-orange-400 border rounded"
+                            data-testid="button5">Button 2</button>
+                        <button
+                            class="hover:bg-orange-50 active:bg-orange-100 border-orange-400 px-2 py-1 text-orange-400 border rounded"
+                            data-testid="button6">Button 3</button>
                     </div>
-                    <div>
-                        <label
-                            class="mr-2"
-                            for="radio-1"
-                            >Radio 1</label
-                        >
-                        <input
-                            type="radio"
-                            name="radios"
-                            id="radio-1"
-                            checked
-                            data-testid="input2" />
-                    </div>
-                    <div>
-                        <label
-                            class="mr-2"
-                            for="radio-2"
-                            >Radio 2</label
-                        >
-                        <input
-                            type="radio"
-                            name="radios"
-                            id="radio-2"
-                            data-testid="input3" />
-                    </div>
-                    <div>
-                        <label
-                            class="mr-2"
-                            for="radio-3"
-                            >Radio 3</label
-                        >
-                        <input
-                            type="radio"
-                            name="radios"
-                            id="radio-3"
-                            data-testid="input4" />
-                    </div>
-                </section>
-                <code class="text-xs">{ focusContainer: true }</code>
-                <script type="module">
-                    import { focusTrapBehavior } from '/src/index.ts';
+                </dialog>
+            </section>
+            <code class="text-xs">{ inert: true, exitOnFocusOut: false }</code>
+            <script type="module">
+                import { focusTrapBehavior } from '/src/index.ts';
 
-                    const article2 = document.querySelector('#article2');
-                    const button2 = article2.querySelector('header button');
-                    const section2 = article2.querySelector('section');
-                    const behavior2 = focusTrapBehavior(section2, {
-                        focusContainer: true,
-                    });
+                const article3 = document.querySelector('#article3');
+                const section3 = article3.querySelector('section');
+                const button3 = section3.querySelector('button');
+                const dialog = section3.querySelector('dialog');
 
-                    button2.addEventListener('click', () => {
-                        button2.focus();
-                        behavior2.connect();
-                    });
-                </script>
-            </article>
-            <article
-                class="gap-y-3 flex flex-col items-start"
-                id="article3"
-                data-testid="article3">
-                <header class="w-full flex flex-row justify-between">
-                    <h2 class="text-2xl font-bold">Dialog</h2>
-                </header>
-                <section class="gap-y-2 flex flex-col items-start w-full p-2 border rounded-sm">
-                    <button
-                        class="hover:bg-orange-500 active:bg-orange-600 bg-orange-400 px-2 py-1 text-white rounded"
-                        id="open-dialog"
-                        data-testid="button3"
-                        >Open</button
-                    >
-                    <dialog
-                        class="open:w-96 open:h-96 backdrop:bg-gray-400 backdrop:bg-opacity-50 group-open: flex flex-col items-start gap-2 p-4 rounded-sm"
-                        data-testid="dialog">
-                        <div
-                            class="dialog-content"
-                            tabindex="0"
-                            data-testid="section3"
-                            aria-labelledby="title3">
-                            <h3
-                                id="title3"
-                                class="text-xl font-bold"
-                                >Dialog</h3
-                            >
-                            <p class="mb-2">Press ESC to exit.</p>
-                            <button
-                                class="hover:bg-orange-50 active:bg-orange-100 border-orange-400 px-2 py-1 text-orange-400 border rounded"
-                                data-testid="button4"
-                                >Button 1</button
-                            >
-                            <button
-                                class="hover:bg-orange-50 active:bg-orange-100 border-orange-400 px-2 py-1 text-orange-400 border rounded"
-                                data-testid="button5"
-                                >Button 2</button
-                            >
-                            <button
-                                class="hover:bg-orange-50 active:bg-orange-100 border-orange-400 px-2 py-1 text-orange-400 border rounded"
-                                data-testid="button6"
-                                >Button 3</button
-                            >
-                        </div>
-                    </dialog>
-                </section>
-                <code class="text-xs">{ inert: true }</code>
-                <script type="module">
-                    import { focusTrapBehavior } from '/src/index.ts';
+                const behavior3 = focusTrapBehavior(dialog.querySelector('.dialog-content'), {
+                    inert: true,
+                    exitOnFocusOut: false,
+                    onExit: () => {
+                        dialog.close();
+                    },
+                });
+                button3.addEventListener('click', () => {
+                    button3.focus();
+                    dialog.showModal();
+                    behavior3.connect();
+                });
+            </script>
+        </article>
+    </main>
+</body>
 
-                    const article3 = document.querySelector('#article3');
-                    const section3 = article3.querySelector('section');
-                    const button3 = section3.querySelector('button');
-                    const dialog = section3.querySelector('dialog');
-
-                    const behavior3 = focusTrapBehavior(dialog.querySelector('.dialog-content'), {
-                        inert: true,
-                        onExit: () => {
-                            dialog.close();
-                        },
-                    });
-                    button3.addEventListener('click', () => {
-                        button3.focus();
-                        dialog.showModal();
-                        behavior3.connect();
-                    });
-                </script>
-            </article>
-        </main>
-    </body>
 </html>

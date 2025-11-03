@@ -88,6 +88,17 @@ test('should focus container', async ({ page }) => {
     expect(await getActiveElement(page)).toBe('input2');
 });
 
+test('should leave context on programmatic blur', async ({ page }) => {
+    await page.goto('/docs/public/demo/focusTrapBehavior.html');
+
+    await page.click('[data-testid="button2"]');
+    expect(await getActiveElement(page)).toBe('section2');
+    await page.keyboard.down('Tab');
+    expect(await getActiveElement(page)).toBe('input1');
+    await page.focus('[data-testid="button1"]');
+    expect(await getActiveElement(page)).toBe('button1');
+});
+
 test('should inert siblings', async ({ page }) => {
     await page.goto('/docs/public/demo/focusTrapBehavior.html');
 
@@ -96,6 +107,15 @@ test('should inert siblings', async ({ page }) => {
     expect(await page.locator('#article1').getAttribute('inert')).toBe('');
     await page.keyboard.down('Escape');
     expect(await page.locator('#article1').getAttribute('inert')).toBeNull();
+});
+
+test('should not leave context on programmatic blur', async ({ page }) => {
+    await page.goto('/docs/public/demo/focusTrapBehavior.html');
+
+    await page.click('[data-testid="button3"]');
+    expect(await getActiveElement(page)).toBe('button4');
+    await page.focus('[data-testid="button1"]');
+    expect(await getActiveElement(page)).toBe('button4');
 });
 
 test('should run lifecycle', async ({ page }) => {

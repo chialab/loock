@@ -45,10 +45,9 @@ export interface FocusTrapOptions extends FocusManagerOptions {
      */
     restore?: boolean;
     /**
-     * The focus trap implementation configuration.
-     * @deprecated Using trap helpers is deprecated and will be removed in future versions.
+     * Whether to exit the focus trap on focus out.
      */
-    trapImpl?: FocusTrapImpl;
+    exitOnFocusOut?: boolean;
     /**
      * Whether to focus the container when entering the focus context.
      */
@@ -65,6 +64,11 @@ export interface FocusTrapOptions extends FocusManagerOptions {
      * A function that is called before the focus context is exited.
      */
     beforeExit?: () => boolean | undefined | Promise<boolean | undefined>;
+    /**
+     * The focus trap implementation configuration.
+     * @deprecated Using trap helpers is deprecated and will be removed in future versions.
+     */
+    trapImpl?: FocusTrapImpl;
 }
 
 /**
@@ -270,13 +274,23 @@ export function focusTrapBehavior(
     };
 
     const handleFocusOut = (event: FocusEvent) => {
-        const relatedTarget = event.relatedTarget as HTMLElement | null;
-        if (!relatedTarget || node.contains(relatedTarget)) {
+        if (!connected) {
             return;
         }
-        restoreFocusNode = null;
-        currentNode = null;
-        disconnect();
+        const relatedTarget = event.relatedTarget as HTMLElement | null;
+        if (relatedTarget && node.contains(relatedTarget)) {
+            return;
+        }
+        const { exitOnFocusOut = true } = options;
+        if (exitOnFocusOut) {
+            restoreFocusNode = null;
+            currentNode = null;
+            disconnect();
+        } else if (currentNode) {
+            currentNode.focus();
+        } else {
+            manager.focusFirst();
+        }
     };
 
     /**
@@ -284,6 +298,9 @@ export function focusTrapBehavior(
      * @param event The keydown event.
      */
     const handleKeyDown = (event: KeyboardEvent) => {
+        if (!connected) {
+            return;
+        }
         switch (event.key) {
             case 'Esc':
             case 'Escape':

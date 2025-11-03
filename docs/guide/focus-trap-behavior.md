@@ -41,6 +41,12 @@ Should restore the focus to the previously focused element when the context is e
 
 Default: `true`.
 
+### `exitOnFocusOut`
+
+Whether to exit the focus trap on focus out, for example when the user clicks outside the context or when the focus is moved programmatically outside the context.
+
+Default: `true`.
+
 ### `focusContainer`
 
 Focus the context container when the context is entered if `true`, focus the first child element otherwise.
