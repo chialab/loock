@@ -278,7 +278,7 @@ export function focusTrapBehavior(
             return;
         }
         const relatedTarget = event.relatedTarget as HTMLElement | null;
-        if (relatedTarget && node.contains(relatedTarget)) {
+        if (!relatedTarget || node.contains(relatedTarget)) {
             return;
         }
         const { exitOnFocusOut = true } = options;
