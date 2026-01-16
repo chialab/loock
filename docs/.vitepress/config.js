@@ -26,8 +26,8 @@ export default defineConfig({
                 text: 'Ecosystem',
                 items: [
                     { text: 'DNA', link: 'https://chialab.github.io/dna/' },
-                    { text: 'Quantum', link: 'https://chialab.github.io/quantum/' },
-                    { text: 'Plasma', link: 'https://chialab.github.io/plasma/' },
+                    { text: 'RNA', link: 'https://chialab.github.io/rna/' },
+                    { text: 'Catalog', link: 'https://catalog.chialab.io/' },
                     { text: 'Synapse', link: 'https://github.com/chialab/synapse/' },
                 ],
             },
