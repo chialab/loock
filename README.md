@@ -1,6 +1,6 @@
 # Loock
 
-Refined keyboard navigation for websites and components.
+Keyboard navigation for Web Apps and Components.
 
 [![NPM](https://img.shields.io/npm/v/@chialab/loock.svg)](https://www.npmjs.com/package/@chialab/loock)
 

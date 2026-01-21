@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
     title: 'Loock',
-    description: 'Refined keyboard navigation for websites and components.',
+    description: 'Keyboard navigation for Web Apps and Components',
     base: '/loock/',
     outDir: '../public',
 

@@ -1,7 +1,7 @@
 {
   "name": "@chialab/loock",
   "version": "4.5.2",
-  "description": "Refined keyboard navigation for websites and components.",
+  "description": "Keyboard navigation for Web Apps and Components.",
   "type": "module",
   "main": "dist/loock.js",
   "module": "dist/loock.js",

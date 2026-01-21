@@ -3,11 +3,11 @@
 layout: home
 
 title: Loock
-titleTemplate: Refined keyboard navigation for websites and components
+titleTemplate: Keyboard navigation for Web Apps and Components
 
 hero:
     name: 'Loock'
-    tagline: 'Refined keyboard navigation for websites and components.'
+    text: 'Keyboard navigation for Web Apps and Components'
     actions:
         - theme: brand
           text: Get started

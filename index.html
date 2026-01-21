@@ -1,46 +1,42 @@
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0" />
-        <script src="https://cdn.tailwindcss.com"></script>
-        <title>Loock Demo</title>
 
-        <style>
-            main {
-                max-width: 50rem;
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Loock Demo</title>
 
-            dialog:not([open]) {
-                display: none;
-            }
+    <style>
+        main {
+            max-width: 50rem;
+        }
 
-            *:focus {
-                outline-offset: 2px;
-            }
-        </style>
-    </head>
+        dialog:not([open]) {
+            display: none;
+        }
 
-    <body data-testid="body">
-        <main class="gap-y-10 flex flex-col p-5 mx-auto">
-            <header class="w-full flex flex-col">
-                <h1 class="text-3xl font-bold">Loock</h1>
-                <p>Refined keyboard navigation for websites and components.</p>
-            </header>
+        *:focus {
+            outline-offset: 2px;
+        }
+    </style>
+</head>
 
-            <article class="gap-y-3 flex flex-col items-start">
-                <h2 class="text-2xl font-bold">Demo</h2>
-                <ul class="list-disc">
-                    <li>
-                        <a
-                            class="text-orange-400"
-                            href="./docs/public/demo/focusTrapBehavior.html"
-                            >focusTrapBehavior</a
-                        >
-                    </li>
-                </ul>
-            </article>
-        </main>
-    </body>
+<body data-testid="body">
+    <main class="gap-y-10 flex flex-col p-5 mx-auto">
+        <header class="w-full flex flex-col">
+            <h1 class="text-3xl font-bold">Loock</h1>
+            <p>Keyboard navigation for Web Apps and Components</p>
+        </header>
+
+        <article class="gap-y-3 flex flex-col items-start">
+            <h2 class="text-2xl font-bold">Demo</h2>
+            <ul class="list-disc">
+                <li>
+                    <a class="text-orange-400" href="./docs/public/demo/focusTrapBehavior.html">focusTrapBehavior</a>
+                </li>
+            </ul>
+        </article>
+    </main>
+</body>
+
 </html>
