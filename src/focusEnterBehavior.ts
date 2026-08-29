@@ -50,10 +50,10 @@ export function focusEnterBehavior(
     };
 
     return {
-        get connected() {
+        get connected(): boolean {
             return connected;
         },
-        connect() {
+        connect(): void {
             if (connected) {
                 return;
             }
@@ -68,7 +68,7 @@ export function focusEnterBehavior(
             node.addEventListener('focusin', onFocusIn);
             node.addEventListener('focusout', onFocusOut);
         },
-        disconnect() {
+        disconnect(): void {
             if (!connected) {
                 return;
             }

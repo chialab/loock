@@ -50,9 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Loock
-          path: |
-            dist
-            types
+          path: dist
 
   test:
     name: Test Browsers

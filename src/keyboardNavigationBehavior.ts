@@ -113,17 +113,17 @@ export function keyboardNavigationBehavior(
     };
 
     return {
-        get connected() {
+        get connected(): boolean {
             return connected;
         },
-        connect() {
+        connect(): void {
             if (connected) {
                 return;
             }
             connected = true;
             node.addEventListener('keydown', onKeydown);
         },
-        disconnect() {
+        disconnect(): void {
             if (!connected) {
                 return;
             }
