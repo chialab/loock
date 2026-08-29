@@ -74,7 +74,7 @@ export interface FocusTrapOptions extends FocusManagerOptions {
 /**
  * A Focus Context controller.
  */
-export interface FocusTrapController {
+export interface FocusTrapBehavior {
     readonly connected: boolean;
     connect: () => Promise<void>;
     disconnect: (force?: boolean) => Promise<void>;
@@ -90,7 +90,7 @@ export interface FocusTrapController {
 export function focusTrapBehavior(
     node: HTMLElement,
     options: FocusTrapOptions = {}
-): FocusTrapController {
+): FocusTrapBehavior {
     /**
      * Whether the focus context is active.
      */
