@@ -40,12 +40,12 @@
     "prepack": "pnpm build"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.5.11",
     "@changesets/cli": "^3.0.1",
     "@playwright/test": "^1.62.1",
     "playwright": "^1.62.1",
     "publint": "^0.2.12",
-    "typescript": "^5.9.3",
+    "typescript": "^7.0.2",
     "unplugin-isolated-decl": "^0.17.0",
     "vite": "^8.2.2",
     "vitepress": "2.0.0-alpha.19"
