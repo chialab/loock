@@ -5,17 +5,14 @@ export default defineConfig({
     plugins: [UnpluginIsolatedDecl()],
     publicDir: false,
     build: {
-        target: 'es2017',
+        outDir: 'dist',
         lib: {
             entry: { loock: 'src/index.ts' },
             formats: ['es'],
         },
         rolldownOptions: {
             output: {
-                dir: 'dist',
                 entryFileNames: '[name].js',
-                chunkFileNames: '[name]-[hash].js',
-                format: 'es',
             },
         },
         sourcemap: true,
