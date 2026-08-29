@@ -1,7 +1,7 @@
 /**
  * Default focusable selectors.
  */
-export const DEFAULT_SELECTORS = [
+export const DEFAULT_SELECTORS: string[] = [
     'a[href]',
     'area[href]',
     'button',
@@ -20,7 +20,7 @@ export const DEFAULT_SELECTORS = [
 /**
  * Default ignore selectors.
  */
-export const DEFAULT_IGNORE_SELECTORS = [
+export const DEFAULT_IGNORE_SELECTORS: string[] = [
     '[tabindex="-1"]',
     '[disabled]',
     '[hidden]',

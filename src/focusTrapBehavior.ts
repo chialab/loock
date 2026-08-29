@@ -72,6 +72,17 @@ export interface FocusTrapOptions extends FocusManagerOptions {
 }
 
 /**
+ * A Focus Context controller.
+ */
+export interface FocusTrapBehavior {
+    readonly connected: boolean;
+    connect: () => Promise<void>;
+    disconnect: (force?: boolean) => Promise<void>;
+    startHelper: HTMLElement | null;
+    endHelper: HTMLElement | null;
+}
+
+/**
  * A Focus Context.
  * @param node The root node of the focus context.
  * @param options The focus context options.
@@ -79,7 +90,7 @@ export interface FocusTrapOptions extends FocusManagerOptions {
 export function focusTrapBehavior(
     node: HTMLElement,
     options: FocusTrapOptions = {}
-) {
+): FocusTrapBehavior {
     /**
      * Whether the focus context is active.
      */
@@ -126,7 +137,7 @@ export function focusTrapBehavior(
     /**
      * Enter the focus context.
      */
-    const connect = async () => {
+    const connect: () => Promise<void> = async () => {
         if (connected) {
             return;
         }
@@ -227,7 +238,9 @@ export function focusTrapBehavior(
      * Leave the focus context.
      * @param force Whether to force exit.
      */
-    const disconnect = async (force = false) => {
+    const disconnect: (force?: boolean) => Promise<void> = async (
+        force = false
+    ) => {
         if (!connected) {
             return;
         }
@@ -337,7 +350,7 @@ export function focusTrapBehavior(
     };
 
     return {
-        get connected() {
+        get connected(): boolean {
             return connected;
         },
         connect,

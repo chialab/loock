@@ -5,16 +5,15 @@
   "type": "module",
   "main": "dist/loock.js",
   "module": "dist/loock.js",
-  "types": "types/index.d.ts",
+  "types": "dist/loock.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
+      "types": "./dist/loock.d.ts",
       "default": "./dist/loock.js"
     }
   },
   "files": [
     "dist",
-    "types",
     "package.json",
     "README.md",
     "LICENSE"
@@ -31,8 +30,7 @@
   "author": "Chialab <dev@chialab.io> (https://www.chialab.it)",
   "scripts": {
     "dev": "vite",
-    "build": "rimraf 'dist' 'types' && yarn types && esbuild src/index.ts --outfile=dist/loock.js --format=esm --bundle --sourcemap",
-    "types": "tsc --declaration --emitDeclarationOnly --declarationDir 'types' --incremental false",
+    "build": "vite build",
     "test": "playwright test",
     "lint": "biome check",
     "typecheck": "tsc --noEmit",
@@ -45,13 +43,12 @@
     "@biomejs/biome": "^1.9.2",
     "@changesets/cli": "^2.24.1",
     "@playwright/test": "^1.39.0",
-    "esbuild": "^0.25.0",
     "playwright": "^1.39.0",
     "publint": "^0.2.5",
-    "rimraf": "^5.0.0",
     "typescript": "^5.0.0",
-    "vite": "^6.0.0",
-    "vitepress": "^1.0.0"
+    "unplugin-isolated-decl": "^0.17.0",
+    "vite": "^8.0.0",
+    "vitepress": "2.0.0-alpha.19"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

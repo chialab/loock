@@ -4,7 +4,6 @@ yarn-error.log
 .env
 .eslintcache
 dist
-types
 public
 !docs/public
 docs/.vitepress/dist

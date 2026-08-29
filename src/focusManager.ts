@@ -102,21 +102,21 @@ export function focusManager(
     options: FocusManagerOptions = {}
 ) {
     return {
-        findFocusable() {
+        findFocusable(): HTMLElement[] {
             return findFocusableByOptions(node, options);
         },
 
         /**
          * Focus the first focusable child.
          */
-        focusFirst() {
+        focusFirst(): void {
             this.findFocusable().shift()?.focus();
         },
 
         /**
          * Focus the last focusable child.
          */
-        focusLast() {
+        focusLast(): void {
             this.findFocusable().pop()?.focus();
         },
     };

@@ -8,7 +8,7 @@ export function restoreAttribute(
     node: HTMLElement,
     name: string,
     value: string | null
-) {
+): void {
     if (value === null) {
         node.removeAttribute(name);
     } else {
