@@ -1,0 +1,2 @@
+allowBuilds:
+  '@biomejs/biome': true

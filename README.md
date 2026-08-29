@@ -58,11 +58,11 @@ dialog.addEventListener('open', () => {
 Install the dependencies and run the `build` script:
 
 ```
-yarn install
+pnpm install
 ```
 
 ```
-yarn build
+pnpm build
 ```
 
 This will generate the bundles in the `dist` folder, as well as the declaration file.
@@ -72,7 +72,7 @@ This will generate the bundles in the `dist` folder, as well as the declaration 
 Run the `test` script:
 
 ```
-yarn test
+pnpm test
 ```
 
 ---
