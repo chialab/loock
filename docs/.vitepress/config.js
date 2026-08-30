@@ -103,7 +103,7 @@ export default defineConfig({
 
         footer: {
             message: 'Released under the MIT License.',
-            copyright: 'Copyright © 2023 - DNA project - Chialab',
+            copyright: '© 2026 Chia Lab Srl. MIT license.',
         },
     },
     lastUpdated: true,
