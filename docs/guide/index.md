@@ -22,10 +22,10 @@ pnpm add @chialab/loock
 
 ### or use a CDN
 
-You can use DNA via CDN thanks to [unpkg](https://unpkg.com/):
+You can use Loock via CDN thanks to [esm.run](https://esm.run/):
 
 ```ts
-import { focusTrapBehavior } from 'https://unpkg.com/@chialab/loock?module';
+import { focusTrapBehavior } from 'https://esm.run/@chialab/loock';
 ```
 
 ## Usage
