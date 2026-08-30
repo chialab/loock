@@ -11,18 +11,21 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          cache: yarn
+          cache: pnpm
 
       - name: Install project dependencies
-        run: yarn install
+        run: pnpm install
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
 
       - name: Lint
-        run: yarn lint
+        run: pnpm lint
 
   build:
     name: Build
@@ -31,18 +34,21 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          cache: yarn
+          cache: pnpm
 
       - name: Install project dependencies
-        run: yarn install
+        run: pnpm install
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
 
       - name: Run build script
-        run: yarn build
+        run: pnpm build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v6
@@ -64,18 +70,21 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          cache: yarn
+          cache: pnpm
 
       - name: Install project dependencies
-        run: yarn install
+        run: pnpm install
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
 
       - name: Install browser
-        run: yarn playwright install --with-deps ${{ matrix.browser }}
+        run: pnpm playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run tests
-        run: yarn test --project ${{ matrix.browser }}
+        run: pnpm test --project ${{ matrix.browser }}

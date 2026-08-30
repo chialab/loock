@@ -6,7 +6,7 @@ export default defineConfig({
         baseURL: 'http://localhost:5173',
     },
     webServer: {
-        command: 'yarn vite',
+        command: 'pnpm vite',
         url: 'http://localhost:5173',
         reuseExistingServer: !process.env.CI,
     },

@@ -1,26 +1,24 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.11/schema.json",
   "files": {
-    "ignore": [
-      ".yarn",
-      ".changeset",
-      ".vitepress",
-      "public",
-      "types",
-      "dist",
-      "test-results"
+    "includes": [
+      "**",
+      "!**/.changeset",
+      "!**/.vitepress",
+      "!**/public",
+      "!**/types",
+      "!**/dist",
+      "!**/test-results"
     ]
   },
-  "organizeImports": {
-    "enabled": true
-  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "formatter": {
     "attributePosition": "multiline",
     "useEditorconfig": true
   },
   "linter": {
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "complexity": {
         "noForEach": "off",
         "noThisInStatic": "off",
@@ -32,7 +30,8 @@
         "useOptionalChain": "warn"
       },
       "correctness": {
-        "useJsxKeyInIterable": "off"
+        "useJsxKeyInIterable": "off",
+        "noSwitchDeclarations": "off"
       },
       "performance": {
         "noAccumulatingSpread": "warn",
@@ -46,7 +45,6 @@
         "useExponentiationOperator": "warn",
         "useImportType": "warn",
         "useSelfClosingElements": "warn",
-        "useSingleCaseStatement": "off",
         "useSingleVarDeclarator": "warn",
         "useTemplate": "warn",
         "noUselessElse": "warn"
@@ -55,8 +53,8 @@
         "noAssignInExpressions": "warn",
         "noClassAssign": "off",
         "noConfusingLabels": "warn",
-        "noConsoleLog": "warn",
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "noConsole": "warn"
       }
     }
   },
@@ -75,7 +73,7 @@
   },
   "overrides": [
     {
-      "include": ["**/package.json"],
+      "includes": ["**/package.json"],
       "formatter": {
         "lineWidth": 1
       }
