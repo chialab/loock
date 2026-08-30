@@ -6,6 +6,7 @@ export default defineConfig({
     description: 'Keyboard navigation for Web Apps and Components',
     base: '/loock/',
     outDir: '../public',
+    appearance: 'force-auto',
 
     head: [
         ['link', { rel: 'icon', href: '/loock/favicon.png' }],

@@ -6,7 +6,6 @@ title: Loock
 titleTemplate: Keyboard navigation for Web Apps and Components
 
 hero:
-    name: 'Loock'
     text: 'Keyboard navigation for Web Apps and Components'
     actions:
         - theme: brand
