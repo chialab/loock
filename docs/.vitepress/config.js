@@ -43,7 +43,7 @@ export default defineConfig({
                 items: [
                     { text: 'DNA', link: 'https://chialab.github.io/dna/' },
                     { text: 'RNA', link: 'https://chialab.github.io/rna/' },
-                    { text: 'Synapse', link: 'https://github.com/chialab/synapse/' },
+                    { text: 'Synapse', link: 'https://chialab.github.io/synapse/' },
                     { text: 'Catalog', link: 'https://catalog.chialab.io/' },
                 ],
             },
@@ -102,7 +102,7 @@ export default defineConfig({
         ],
 
         footer: {
-            message: 'Released under the MIT License.',
+            message: 'Keyboard navigation for Web Apps and Components.',
             copyright: '© 2026 Chia Lab Srl. MIT license.',
         },
     },
