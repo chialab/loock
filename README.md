@@ -4,19 +4,25 @@ Keyboard navigation for Web Apps and Components.
 
 [![NPM](https://img.shields.io/npm/v/@chialab/loock.svg)](https://www.npmjs.com/package/@chialab/loock)
 
-## Introducing Loock
+## Features
 
-- Organize your web page or web application by navigation areas.
-- Never lose the context while navigating the area with the `TAB` key.
-- Leave the context with the `ESC` key.
+Loock provides a set of behaviors to manage focus and keyboard navigation for web apps and components.
 
-<!-- Medium article - ["How to improve keyboard navigation of your web page"](https://medium.com/chialab-open-source/how-to-improve-keyboard-navigation-of-your-web-page-f11b324adbab)
+### Navigation areas
 
-[Try out the demo!](https://codesandbox.io/s/ypjoj2r1qv) -->
+Organize your web page or web application by navigation areas.
 
-## Install
+### Persistent context
 
-### NPM
+Never lose the context while navigating the area with the `TAB` key.
+
+### Escape hatch
+
+Leave the context with the `ESC` key.
+
+## Get the library
+
+Install via NPM:
 
 ```
 npm install @chialab/loock
@@ -26,10 +32,16 @@ npm install @chialab/loock
 yarn add @chialab/loock
 ```
 
+```
+pnpm add @chialab/loock
+```
+
 ### CDN
 
+Load via [esm.run](https://esm.run/):
+
 ```ts
-import { focusTrapBehavior } from 'https://unpkg.com/@chialab/loock?module';
+import { focusTrapBehavior } from 'https://esm.run/@chialab/loock';
 ```
 
 ## Usage
@@ -47,8 +59,6 @@ dialog.addEventListener('open', () => {
 });
 ```
 
----
-
 ## Development
 
 [![Build status](https://github.com/chialab/loock/workflows/Main/badge.svg)](https://github.com/chialab/loock/actions?query=workflow%3AMain)
@@ -65,7 +75,7 @@ pnpm install
 pnpm build
 ```
 
-This will generate the bundles in the `dist` folder, as well as the declaration file.
+This will generate the bundles in the `dist` folder, as well as the declaration files.
 
 ### Test
 
