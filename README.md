@@ -63,7 +63,7 @@ dialog.addEventListener('open', () => {
 
 [![Build status](https://github.com/chialab/loock/workflows/Main/badge.svg)](https://github.com/chialab/loock/actions?query=workflow%3AMain)
 
-### Build the project
+### Build
 
 Install the dependencies and run the `build` script:
 
@@ -77,7 +77,7 @@ pnpm build
 
 This will generate the bundles in the `dist` folder, as well as the declaration files.
 
-### Testing
+### Test
 
 Run the `test` script:
 
