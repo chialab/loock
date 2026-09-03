@@ -29,7 +29,7 @@
   "homepage": "https://github.com/chialab/loock",
   "author": "Chialab <dev@chialab.io> (https://www.chialab.it)",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite ./demo/focus-trap/",
     "build": "vite build",
     "test": "playwright test",
     "lint": "biome check",
