@@ -83,15 +83,6 @@ export default defineConfig({
                     },
                 ],
             },
-            {
-                text: 'Demos',
-                items: [
-                    {
-                        text: 'focusTrapBehavior',
-                        link: 'https://chialab.github.io/loock/demo/focusTrapBehavior.html',
-                    },
-                ],
-            },
         ],
 
         socialLinks: [
