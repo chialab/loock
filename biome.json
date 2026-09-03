@@ -6,6 +6,7 @@
       "!**/.changeset",
       "!**/.vitepress",
       "!**/public",
+      "!**/test/fixtures",
       "!**/types",
       "!**/dist",
       "!**/test-results"
