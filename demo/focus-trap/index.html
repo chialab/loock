@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loock</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: system-ui, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        dialog {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        dialog:not([open]) {
+            display: none;
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        *:focus {
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="open-dialog" type="button">Open dialog</button>
+    <p>Focus is trapped inside the dialog: press <kbd>Tab</kbd> to move between its buttons, <kbd>Esc</kbd> to
+        exit.</p>
+
+    <dialog id="dialog">
+        <h2>Focus trap</h2>
+        <button type="button">Button 1</button>
+        <button type="button">Button 2</button>
+        <button id="close-dialog" type="button">Close</button>
+    </dialog>
+
+    <script type="module" src="./index.ts"></script>
+</body>
+
+</html>
