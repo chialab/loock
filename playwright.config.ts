@@ -7,7 +7,7 @@ export default defineConfig({
     },
     webServer: {
         command: 'pnpm vite',
-        url: 'http://localhost:5173',
+        url: 'http://localhost:5173/@vite/client',
         reuseExistingServer: !process.env.CI,
     },
     projects: [
