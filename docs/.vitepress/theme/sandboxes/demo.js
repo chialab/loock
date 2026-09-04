@@ -8,10 +8,12 @@ const sources = await import.meta.glob('./**/*.{js,ts,jsx,tsx,css,html}', {
 });
 
 export const files = {
-    ...Object.entries(sources).reduce((acc, [path, code]) => {
-        acc[path.replace('./', '')] = { code };
-        return acc;
-    }, {}),
+    'index.ts': {
+        code: sources['./index.ts'],
+    },
+    'index.html': {
+        code: sources['./index.html'],
+    },
 };
 
 export const customSetup = {

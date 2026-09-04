@@ -7,6 +7,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Loock</title>
     <style>
+        :root {
+            --zinc-50: #fafafa;
+            --zinc-100: #f4f4f5;
+            --zinc-200: #e4e4e7;
+            --zinc-300: #d4d4d8;
+            --zinc-400: #a1a1aa;
+            --zinc-500: #71717a;
+            --zinc-600: #52525b;
+            --zinc-700: #3f3f46;
+            --zinc-800: #27272a;
+            --zinc-900: #18181b;
+
+            --bg: var(--zinc-50);
+            --fg: var(--zinc-900);
+            --muted-fg: var(--zinc-600);
+            --surface: #fff;
+            --border: var(--zinc-200);
+            --backdrop: rgb(24 24 27 / 50%);
+            --focus-ring: var(--zinc-400);
+
+            --kbd-bg: var(--zinc-100);
+            --kbd-border: var(--zinc-300);
+            --kbd-fg: var(--zinc-700);
+
+            --btn-bg: var(--zinc-900);
+            --btn-fg: var(--zinc-50);
+            --btn-hover-bg: var(--zinc-700);
+            --btn-active-bg: var(--zinc-800);
+
+            --btn-secondary-bg: #fff;
+            --btn-secondary-fg: var(--zinc-900);
+            --btn-secondary-border: var(--zinc-300);
+            --btn-secondary-hover-bg: var(--zinc-100);
+            --btn-secondary-active-bg: var(--zinc-200);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: var(--zinc-900);
+                --fg: var(--zinc-50);
+                --muted-fg: var(--zinc-400);
+                --surface: var(--zinc-800);
+                --border: var(--zinc-700);
+                --backdrop: rgb(0 0 0 / 60%);
+                --focus-ring: var(--zinc-500);
+
+                --kbd-bg: var(--zinc-700);
+                --kbd-border: var(--zinc-600);
+                --kbd-fg: var(--zinc-200);
+
+                --btn-bg: var(--zinc-50);
+                --btn-fg: var(--zinc-900);
+                --btn-hover-bg: var(--zinc-200);
+                --btn-active-bg: var(--zinc-300);
+
+                --btn-secondary-bg: var(--zinc-800);
+                --btn-secondary-fg: var(--zinc-50);
+                --btn-secondary-border: var(--zinc-600);
+                --btn-secondary-hover-bg: var(--zinc-700);
+                --btn-secondary-active-bg: var(--zinc-600);
+            }
+        }
+
         html,
         body {
             margin: 0;
@@ -23,6 +86,23 @@
             gap: 12px;
             padding: 24px;
             box-sizing: border-box;
+            background: var(--bg);
+            color: var(--fg);
+        }
+
+        p {
+            color: var(--muted-fg);
+        }
+
+        kbd {
+            padding: 2px 6px;
+            font-family: ui-monospace, monospace;
+            font-size: 0.85em;
+            background: var(--kbd-bg);
+            border: 1px solid var(--kbd-border);
+            border-bottom-width: 2px;
+            border-radius: 6px;
+            color: var(--kbd-fg);
         }
 
         dialog {
@@ -30,9 +110,13 @@
             flex-direction: column;
             align-items: flex-start;
             gap: 8px;
+            width: min(360px, 100% - 2rem);
             padding: 16px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            background: var(--surface);
+            color: var(--fg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
 
         dialog:not([open]) {
@@ -40,14 +124,54 @@
         }
 
         dialog::backdrop {
-            background: rgba(0, 0, 0, 0.4);
+            background: var(--backdrop);
+        }
+
+        dialog h2 {
+            margin: 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--fg);
         }
 
         button {
             cursor: pointer;
+            font: inherit;
+            font-weight: 500;
+            font-size: 0.875rem;
+            padding: 8px 16px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            background: var(--btn-bg);
+            color: var(--btn-fg);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.15s ease;
+        }
+
+        button:hover {
+            background: var(--btn-hover-bg);
+        }
+
+        button:active {
+            background: var(--btn-active-bg);
+        }
+
+        #close-dialog {
+            background: var(--btn-secondary-bg);
+            color: var(--btn-secondary-fg);
+            border-color: var(--btn-secondary-border);
+        }
+
+        #close-dialog:hover {
+            background: var(--btn-secondary-hover-bg);
+        }
+
+        #close-dialog:active {
+            background: var(--btn-secondary-active-bg);
         }
 
         *:focus {
+            outline: 2px solid var(--focus-ring);
             outline-offset: 2px;
         }
     </style>
