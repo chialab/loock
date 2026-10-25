@@ -27,6 +27,15 @@ export interface KeyboardNavigationOptions extends FocusManagerOptions {
 }
 
 /**
+ * The behavior controller for keyboard navigation.
+ */
+export interface KeyboardNavigationBehavior {
+    connected: boolean;
+    connect(): void;
+    disconnect(): void;
+}
+
+/**
  * Navigate focusable elements with keyboard.
  * @param node The target element.
  * @param options Behavior options.

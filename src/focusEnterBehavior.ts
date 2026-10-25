@@ -15,6 +15,15 @@ export interface FocusEnterOptions extends FocusManagerOptions {
 }
 
 /**
+ * The behavior controller for focus enter.
+ */
+export interface FocusEnterBehavior {
+    connected: boolean;
+    connect(): void;
+    disconnect(): void;
+}
+
+/**
  * Focus first option on focus enter.
  * @param node The target element.
  * @param options The options.
@@ -23,7 +32,7 @@ export interface FocusEnterOptions extends FocusManagerOptions {
 export function focusEnterBehavior(
     node: HTMLElement,
     options: FocusEnterOptions = {}
-) {
+): FocusEnterBehavior {
     const { onEnter, onExit } = options;
     let focused = false;
     let connected = false;

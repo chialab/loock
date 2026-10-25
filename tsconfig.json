@@ -19,6 +19,7 @@
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "erasableSyntaxOnly": true,
     "isolatedModules": true
   },
   "include": ["src"]

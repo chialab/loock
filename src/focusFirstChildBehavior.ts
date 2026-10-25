@@ -3,6 +3,15 @@ import { type FocusManagerOptions, focusManager } from './focusManager';
 import { restoreAttribute } from './helpers';
 
 /**
+ * The behavior controller for focusing the first child element.
+ */
+export interface FocusFirstChildBehavior {
+    connected: boolean;
+    connect(): void;
+    disconnect(): void;
+}
+
+/**
  * Focus first option on focus enter.
  * @param node The target element.
  * @param options The options.
@@ -11,7 +20,7 @@ import { restoreAttribute } from './helpers';
 export function focusFirstChildBehavior(
     node: HTMLElement,
     options: FocusManagerOptions = {}
-) {
+): FocusFirstChildBehavior {
     let activeElement: HTMLElement | null = null;
     let connected = false;
     let tabIndex: string | null = null;
