@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.6.2
+
+### Patch Changes
+
+- 3b8ae80: Customize ignoring keyboard events.
+
 ## 4.6.1
 
 ### Patch Changes
