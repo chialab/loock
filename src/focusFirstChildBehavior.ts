@@ -39,17 +39,20 @@ export function focusFirstChildBehavior(
 
     const onFocus = () => {
         const elements = manager.findFocusable();
-        const target = node.ownerDocument.activeElement as HTMLElement;
+        const target = manager.getActiveElement();
         if (target === node) {
             if (activeElement && node.contains(activeElement)) {
-                activeElement.focus();
+                manager.focusNode(activeElement);
                 return;
             }
 
-            elements[0]?.focus();
+            const firstElement = elements[0];
+            if (firstElement) {
+                manager.focusNode(firstElement);
+            }
             return;
         }
-        if (elements.includes(target)) {
+        if (target && elements.includes(target)) {
             activeElement = target;
         }
     };
@@ -65,10 +68,9 @@ export function focusFirstChildBehavior(
             enterBehavior.connect();
             connected = true;
             activeElement = null;
-            if (
-                node.ownerDocument.activeElement &&
-                node.contains(node.ownerDocument.activeElement)
-            ) {
+
+            const target = manager.getActiveElement();
+            if (target && node.contains(target)) {
                 onFocus();
             }
             node.addEventListener('focus', onFocus, true);

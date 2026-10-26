@@ -1,4 +1,4 @@
-import type { FocusManagerOptions } from './focusManager';
+import { type FocusManagerOptions, focusManager } from './focusManager';
 
 /**
  * The focus enter options.
@@ -37,8 +37,9 @@ export function focusEnterBehavior(
     let focused = false;
     let connected = false;
 
+    const manager = focusManager(node, options);
     const onFocusIn = () => {
-        const activeElement = node.ownerDocument.activeElement;
+        const activeElement = manager.getActiveElement();
         if (focused || !activeElement) {
             return;
         }
@@ -68,10 +69,9 @@ export function focusEnterBehavior(
             }
             connected = true;
             focused = false;
-            if (
-                node.ownerDocument.activeElement &&
-                node.contains(node.ownerDocument.activeElement)
-            ) {
+
+            const activeElement = manager.getActiveElement();
+            if (activeElement && node.contains(activeElement)) {
                 onFocusIn();
             }
             node.addEventListener('focusin', onFocusIn);

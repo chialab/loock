@@ -2,6 +2,18 @@ import { DEFAULT_IGNORE_SELECTORS, DEFAULT_SELECTORS } from './constants';
 
 export interface FocusManagerOptions {
     /**
+     * Get the active focused element.
+     */
+    getActiveElement?: () => HTMLElement | null;
+    /**
+     * Focus the specified node.
+     */
+    focusNode?: (node: HTMLElement, options?: FocusOptions) => void;
+    /**
+     * Blur the specified node.
+     */
+    blurNode?: (node: HTMLElement) => void;
+    /**
      * The focusable elements.
      */
     elements?: HTMLElement[] | (() => HTMLElement[]);
@@ -13,6 +25,18 @@ export interface FocusManagerOptions {
      * The selectors for ignored nodes.
      */
     exclude?: string[];
+}
+
+/**
+ * The focus manager interface.
+ */
+export interface FocusManager {
+    getActiveElement(): HTMLElement | null;
+    focusNode(node: HTMLElement, options?: FocusOptions): void;
+    blurNode(node: HTMLElement): void;
+    findFocusable(): HTMLElement[];
+    focusFirst(): void;
+    focusLast(): void;
 }
 
 function isFocusableElement(element: HTMLElement) {
@@ -100,24 +124,33 @@ function findFocusableChildren(
 export function focusManager(
     node: HTMLElement,
     options: FocusManagerOptions = {}
-) {
+): FocusManager {
+    const getActiveElement =
+        options.getActiveElement ??
+        (() => node.ownerDocument.activeElement as HTMLElement | null);
+    const focusNode =
+        options.focusNode ??
+        ((node: HTMLElement, options?: FocusOptions) => node.focus(options));
+    const blurNode = options.blurNode ?? ((node: HTMLElement) => node.blur());
+
     return {
-        findFocusable(): HTMLElement[] {
+        getActiveElement,
+        focusNode,
+        blurNode,
+        findFocusable() {
             return findFocusableByOptions(node, options);
         },
-
-        /**
-         * Focus the first focusable child.
-         */
-        focusFirst(): void {
-            this.findFocusable().shift()?.focus();
+        focusFirst() {
+            const firstElement = this.findFocusable().shift();
+            if (firstElement) {
+                focusNode(firstElement);
+            }
         },
-
-        /**
-         * Focus the last focusable child.
-         */
-        focusLast(): void {
-            this.findFocusable().pop()?.focus();
+        focusLast() {
+            const lastElement = this.findFocusable().pop();
+            if (lastElement) {
+                focusNode(lastElement);
+            }
         },
     };
 }

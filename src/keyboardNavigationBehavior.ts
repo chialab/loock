@@ -60,9 +60,11 @@ export function keyboardNavigationBehavior(
             return;
         }
 
-        const current = node.contains(node.ownerDocument.activeElement)
-            ? (node.ownerDocument.activeElement as HTMLElement)
-            : null;
+        const activeElement = manager.getActiveElement();
+        const current =
+            activeElement && node.contains(activeElement)
+                ? activeElement
+                : null;
         if (!current) {
             return;
         }
@@ -75,7 +77,7 @@ export function keyboardNavigationBehavior(
             continuous = false,
         } = options;
         const elements = manager.findFocusable();
-        let index = elements.findIndex((el) => el === current);
+        let index = elements.indexOf(current);
         if (index === -1) {
             index = elements.findIndex((el) => el.contains(current));
         }
@@ -86,7 +88,7 @@ export function keyboardNavigationBehavior(
                 elements[index - 1] ||
                 (continuous ? elements[elements.length - 1] : elements[0]);
             if (item) {
-                item.focus();
+                manager.focusNode(item);
             }
             return;
         }
@@ -97,7 +99,7 @@ export function keyboardNavigationBehavior(
                 elements[index + 1] ||
                 (continuous ? elements[0] : elements[elements.length - 1]);
             if (item) {
-                item.focus();
+                manager.focusNode(item);
             }
             return;
         }
@@ -106,7 +108,7 @@ export function keyboardNavigationBehavior(
             event.preventDefault();
             const item = elements[0];
             if (item) {
-                item.focus();
+                manager.focusNode(item);
             }
             return;
         }
@@ -115,7 +117,7 @@ export function keyboardNavigationBehavior(
             event.preventDefault();
             const item = elements[elements.length - 1];
             if (item) {
-                item.focus();
+                manager.focusNode(item);
             }
             return;
         }

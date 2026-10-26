@@ -168,7 +168,7 @@ export function focusTrapBehavior(
                         manager.focusFirst();
                     } else if (focusContainer) {
                         currentNode = node;
-                        node.focus();
+                        manager.focusNode(node);
                     } else {
                         manager.focusLast();
                     }
@@ -187,7 +187,7 @@ export function focusTrapBehavior(
                         manager.focusLast();
                     } else if (focusContainer) {
                         currentNode = node;
-                        node.focus();
+                        manager.focusNode(node);
                     } else {
                         manager.focusFirst();
                     }
@@ -216,11 +216,11 @@ export function focusTrapBehavior(
         node.addEventListener('focusout', handleFocusOut, true);
         node.addEventListener('blur', handleFocusOut, true);
         node.addEventListener('keydown', handleKeyDown, true);
-        restoreFocusNode = node.ownerDocument.activeElement as HTMLElement;
+        restoreFocusNode = manager.getActiveElement();
         if (node.contains(restoreFocusNode) && restoreFocusNode !== node) {
             restoreFocusNode = node;
         } else if (focusContainer) {
-            node.focus();
+            manager.focusNode(node);
         } else {
             manager.focusFirst();
         }
@@ -262,7 +262,7 @@ export function focusTrapBehavior(
             restoreTreeState = null;
         }
         if (restoreFocusNode && restore) {
-            restoreFocusNode.focus();
+            manager.focusNode(restoreFocusNode);
         }
         if (startHelper) {
             startHelper.tabIndex = -1;
@@ -300,7 +300,7 @@ export function focusTrapBehavior(
             currentNode = null;
             disconnect();
         } else if (currentNode) {
-            currentNode.focus();
+            manager.focusNode(currentNode);
         } else {
             manager.focusFirst();
         }
