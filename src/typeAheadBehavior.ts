@@ -66,16 +66,12 @@ export function typeAheadBehavior(
             return;
         }
 
-        const activeElement = manager.getActiveElement();
-        if (!activeElement || !node.contains(activeElement)) {
-            return;
-        }
-
         const elements = manager.findFocusable();
         if (!elements.length) {
             return;
         }
 
+        const activeElement = manager.getActiveElement();
         value += event.key.toLowerCase();
         clearTimeout(timeoutId);
         timeoutId = setTimeout(clear, options.timeout ?? 600);
@@ -89,7 +85,7 @@ export function typeAheadBehavior(
             options.getText ??
             ((element: HTMLElement) => element.textContent ?? '');
 
-        let index = elements.indexOf(activeElement);
+        let index = activeElement ? elements.indexOf(activeElement) : -1;
         if (index === -1) {
             index = elements.findIndex((el) => el.contains(activeElement));
         }

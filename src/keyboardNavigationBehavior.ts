@@ -65,9 +65,6 @@ export function keyboardNavigationBehavior(
             activeElement && node.contains(activeElement)
                 ? activeElement
                 : null;
-        if (!current) {
-            return;
-        }
 
         const {
             prevKeys = ['Up', 'ArrowUp', 'Left', 'ArrowLeft'],
@@ -77,13 +74,17 @@ export function keyboardNavigationBehavior(
             continuous = false,
         } = options;
         const elements = manager.findFocusable();
-        let index = elements.indexOf(current);
+        let index = current ? elements.indexOf(current) : -1;
         if (index === -1) {
             index = elements.findIndex((el) => el.contains(current));
         }
         if (prevKeys.includes(event.key)) {
             // select previous list item
             event.preventDefault();
+            if (index === -1) {
+                manager.focusLast();
+                return;
+            }
             const item =
                 elements[index - 1] ||
                 (continuous ? elements[elements.length - 1] : elements[0]);
@@ -95,6 +96,10 @@ export function keyboardNavigationBehavior(
         if (nextKeys.includes(event.key)) {
             // select next list item
             event.preventDefault();
+            if (index === -1) {
+                manager.focusFirst();
+                return;
+            }
             const item =
                 elements[index + 1] ||
                 (continuous ? elements[0] : elements[elements.length - 1]);
@@ -106,6 +111,10 @@ export function keyboardNavigationBehavior(
         if (firstKeys.includes(event.key)) {
             // select first list item
             event.preventDefault();
+            if (index === -1) {
+                manager.focusFirst();
+                return;
+            }
             const item = elements[0];
             if (item) {
                 manager.focusNode(item);
@@ -115,6 +124,10 @@ export function keyboardNavigationBehavior(
         if (lastKeys.includes(event.key)) {
             // select last list item
             event.preventDefault();
+            if (index === -1) {
+                manager.focusLast();
+                return;
+            }
             const item = elements[elements.length - 1];
             if (item) {
                 manager.focusNode(item);
