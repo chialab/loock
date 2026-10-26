@@ -24,6 +24,10 @@ export interface KeyboardNavigationOptions extends FocusManagerOptions {
      * Whether to navigate continuously.
      */
     continuous?: boolean;
+    /**
+     * A function to determine whether the keyboard event should be ignored.
+     */
+    shouldIgnoreEvent?: (event: KeyboardEvent) => boolean;
 }
 
 /**
@@ -44,19 +48,25 @@ export interface KeyboardNavigationBehavior {
 export function keyboardNavigationBehavior(
     node: HTMLElement,
     options: KeyboardNavigationOptions
-) {
+): KeyboardNavigationBehavior {
     let connected = false;
 
     const manager = focusManager(node, options);
+    const shouldIgnoreEvent =
+        options.shouldIgnoreEvent ??
+        ((event) => {
+            const inputTarget = (event.target as HTMLElement)?.closest(
+                'input, textarea, select, [contenteditable]'
+            );
+            return !!inputTarget;
+        });
+
     const onKeydown = (event: KeyboardEvent) => {
         if (event.defaultPrevented) {
             return;
         }
 
-        const inputTarget = (event.target as HTMLElement)?.closest(
-            'input, textarea, select, [contenteditable]'
-        );
-        if (inputTarget) {
+        if (shouldIgnoreEvent(event)) {
             return;
         }
 
@@ -137,17 +147,17 @@ export function keyboardNavigationBehavior(
     };
 
     return {
-        get connected(): boolean {
+        get connected() {
             return connected;
         },
-        connect(): void {
+        connect() {
             if (connected) {
                 return;
             }
             connected = true;
             node.addEventListener('keydown', onKeydown);
         },
-        disconnect(): void {
+        disconnect() {
             if (!connected) {
                 return;
             }

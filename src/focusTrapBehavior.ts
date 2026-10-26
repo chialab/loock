@@ -350,7 +350,7 @@ export function focusTrapBehavior(
     };
 
     return {
-        get connected(): boolean {
+        get connected() {
             return connected;
         },
         connect,

@@ -12,6 +12,10 @@ export interface TypeAheadOptions extends FocusManagerOptions {
      * Get the searchable text of an element.
      */
     getText?: (element: HTMLElement) => string;
+    /**
+     * A function to determine whether the keyboard event should be ignored.
+     */
+    shouldIgnoreEvent?: (event: KeyboardEvent) => boolean;
 }
 
 /**
@@ -38,6 +42,14 @@ export function typeAheadBehavior(
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
     const manager = focusManager(node, options);
+    const shouldIgnoreEvent =
+        options.shouldIgnoreEvent ??
+        ((event) => {
+            const inputTarget = (event.target as HTMLElement)?.closest(
+                'input, textarea, select, [contenteditable]'
+            );
+            return !!inputTarget;
+        });
 
     const clear = () => {
         clearTimeout(timeoutId);
@@ -58,10 +70,7 @@ export function typeAheadBehavior(
             return;
         }
 
-        const inputTarget = (event.target as HTMLElement)?.closest(
-            'input, textarea, select, [contenteditable]'
-        );
-        if (inputTarget) {
+        if (shouldIgnoreEvent(event)) {
             clear();
             return;
         }

@@ -58,10 +58,10 @@ export function focusFirstChildBehavior(
     };
 
     return {
-        get connected(): boolean {
+        get connected() {
             return connected;
         },
-        connect(): void {
+        connect() {
             if (connected) {
                 return;
             }
@@ -75,7 +75,7 @@ export function focusFirstChildBehavior(
             }
             node.addEventListener('focus', onFocus, true);
         },
-        disconnect(): void {
+        disconnect() {
             if (!connected) {
                 return;
             }
