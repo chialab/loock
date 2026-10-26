@@ -1,5 +1,16 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.6.0
+
+### Minor Changes
+
+- 0f157c0: Implementation options for focus manager.
+- 7d3bdea: Add type ahead behavior.
+
+### Patch Changes
+
+- 692ce4b: Export behavior interfaces.
+
 ## 4.5.2
 
 ### Patch Changes
