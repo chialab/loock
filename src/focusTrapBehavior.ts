@@ -217,13 +217,21 @@ export function focusTrapBehavior(
         node.addEventListener('blur', handleFocusOut, true);
         node.addEventListener('keydown', handleKeyDown, true);
         restoreFocusNode = manager.getActiveElement();
-        if (node.contains(restoreFocusNode) && restoreFocusNode !== node) {
-            restoreFocusNode = node;
-        } else if (focusContainer) {
-            manager.focusNode(node);
+
+        const focusable = manager.findFocusable();
+        const activeInTrap =
+            restoreFocusNode !== null && focusable.includes(restoreFocusNode);
+
+        if (!activeInTrap) {
+            if (focusContainer) {
+                manager.focusNode(node);
+            } else {
+                manager.focusFirst();
+            }
         } else {
-            manager.focusFirst();
+            currentNode = restoreFocusNode;
         }
+
         if (inert) {
             restoreTreeState = inertTree(node, node.ownerDocument.body);
         }
@@ -261,8 +269,12 @@ export function focusTrapBehavior(
             restoreTreeState();
             restoreTreeState = null;
         }
-        if (restoreFocusNode && restore) {
-            manager.focusNode(restoreFocusNode);
+        if (restore && restoreFocusNode) {
+            if (restoreFocusNode.isConnected) {
+                manager.focusNode(restoreFocusNode);
+            } else if (node.isConnected) {
+                manager.focusNode(node);
+            }
         }
         if (startHelper) {
             startHelper.tabIndex = -1;
@@ -332,7 +344,15 @@ export function focusTrapBehavior(
                         }
                     } else {
                         const io = focusable.indexOf(currentNode);
-                        if (event.shiftKey && io === 0) {
+                        if (io === -1) {
+                            event.preventDefault();
+
+                            if (event.shiftKey) {
+                                manager.focusLast();
+                            } else {
+                                manager.focusFirst();
+                            }
+                        } else if (event.shiftKey && io === 0) {
                             event.preventDefault();
                             manager.focusLast();
                         } else if (
