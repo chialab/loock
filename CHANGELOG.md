@@ -1,5 +1,11 @@
 ## [2.2.1](https://github.com/chialab/loock/compare/v2.2.0...v2.2.1) (2021-10-07)
 
+## 4.6.1
+
+### Patch Changes
+
+- d387c61: Correctly handle active position of the focus.
+
 ## 4.6.0
 
 ### Minor Changes
